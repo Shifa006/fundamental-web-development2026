@@ -59,7 +59,7 @@ h1, h2, h3 {
 
 .portrait {
     border-radius: 0; /* keep it minimal — no rounded corners */
-    filter: grayscale(100%);
+    filter: none;
     border: 1px solid #dddddd;
     flex-shrink: 0;
 }
