@@ -7,37 +7,173 @@
     <meta name="keywords" content="CV, Shifa, Mama, Resume, Portfolio">
     <meta name="author" content="Shifa Mama">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts: a characterful serif for headings + a clean sans-serif for body text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- External CSS file -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body> <!-- This is the content -->
-    <h1>Curriculum Vitae</h1> <!-- This is the main heading -->
-    <h2>Shifa Mama</h2>
-    <img src="image/shifa.png" alt="Shifa Mama" width="200" height="270"> <!-- This is the image of Shifa Mama -->
-    <h3>Major</h3> <!-- this is the Major sections -->
-    <p>Data Science and Analytics</p>
-    <h3>Languages</h3><!-- this is the Languages sections -->
-    <ul>
-        <li>Thai</li>
-        <li>Malay</li>
-    </ul>
-    <h3>Programming Languages</h3> <!-- this is the Programming Languages sections -->
-    <ul>
-        <li>Python</li>
-    </ul>
-    <h3>Projects</h3> <!-- this is the Projects sections -->
-    <ul>
-        <li>Shop Zone web application</li>
-        <li>Dashboard Sales</li>
-    </ul>
-    <h3>Activities</h3> <!-- this is the Activities sections -->
-    <ul>
-        <li>3i camp 2025</li>
-        <li>acb bismillah</li>
-    </ul>
-    <h3>Contact Information</h3> <!-- This is the contact information section -->
-    <ul>
-        <li>Email: ug672437001@ftu.ac.th</li>
-        <li>Phone: 083-509-1120</li>
-        <li>Facebook: <a href="https://www.facebook.com/shifa.mama.7/about/" target="_blank" rel="noopener noreferrer">Shifa Muhammad </a></li><!-- this is the Facebook link -->
-    </ul>
+
+    <!-- ===================== HEADER / HERO ===================== -->
+    <header class="siteHeader">
+        <div class="headerText">
+            <p class="eyebrow">Curriculum&nbsp;Vitae</p>
+            <h1 class="name">Shifa Mama</h1>
+            <h2 class="role">Data Science &amp; Analytics Student</h2>
+        </div>
+        <img class="portrait" src="image/shifa.png" alt="Shifa Mama" width="200" height="270"> <!-- This is the image of Shifa Mama -->
+    </header>
+
+    <main class="pageContent">
+
+        <!-- ===================== ABOUT / SELF-INTRODUCTION ===================== -->
+        <section class="section" id="about">
+            <h3 class="sectionTitle">About Me</h3>
+            <p class="aboutText">
+                Hi, I'm Shifa — a Data Science and Analytics student who enjoys turning raw numbers
+                into stories that make sense to people. I like building things end-to-end, from
+                writing the Python that cleans the data to designing the dashboard that explains it.
+                Feel free to say hello using the form below.
+            </p>
+            <!-- Beginner note: replace the paragraph above with your own words. -->
+        </section>
+
+        <!-- ===================== MAJOR ===================== -->
+        <section class="section" id="major">
+            <h3 class="sectionTitle">Major</h3> <!-- this is the Major sections -->
+            <p class="plainText">Data Science and Analytics</p>
+        </section>
+
+        <!-- ===================== LANGUAGES ===================== -->
+        <section class="section" id="languages">
+            <h3 class="sectionTitle">Languages</h3><!-- this is the Languages sections -->
+            <ul class="chipList">
+                <li class="chip">Thai</li>
+                <li class="chip">Malay</li>
+            </ul>
+        </section>
+
+        <!-- ===================== PROGRAMMING LANGUAGES ===================== -->
+        <section class="section" id="programming">
+            <h3 class="sectionTitle">Programming Languages</h3> <!-- this is the Programming Languages sections -->
+            <ul class="chipList">
+                <li class="chip">Python</li>
+            </ul>
+        </section>
+
+        <!-- ===================== EDUCATION (NEW: TABLE) ===================== -->
+        <section class="section" id="education">
+            <h3 class="sectionTitle">Education</h3>
+            <table class="educationTable">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Institution</th>
+                        <th>Degree / Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Beginner note: edit the rows below with your real dates and school names -->
+                    <tr>
+                        <td>2022 – Present</td>
+                        <td>Fatoni University</td>
+                        <td>B.Sc. in Data Science and Analytics</td>
+                    </tr>
+                    <tr>
+                        <td>2019 – 2022</td>
+                        <td>Your High School Name</td>
+                        <td>High School Diploma, Science–Math Program</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ===================== PROJECTS ===================== -->
+        <section class="section" id="projects">
+            <h3 class="sectionTitle">Projects</h3> <!-- this is the Projects sections -->
+            <ul class="plainList">
+                <li>Shop Zone web application</li>
+                <li>Dashboard Sales</li>
+            </ul>
+        </section>
+
+        <!-- ===================== ACTIVITIES ===================== -->
+        <section class="section" id="activities">
+            <h3 class="sectionTitle">Activities</h3> <!-- this is the Activities sections -->
+            <ul class="plainList">
+                <li>3i camp 2025</li>
+                <li>ACB Bismillah</li>
+            </ul>
+        </section>
+
+        <!-- ===================== MEDIA: VIDEO & AUDIO (NEW) ===================== -->
+        <section class="section" id="media">
+            <h3 class="sectionTitle">Video &amp; Audio Introduction</h3>
+            <p class="plainText">A short video and voice introduction — replace the placeholder files below with your own.</p>
+
+            <div class="mediaBlock">
+                <p class="mediaLabel">Video introduction</p>
+                <!-- Beginner note: change src="" to your own video file path, e.g. video/intro.mp4 -->
+                <video class="mediaPlayer" controls width="480" poster="image/shifa.png">
+                    <source src="video/intro-placeholder.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <div class="mediaBlock">
+                <p class="mediaLabel">Voice introduction</p>
+                <!-- Beginner note: change src="" to your own audio file path, e.g. audio/intro.mp3 -->
+                <audio class="mediaPlayer" controls>
+                    <source src="audio/intro-placeholder.mp3" type="audio/mpeg">
+                    Your browser does not support the audio tag.
+                </audio>
+            </div>
+        </section>
+
+        <!-- ===================== CONTACT INFORMATION ===================== -->
+        <section class="section" id="contact-info">
+            <h3 class="sectionTitle">Contact Information</h3> <!-- This is the contact information section -->
+            <ul class="plainList">
+                <li>Email: ug672437001@ftu.ac.th</li>
+                <li>Phone: 083-509-1120</li>
+                <li>Facebook: <a class="inlineLink" href="https://www.facebook.com/shifa.mama.7/about/" target="_blank" rel="noopener noreferrer">Shifa Muhammad</a></li><!-- this is the Facebook link -->
+            </ul>
+        </section>
+
+        <!-- ===================== SELF-INTRODUCTION / CONTACT FORM (NEW) ===================== -->
+        <section class="section" id="contact-form">
+            <h3 class="sectionTitle">Get in Touch</h3>
+            <p class="plainText">Want to know more about me or work together? Send a short message below.</p>
+
+            <form class="introForm" action="#" method="post">
+                <div class="formRow">
+                    <label class="formLabel" for="visitorName">Your Name</label>
+                    <input class="formInput" type="text" id="visitorName" name="visitorName" placeholder="e.g. Anas Tawalbeh" required>
+                </div>
+
+                <div class="formRow">
+                    <label class="formLabel" for="visitorEmail">Your Email</label>
+                    <input class="formInput" type="email" id="visitorEmail" name="visitorEmail" placeholder="you@example.com" required>
+                </div>
+
+                <div class="formRow">
+                    <label class="formLabel" for="visitorMessage">Message</label>
+                    <textarea class="formTextarea" id="visitorMessage" name="visitorMessage" rows="4" placeholder="Tell me a bit about yourself, or why you're reaching out..." required></textarea>
+                </div>
+
+                <button class="formButton" type="submit">Send Message</button>
+            </form>
+        </section>
+
+    </main>
+
+    <footer class="siteFooter">
+        <p>&copy; 2026 Shifa Mama. Built with HTML &amp; CSS.</p>
+    </footer>
+
 </body>
 </html>
