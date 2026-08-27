@@ -1,4 +1,4 @@
-/* ---------- 1. Reset & base ---------- */
+/* Reset & base */
 * {
     margin: 0;
     padding: 0;
@@ -19,14 +19,15 @@ h1, h2, h3 {
     color: #000000;
 }
 
-/* ---------- 2. Header / hero ---------- */
+/* Header / hero */
+/* Mobile-first: image on top, text below, stacked in a column */
 .siteHeader {
     max-width: 900px;
     margin: 0 auto;
-    padding: 4rem 1.5rem 3rem 1.5rem;
+    padding: 2.5rem 1.5rem 3rem 1.5rem;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    flex-direction: column-reverse;
+    align-items: flex-start;
     gap: 2rem;
     border-bottom: 2px solid #111111;
 }
@@ -44,7 +45,7 @@ h1, h2, h3 {
 }
 
 .name {
-    font-size: 3.5rem;
+    font-size: 2.4rem;
     line-height: 1;
     letter-spacing: -0.02em;
     margin-bottom: 0.5rem;
@@ -58,13 +59,13 @@ h1, h2, h3 {
 }
 
 .portrait {
-    border-radius: 0; /* keep it minimal — no rounded corners */
+    border-radius: 0;
     filter: none;
     border: 1px solid #dddddd;
     flex-shrink: 0;
 }
 
-/* ---------- 3. Page content / sections ---------- */
+/* Page content / sections */
 .pageContent {
     max-width: 900px;
     margin: 0 auto;
@@ -107,7 +108,7 @@ h1, h2, h3 {
     font-size: 1.05rem;
 }
 
-/* ---------- 4. Lists ---------- */
+/* Lists */
 .plainList {
     list-style: none;
     padding-left: 0;
@@ -137,11 +138,12 @@ h1, h2, h3 {
     letter-spacing: 0.02em;
 }
 
-/* ---------- 5. Table (Education) ---------- */
+/* Table (Education) */
 .educationTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 0.5rem;
+    font-size: 0.85rem;
 }
 
 .educationTable th,
@@ -164,7 +166,7 @@ h1, h2, h3 {
     font-size: 0.95rem;
 }
 
-/* ---------- 6. Media (video / audio) ---------- */
+/* Media (video / audio) */
 .mediaBlock {
     margin-top: 1.25rem;
 }
@@ -182,7 +184,7 @@ h1, h2, h3 {
     border: 1px solid #dddddd;
 }
 
-/* ---------- 7. Links ---------- */
+/* Links */
 .inlineLink {
     color: #111111;
     text-decoration: underline;
@@ -193,7 +195,27 @@ h1, h2, h3 {
     color: #666666;
 }
 
-/* ---------- 8. Form ---------- */
+/* Contact list, uses flexbox to line up label and value on each row */
+.contactList li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.contactLabel {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666666;
+}
+
+.contactValue {
+    color: #222222;
+}
+
+/* Form */
 .introForm {
     max-width: 500px;
     margin-top: 1.5rem;
@@ -252,7 +274,7 @@ h1, h2, h3 {
     color: #111111;
 }
 
-/* ---------- 9. Footer ---------- */
+/* Footer */
 .siteFooter {
     max-width: 900px;
     margin: 0 auto;
@@ -262,19 +284,64 @@ h1, h2, h3 {
     color: #888888;
 }
 
-/* ---------- 10. Responsive: mobile ---------- */
-@media (max-width: 600px) {
+/* Grid system, 12 columns, used to place sections side by side on bigger screens */
+.row {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 2rem;
+}
+
+.col-1  { grid-column: span 1; }
+.col-2  { grid-column: span 2; }
+.col-3  { grid-column: span 3; }
+.col-4  { grid-column: span 4; }
+.col-5  { grid-column: span 5; }
+.col-6  { grid-column: span 6; }
+.col-7  { grid-column: span 7; }
+.col-8  { grid-column: span 8; }
+.col-9  { grid-column: span 9; }
+.col-10 { grid-column: span 10; }
+.col-11 { grid-column: span 11; }
+.col-12 { grid-column: span 12; }
+
+/* mobile first, full width by default, then shrink at bigger screens */
+.col-md-4 { grid-column: span 12; }
+.col-md-6 { grid-column: span 12; }
+
+/* Responsive breakpoints, mobile first */
+
+/* Tablet and up */
+@media (min-width: 768px) {
     .siteHeader {
-        flex-direction: column-reverse;
-        align-items: flex-start;
-        padding-top: 2.5rem;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding: 4rem 1.5rem 3rem 1.5rem;
     }
 
     .name {
-        font-size: 2.4rem;
+        font-size: 3.5rem;
     }
 
     .educationTable {
-        font-size: 0.85rem;
+        font-size: 1rem;
     }
+
+    .col-md-4 { grid-column: span 6; }
+    .col-md-6 { grid-column: span 6; }
+}
+
+/* Desktop and up */
+@media (min-width: 992px) {
+    .siteHeader,
+    .pageContent,
+    .siteFooter {
+        max-width: 1000px;
+    }
+
+    .name {
+        font-size: 4rem;
+    }
+
+    .col-md-4 { grid-column: span 4; }
 }

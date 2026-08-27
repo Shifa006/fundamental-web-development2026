@@ -18,7 +18,7 @@
 </head>
 <body> <!-- This is the content -->
 
-    <!-- ===================== HEADER ===================== -->
+    <!-- header -->
     <header class="siteHeader">
         <div class="headerText">
             <p class="eyebrow">Curriculum&nbsp;Vitae</p>
@@ -30,7 +30,7 @@
 
     <main class="pageContent">
 
-        <!-- ===================== ABOUT ===================== -->
+        <!-- about me -->
         <section class="section" id="about">
             <h3 class="sectionTitle">About Me</h3>
             <p class="aboutText">
@@ -38,30 +38,30 @@
             </p>
         </section>
 
-        <!-- ===================== MAJOR ===================== -->
-        <section class="section" id="major">
-            <h3 class="sectionTitle">Major</h3> <!-- this is the Major sections -->
-            <p class="plainText">Data Science and Analytics</p>
-        </section>
+        <!-- Major, Languages, Programming Languages sit side by side from tablet up -->
+        <div class="row section">
+            <div class="col-md-4" id="major">
+                <h3 class="sectionTitle">Major</h3>
+                <p class="plainText">Data Science and Analytics</p>
+            </div>
 
-        <!-- ===================== LANGUAGES ===================== -->
-        <section class="section" id="languages">
-            <h3 class="sectionTitle">Languages</h3><!-- this is the Languages sections -->
-            <ul class="chipList">
-                <li class="chip">Thai</li>
-                <li class="chip">Malay</li>
-            </ul>
-        </section>
+            <div class="col-md-4" id="languages">
+                <h3 class="sectionTitle">Languages</h3>
+                <ul class="chipList">
+                    <li class="chip">Thai</li>
+                    <li class="chip">Malay</li>
+                </ul>
+            </div>
 
-        <!-- ===================== PROGRAMMING LANGUAGES ===================== -->
-        <section class="section" id="programming">
-            <h3 class="sectionTitle">Programming Languages</h3> <!-- this is the Programming Languages sections -->
-            <ul class="chipList">
-                <li class="chip">Python</li>
-            </ul>
-        </section>
+            <div class="col-md-4" id="programming">
+                <h3 class="sectionTitle">Programming Languages</h3>
+                <ul class="chipList">
+                    <li class="chip">Python</li>
+                </ul>
+            </div>
+        </div>
 
-        <!-- ===================== EDUCATION (NEW: TABLE) ===================== -->
+        <!-- education table -->
         <section class="section" id="education">
             <h3 class="sectionTitle">Education</h3>
             <table class="educationTable">
@@ -87,57 +87,69 @@
             </table>
         </section>
 
-        <!-- ===================== PROJECTS ===================== -->
-        <section class="section" id="projects">
-            <h3 class="sectionTitle">Projects</h3> <!-- this is the Projects sections -->
-            <ul class="plainList">
-                <li>Shop Zone web application</li>
-                <li>Dashboard Sales</li>
-            </ul>
-        </section>
+        <!-- Projects and Activities sit side by side from tablet up -->
+        <div class="row section">
+            <div class="col-md-6" id="projects">
+                <h3 class="sectionTitle">Projects</h3>
+                <ul class="plainList">
+                    <li>Shop Zone web application</li>
+                    <li>Dashboard Sales</li>
+                </ul>
+            </div>
 
-        <!-- ===================== ACTIVITIES ===================== -->
-        <section class="section" id="activities">
-            <h3 class="sectionTitle">Activities</h3> <!-- this is the Activities sections -->
-            <ul class="plainList">
-                <li>3i camp 2025</li>
-                <li>ACB Bismillah</li>
-            </ul>
-        </section>
+            <div class="col-md-6" id="activities">
+                <h3 class="sectionTitle">Activities</h3>
+                <ul class="plainList">
+                    <li>3i camp 2025</li>
+                    <li>ACB Bismillah</li>
+                </ul>
+            </div>
+        </div>
 
-        <!-- ===================== MEDIA: VIDEO & AUDIO  ===================== -->
+        <!-- video and audio intro -->
         <section class="section" id="media">
             <h3 class="sectionTitle">Video &amp; Audio Introduction</h3>
             <p class="plainText">A short video and voice introduction</p>
 
-            <div class="mediaBlock">
-                <p class="mediaLabel">Video introduction</p>
-                <video class="mediaPlayer" controls width="480" poster="image/shifa.png">
-                    <source src="video/intro-placeholder.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
+            <div class="row">
+                <div class="mediaBlock col-md-6">
+                    <p class="mediaLabel">Video introduction</p>
+                    <video class="mediaPlayer" controls width="480" poster="image/shifa.png">
+                        <source src="video/intro-placeholder.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
 
-            <div class="mediaBlock">
-                <p class="mediaLabel">Voice introduction</p>
-                <audio class="mediaPlayer" controls>
-                    <source src="audio/intro-placeholder.mp3" type="audio/mpeg">
-                    Your browser does not support the audio tag.
-                </audio>
+                <div class="mediaBlock col-md-6">
+                    <p class="mediaLabel">Voice introduction</p>
+                    <audio class="mediaPlayer" controls>
+                        <source src="audio/intro-placeholder.mp3" type="audio/mpeg">
+                        Your browser does not support the audio tag.
+                    </audio>
+                </div>
             </div>
         </section>
 
-        <!-- ===================== CONTACT INFORMATION ===================== -->
+        <!-- contact information -->
         <section class="section" id="contact-info">
-            <h3 class="sectionTitle">Contact Information</h3> <!-- This is the contact information section -->
-            <ul class="plainList">
-                <li>Email: ug672437001@ftu.ac.th</li>
-                <li>Phone: 083-509-1120</li>
-                <li>Facebook: <a class="inlineLink" href="https://www.facebook.com/shifa.mama.7/about/" target="_blank" rel="noopener noreferrer">Shifa Muhammad</a></li><!-- this is the Facebook link -->
+            <h3 class="sectionTitle">Contact Information</h3>
+            <ul class="plainList contactList">
+                <li>
+                    <span class="contactLabel">Email</span>
+                    <span class="contactValue">ug672437001@ftu.ac.th</span>
+                </li>
+                <li>
+                    <span class="contactLabel">Phone</span>
+                    <span class="contactValue">083-509-1120</span>
+                </li>
+                <li>
+                    <span class="contactLabel">Facebook</span>
+                    <a class="inlineLink" href="https://www.facebook.com/shifa.mama.7/about/" target="_blank" rel="noopener noreferrer">Shifa Muhammad</a>
+                </li>
             </ul>
         </section>
 
-        <!-- ===================== SELF-INTRODUCTION / CONTACT FORM ===================== -->
+        <!-- contact form -->
         <section class="section" id="contact-form">
             <h3 class="sectionTitle">Get in Touch</h3>
             <p class="plainText">Want to know more about me or work together? Send a short message below.</p>
