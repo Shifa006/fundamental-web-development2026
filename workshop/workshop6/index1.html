@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Dialogs Example</title>
+    <script src="GuessingNumberGame.js"></script>
+  <style>
+    :root {
+      --sand:      #E9DFCE;
+      --sand-deep: #DCCFB6;
+      --card:      #F6F0E4;
+      --ink:       #4A4038;
+      --ink-soft:  #7C6F62;
+      --clay:      #BC7F63;
+      --clay-dark: #A2694F;
+      --sage:      #8A9873;
+      --sage-dark: #71805D;
+      --sand-btn:  #C7A26A;
+      --sand-btn-dark: #AD8A54;
+      --line:      #D8CBB4;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background:
+        radial-gradient(circle at 15% 20%, #F0E7D6 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, #E3D7BF 0%, transparent 50%),
+        var(--sand);
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1.5rem;
+    }
+
+    .container {
+      background-color: var(--card);
+      padding: 2.75rem 2.5rem;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      text-align: left;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .eyebrow {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      color: var(--ink-soft);
+      margin: 0 0 0.4rem;
+    }
+
+    h1 {
+      font-size: 1.7rem;
+      font-weight: 400;
+      margin: 0 0 0.35rem;
+      color: var(--ink);
+    }
+
+    .subtitle {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      margin: 0 0 1.75rem;
+      line-height: 1.5;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    button {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 0.7rem 1.1rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      text-align: left;
+      transition: filter 0.15s ease;
+    }
+
+    button:hover { filter: brightness(0.94); }
+    button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+    .btn-alert   { background-color: var(--clay);    color: #FBF6EE; }
+    .btn-alert:hover   { background-color: var(--clay-dark); }
+
+    .btn-confirm { background-color: var(--sage);    color: #FBF6EE; }
+    .btn-confirm:hover { background-color: var(--sage-dark); }
+
+    .btn-prompt  { background-color: var(--sand-btn); color: #3C2E1E; }
+    .btn-prompt:hover  { background-color: var(--sand-btn-dark); }
+
+    #result {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin-top: 1.5rem;
+      padding-top: 1.1rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      min-height: 1.4em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Alert, Confirm &amp; Prompt</h1>
+
+    <div class="btn-group">
+      <button class="btn-alert" onclick="showAlert()">Show alert</button>
+      <button class="btn-confirm" onclick="showConfirm()">Show confirm</button>
+      <button class="btn-prompt" onclick="showPrompt()">Show prompt</button>
+    </div>
+
+    <div id="result">Click a button above</div>
+  </div>
+
+  <script>
+    const resultDiv = document.getElementById('result');
+
+    // 1. Alert Box
+    function showAlert() {
+      alert("This is a standard Alert message!");
+      resultDiv.innerText = "Alert button was clicked.";
+    }
+
+    // 2. Confirm Box
+    function showConfirm() {
+      const isConfirmed = confirm("Are you sure you want to proceed?");
+      if (isConfirmed) {
+        resultDiv.innerText = "Confirm result: user clicked OK";
+      } else {
+        resultDiv.innerText = "Confirm result: user clicked Cancel";
+      }
+    }
+
+    // 3. Prompt Box
+    function showPrompt() {
+      const name = prompt("Please enter your name:", "Guest");
+      if (name !== null && name.trim() !== "") {
+        resultDiv.innerText = `Prompt result: Hello, ${name}!`;
+      } else {
+        resultDiv.innerText = "Prompt result: input was cancelled or left empty.";
+      }
+    }
+  </script>
+
+</body>
+</html>
