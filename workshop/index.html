@@ -1,183 +1,269 @@
-<!DOCTYPE html><!-- This is the DOCTYPE declaration for an HTML5 document -->
+<!DOCTYPE html>
 <html lang="en">
-<head> <!-- This is the head section -->
-    <title>CV Shifa Mama</title> <!-- This is the title -->
-    <meta charset="UTF-8"> <!-- This is the character encoding -->
+<head>
+    <title>CV — Shifa Mama</title>
+    <meta charset="UTF-8">
     <meta name="description" content="The CV of Shifa Mama">
     <meta name="keywords" content="CV, Shifa, Mama, Resume, Portfolio">
     <meta name="author" content="Shifa Mama">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Google Fonts: a characterful serif for headings + a clean sans-serif for body text -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <!-- External CSS file -->
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="myscript.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Fraunces', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            light: '#F0EDE3',
+                            dark: '#2C332A',
+                            accent: '#5C715E'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { display: none; }
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; }
+        }
+    </style>
 </head>
-<body> <!-- This is the content -->
+<body class="bg-brand-light text-brand-dark font-sans antialiased selection:bg-brand-accent selection:text-white">
 
-    <!-- header -->
-    <header class="siteHeader">
-        <div class="headerText">
-            <p class="eyebrow">Curriculum&nbsp;Vitae</p>
-            <h1 class="name">Shifa Mama</h1>
-            <h2 class="role">Data Science &amp; Analytics Student</h2>
+    <!-- Navigation -->
+    <nav class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-center gap-4 text-sm font-medium tracking-widest uppercase">
+        <a href="#" class="hover:text-brand-accent transition-colors">CV.</a>
+        <div class="flex flex-wrap gap-x-6 gap-y-2">
+            <a href="#about" class="hover:text-brand-accent transition-colors">About</a>
+            <a href="#education" class="hover:text-brand-accent transition-colors">Education</a>
+            <a href="#projects" class="hover:text-brand-accent transition-colors">Projects</a>
+            <a href="#contact" class="hover:text-brand-accent transition-colors">Contact</a>
         </div>
-        <img class="portrait" src="image/shifa.png" alt="Shifa Mama" width="200" height="270"> <!-- This is the image of Shifa Mama -->
+    </nav>
+
+    <!-- Hero -->
+    <header class="max-w-7xl mx-auto px-6 pt-12 pb-24 md:pt-20 grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative">
+        <div class="col-span-1 md:col-span-8 z-10">
+            <p class="text-brand-accent font-medium tracking-[0.2em] uppercase mb-4 text-sm flex items-center gap-4">
+                <span class="w-12 h-[1px] bg-brand-accent"></span>
+                Data Science &amp; Analytics
+            </p>
+            <h1 class="font-serif text-6xl md:text-8xl lg:text-[10rem] leading-none font-bold uppercase tracking-tighter text-brand-dark">
+                Shifa<br>
+                <span class="text-brand-accent italic font-light pr-4">Mama.</span>
+            </h1>
+            <p class="mt-6 text-brand-dark/70 text-lg max-w-md">
+                Data Science &amp; Analytics student, Fatoni University, Faculty of Science and Technology.
+            </p>
+        </div>
+        <div class="col-span-1 md:col-span-4 mt-8 md:mt-0 relative md:-ml-12 lg:-ml-24">
+            <div class="aspect-[3/4] w-full bg-[#E0DCD0] rounded-sm overflow-hidden relative shadow-lg">
+                <img src="image/shifa.png" alt="Shifa Mama" class="object-cover w-full h-full mix-blend-multiply opacity-90 hover:opacity-100 transition duration-700">
+            </div>
+            <div class="absolute -bottom-6 right-2 md:-bottom-8 md:-right-4 bg-brand-accent text-brand-light w-24 h-24 rounded-full flex items-center justify-center text-xs uppercase tracking-widest font-semibold shadow-xl rotate-12 hover:rotate-0 transition-transform duration-500">
+                Portfolio
+            </div>
+        </div>
     </header>
 
-    <main class="pageContent">
-
-        <!-- about me -->
-        <section class="section" id="about">
-            <h3 class="sectionTitle">About Me</h3>
-            <p class="aboutText">
-                Hi, I'm Shifa a Data Science and Analytics student in fatoni University
-            </p>
-        </section>
-
-        <!-- Major, Languages, Programming Languages sit side by side from tablet up -->
-        <div class="row section">
-            <div class="col-md-4" id="major">
-                <h3 class="sectionTitle">Major</h3>
-                <p class="plainText">Data Science and Analytics</p>
+    <!-- About / Major / Toolkit / Languages -->
+    <section id="about" class="max-w-7xl mx-auto px-6 py-24 border-t border-brand-dark/10">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+            <div class="md:col-span-6">
+                <h3 class="font-serif text-3xl mb-4 text-brand-accent">About</h3>
+                <p class="text-brand-dark/80 font-light leading-relaxed text-lg max-w-md">
+                    Hi, I'm Shifa, a Data Science and Analytics student at Fatoni University. I blend analytical thinking with creative problem-solving.
+                </p>
             </div>
-
-            <div class="col-md-4" id="languages">
-                <h3 class="sectionTitle">Languages</h3>
-                <ul class="chipList">
-                    <li class="chip">Thai</li>
-                    <li class="chip">Malay</li>
-                </ul>
-            </div>
-
-            <div class="col-md-4" id="programming">
-                <h3 class="sectionTitle">Programming Languages</h3>
-                <ul class="chipList">
-                    <li class="chip">Python</li>
-                </ul>
+            <div class="md:col-span-4 md:col-start-9">
+                <h3 class="font-serif text-3xl mb-4 text-brand-accent">Major</h3>
+                <p class="text-brand-dark/80 font-light text-lg">Data Science and Analytics</p>
             </div>
         </div>
 
-        <!-- education table -->
-        <section class="section" id="education">
-            <h3 class="sectionTitle">Education</h3>
-            <table class="educationTable">
-                <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th>Institution</th>
-                        <th>Degree / Level</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2022 – Present</td>
-                        <td>Fatoni University</td>
-                        <td>B.Sc. in Data Science and Analytics</td>
-                    </tr>
-                    <tr>
-                        <td>2019 – 2022</td>
-                        <td>Attarkiah Islamiah Institute</td>
-                        <td>Arabic Program</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Projects and Activities sit side by side from tablet up -->
-        <div class="row section">
-            <div class="col-md-6" id="projects">
-                <h3 class="sectionTitle">Projects</h3>
-                <ul class="plainList">
-                    <li>Shop Zone web application</li>
-                    <li>Dashboard Sales</li>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+            <div class="md:col-span-5">
+                <h3 class="font-serif text-3xl mb-4 text-brand-accent">Toolkit</h3>
+                <ul class="space-y-3 text-brand-dark/80 font-light text-lg border-l border-brand-accent/30 pl-4">
+                    <li>Python (Pandas, NumPy)</li>
+                    <li>PostgreSQL &amp; Databases</li>
+                    <li>Data Visualization (Tableau)</li>
+                    <li>Web Dev (HTML, CSS, Django)</li>
                 </ul>
             </div>
+            <div class="md:col-span-3 md:col-start-7">
+                <h3 class="font-serif text-3xl mb-4 text-brand-accent">Languages</h3>
+                <div class="flex flex-col gap-3">
+                    <span class="inline-block pb-2 border-b border-brand-dark/10 text-lg">Thai</span>
+                    <span class="inline-block pb-2 border-b border-brand-dark/10 text-lg">Malay</span>
+                </div>
+            </div>
+            <div class="md:col-span-3 md:col-start-10">
+                <h3 class="font-serif text-3xl mb-4 text-brand-accent">Programming</h3>
+                <div class="flex flex-col gap-3">
+                    <span class="inline-block pb-2 border-b border-brand-dark/10 text-lg">Python</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <div class="col-md-6" id="activities">
-                <h3 class="sectionTitle">Activities</h3>
-                <ul class="plainList">
-                    <li>3i camp 2025</li>
-                    <li>ACB Bismillah</li>
+    <!-- Education -->
+    <section id="education" class="max-w-7xl mx-auto px-6 py-24 border-t border-brand-dark/10">
+        <h3 class="font-serif text-3xl mb-10 text-brand-accent">Education</h3>
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="border-b-2 border-brand-dark/20">
+                    <th class="pb-4 pr-4 text-xs tracking-[0.2em] uppercase text-brand-dark/50 font-medium">Year</th>
+                    <th class="pb-4 pr-4 text-xs tracking-[0.2em] uppercase text-brand-dark/50 font-medium">Institution</th>
+                    <th class="pb-4 text-xs tracking-[0.2em] uppercase text-brand-dark/50 font-medium">Degree / Level</th>
+                </tr>
+            </thead>
+            <tbody class="text-lg font-light">
+                <tr class="border-b border-brand-dark/10">
+                    <td class="py-5 pr-4 whitespace-nowrap">2022 – Present</td>
+                    <td class="py-5 pr-4">Fatoni University</td>
+                    <td class="py-5">B.Sc. in Data Science and Analytics</td>
+                </tr>
+                <tr class="border-b border-brand-dark/10">
+                    <td class="py-5 pr-4 whitespace-nowrap">2019 – 2022</td>
+                    <td class="py-5 pr-4">Attarkiah Islamiah Institute</td>
+                    <td class="py-5">Arabic Program</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Selected Works -->
+    <section id="projects" class="bg-brand-dark text-brand-light py-24 rounded-t-[3rem] mt-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="font-serif text-4xl md:text-6xl mb-20 uppercase text-center md:text-left text-brand-light/90">Selected<br>Works</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 mb-20">
+                <div class="group cursor-pointer">
+                    <div class="aspect-[4/3] bg-brand-light/10 mb-8 overflow-hidden rounded-sm flex items-center justify-center">
+                        <span class="font-serif text-5xl text-brand-light/30 group-hover:text-brand-light/50 transition-colors">SZ</span>
+                    </div>
+                    <p class="text-xs tracking-[0.2em] uppercase mb-3 text-brand-accent">Web Development</p>
+                    <h3 class="font-serif text-3xl mb-3 group-hover:text-brand-accent transition-colors">ShopZone Web Application</h3>
+                    <p class="text-brand-light/60 font-light">A complete web store experience built using the Django framework.</p>
+                </div>
+
+                <div class="group cursor-pointer md:mt-32">
+                    <div class="aspect-[4/3] bg-brand-light/10 mb-8 overflow-hidden rounded-sm flex items-center justify-center">
+                        <span class="font-serif text-5xl text-brand-light/30 group-hover:text-brand-light/50 transition-colors">DS</span>
+                    </div>
+                    <p class="text-xs tracking-[0.2em] uppercase mb-3 text-brand-accent">Data Visualization</p>
+                    <h3 class="font-serif text-3xl mb-3 group-hover:text-brand-accent transition-colors">Dashboard Sales</h3>
+                    <p class="text-brand-light/60 font-light">An analytical Tableau dashboard visualizing sales metrics and KPI cards.</p>
+                </div>
+            </div>
+
+            <!-- Activities -->
+            <div class="border-t border-brand-light/10 pt-16">
+                <h3 class="font-serif text-2xl md:text-3xl mb-8 text-brand-light/90">Activities</h3>
+                <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 text-brand-light/70 font-light text-lg">
+                    <li class="pb-3 border-b border-brand-light/10">3i Camp 2025</li>
+                    <li class="pb-3 border-b border-brand-light/10">ACB Bismillah</li>
                 </ul>
             </div>
         </div>
+    </section>
 
-        <!-- video and audio intro -->
-        <section class="section" id="media">
-            <h3 class="sectionTitle">Video &amp; Audio Introduction</h3>
-            <p class="plainText">A short video and voice introduction</p>
+    <!-- Video & Audio -->
+    <section class="max-w-7xl mx-auto px-6 py-24 border-b border-brand-dark/10">
+        <h3 class="font-serif text-3xl mb-2 text-brand-accent">Video &amp; Audio Introduction</h3>
+        <p class="text-brand-dark/60 font-light mb-10">A short video and voice introduction</p>
 
-            <div class="row">
-                <div class="mediaBlock col-md-6">
-                    <p class="mediaLabel">Video introduction</p>
-                    <video class="mediaPlayer" controls width="480" poster="image/shifa.png">
-                        <source src="video/intro-placeholder.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-
-                <div class="mediaBlock col-md-6">
-                    <p class="mediaLabel">Voice introduction</p>
-                    <audio class="mediaPlayer" controls>
-                        <source src="audio/intro-placeholder.mp3" type="audio/mpeg">
-                        Your browser does not support the audio tag.
-                    </audio>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div>
+                <p class="text-xs tracking-[0.2em] uppercase text-brand-dark/50 mb-3">Video</p>
+                <video controls width="480" poster="image/shifa.png" class="w-full rounded-sm border border-brand-dark/10">
+                    <source src="video/intro-placeholder.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
             </div>
-        </section>
+            <div>
+                <p class="text-xs tracking-[0.2em] uppercase text-brand-dark/50 mb-3">Audio</p>
+                <audio controls class="w-full">
+                    <source src="audio/intro-placeholder.mp3" type="audio/mpeg">
+                    Your browser does not support the audio tag.
+                </audio>
+            </div>
+        </div>
+    </section>
 
-        <!-- contact information -->
-        <section class="section" id="contact-info">
-            <h3 class="sectionTitle">Contact Information</h3>
-            <ul class="plainList contactList">
-                <li>
-                    <span class="contactLabel">Email</span>
-                    <span class="contactValue">ug672437001@ftu.ac.th</span>
+    <!-- Contact Info & Form -->
+    <section id="contact" class="max-w-7xl mx-auto px-6 py-24 grid grid-cols-1 md:grid-cols-12 gap-16">
+        <div class="md:col-span-5">
+            <h3 class="font-serif text-3xl mb-8 text-brand-accent">Contact Information</h3>
+            <ul class="text-lg font-light">
+                <li class="flex justify-between items-center py-4 border-b border-brand-dark/10">
+                    <span class="text-xs tracking-[0.2em] uppercase text-brand-dark/50">Email</span>
+                    <span>ug672437001@ftu.ac.th</span>
                 </li>
-                <li>
-                    <span class="contactLabel">Phone</span>
-                    <span class="contactValue">083-509-1120</span>
+                <li class="flex justify-between items-center py-4 border-b border-brand-dark/10">
+                    <span class="text-xs tracking-[0.2em] uppercase text-brand-dark/50">Phone</span>
+                    <span>083-509-1120</span>
                 </li>
-                <li>
-                    <span class="contactLabel">Facebook</span>
-                    <a class="inlineLink" href="https://www.facebook.com/shifa.mama.7/about/" target="_blank" rel="noopener noreferrer">Shifa Muhammad</a>
+                <li class="flex justify-between items-center py-4">
+                    <span class="text-xs tracking-[0.2em] uppercase text-brand-dark/50">Facebook</span>
+                    <a href="https://www.facebook.com/shifa.mama.7/about/" target="_blank" rel="noopener noreferrer"
+                       class="underline underline-offset-2 hover:text-brand-accent transition-colors">Shifa Muhammad</a>
                 </li>
             </ul>
-        </section>
+        </div>
 
-        <!-- contact form -->
-        <section class="section" id="contact-form">
-            <h3 class="sectionTitle">Get in Touch</h3>
-            <p class="plainText">Want to know more about me or work together? Send a short message below.</p>
+        <div class="md:col-span-6 md:col-start-7">
+            <h3 class="font-serif text-3xl mb-4 text-brand-accent">Get in Touch</h3>
+            <p class="text-brand-dark/60 font-light mb-8">Want to know more about me or work together? Send a short message below.</p>
 
-            <form class="introForm" action="#" method="post">
-                <div class="formRow">
-                    <label class="formLabel" for="visitorName">Your Name</label>
-                    <input class="formInput" type="text" id="visitorName" name="visitorName" placeholder="e.g. Anas Tawalbeh" required>
+            <form class="max-w-md" action="#" method="post">
+                <div class="mb-6">
+                    <label for="visitorName" class="block text-xs tracking-[0.2em] uppercase text-brand-dark/50 mb-2">Your Name</label>
+                    <input type="text" id="visitorName" name="visitorName" placeholder="e.g. Anas Tawalbeh" required
+                           class="w-full bg-transparent border-b border-brand-dark/30 py-2 font-light focus:outline-none focus:border-brand-accent transition-colors">
                 </div>
-
-                <div class="formRow">
-                    <label class="formLabel" for="visitorEmail">Your Email</label>
-                    <input class="formInput" type="email" id="visitorEmail" name="visitorEmail" placeholder="you@example.com" required>
+                <div class="mb-6">
+                    <label for="visitorEmail" class="block text-xs tracking-[0.2em] uppercase text-brand-dark/50 mb-2">Your Email</label>
+                    <input type="email" id="visitorEmail" name="visitorEmail" placeholder="you@example.com" required
+                           class="w-full bg-transparent border-b border-brand-dark/30 py-2 font-light focus:outline-none focus:border-brand-accent transition-colors">
                 </div>
-
-                <div class="formRow">
-                    <label class="formLabel" for="visitorMessage">Message</label>
-                    <textarea class="formTextarea" id="visitorMessage" name="visitorMessage" rows="4" placeholder="Tell me a bit about yourself, or why you're reaching out..." required></textarea>
+                <div class="mb-8">
+                    <label for="visitorMessage" class="block text-xs tracking-[0.2em] uppercase text-brand-dark/50 mb-2">Message</label>
+                    <textarea id="visitorMessage" name="visitorMessage" rows="4" required
+                              placeholder="Tell me a bit about yourself, or why you're reaching out..."
+                              class="w-full bg-transparent border-b border-brand-dark/30 py-2 font-light focus:outline-none focus:border-brand-accent transition-colors resize-y"></textarea>
                 </div>
-
-                <button class="formButton" type="submit">Send Message</button>
+                <button type="submit"
+                        class="px-8 py-3 bg-brand-dark text-brand-light text-sm tracking-widest uppercase hover:bg-brand-accent transition-colors">
+                    Send Message
+                </button>
             </form>
-        </section>
+        </div>
+    </section>
 
-    </main>
+    <!-- Closing CTA -->
+    <section class="bg-brand-accent text-brand-light py-32 text-center">
+        <h2 class="font-serif text-4xl md:text-5xl mb-8">Ready to create magic?</h2>
+        <a href="mailto:ug672437001@ftu.ac.th" class="inline-block border-b-2 border-brand-light text-xl md:text-2xl pb-2 hover:text-brand-dark hover:border-brand-dark transition-colors duration-300">
+            ug672437001@ftu.ac.th
+        </a>
+    </section>
 
-    <footer class="siteFooter">
-        <p>&copy; 2026 Shifa Mama. Built with HTML &amp; CSS.</p>
+    <footer class="bg-brand-dark text-brand-light/40 py-8 text-center text-sm">
+        <p>&copy; 2026 Shifa Mama. Built with Tailwind CSS.</p>
     </footer>
 
 </body>
