@@ -4,6 +4,7 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 /* backround color */
 html, body {
     background-color: rgb(221, 221, 221);
@@ -81,16 +82,58 @@ ul {
 }
 
 /* title */
-#title {
-    float: right;
+.header {
     display: flex;
-    justify-content: center;
-    text-align: center;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #333333;
+    align-items: center;
+    
+}
 
+#Header {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    gap: 20px;
+    text-align: center;
+    padding: 1%;
+    flex-wrap: wrap;
+    align-items: center;
+    color: #f1f1f1;
+    background-color: #333333;
+}
+
+#nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    text-align: center;
+    padding: 1%;
+    flex-wrap: wrap;
+    align-items: center;
+    color: #f1f1f1;
+    background-color: #333333;
 }
 
 .Governorates {
     display: flex;
     flex-direction: row;
+    background-color: #f1f1f1;
+    padding: 1%;
+    margin: 1%;
+    border: #555555;
+}
+
+#Introduction {
+    background-color: #f1f1f1;
+    margin: 1%;
+    padding: 1%;
+}
+
+#logo {
+    max-width: 100px;
+    max-height: 50%;
 }
 
