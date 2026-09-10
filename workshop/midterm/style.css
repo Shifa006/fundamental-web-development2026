@@ -1,0 +1,96 @@
+/* Reset & base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* backround color */
+html, body {
+    background-color: rgb(221, 221, 221);
+}
+/* for small screen */
+@media only screen and (max-width: 600px) {
+    .Governorates {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+}
+
+li a {
+  display: block;
+  color: black;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+/* for decktop */
+/* navbar */
+li a:hover {
+  background-color: #555555;
+  color: white;
+}
+
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+h2, p {
+  margin: 10px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333333;
+}
+
+ul li {
+  float: left;
+}
+
+ul li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+ul li a:hover {
+  background-color: #111111;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
+/* title */
+#title {
+    float: right;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+
+}
+
+.Governorates {
+    display: flex;
+    flex-direction: row;
+}
+

@@ -1,4 +1,4 @@
-let playAgain = true;
+let playAgain = confirm("Do you want to play a guessing game?");
 
 while (playAgain) {
     let ranNum = Math.floor(Math.random() * 11); //1-10//
@@ -8,9 +8,11 @@ while (playAgain) {
         if (userNum == ranNum) {
             alert("Yeah, you guessed it!");
             break;
-        } else if (userNum > ranNum) {
+        } 
+        else if (userNum > ranNum) {
             alert("Too high, try again");
-        } else {
+        } 
+        else {
             alert("Too low, try again");
         }
     }
