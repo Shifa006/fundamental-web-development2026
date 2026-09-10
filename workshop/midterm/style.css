@@ -88,7 +88,7 @@ ul {
     justify-content: space-between;
     background-color: #333333;
     align-items: center;
-    
+
 }
 
 #Header {
@@ -117,7 +117,14 @@ ul {
     background-color: #333333;
 }
 
-.Governorates {
+.Governorates{
+    background-color: #f1f1f1;
+    padding: 1%;
+    margin: 1%;
+    border: #555555;
+}
+
+.card {
     display: flex;
     flex-direction: row;
     background-color: #f1f1f1;
@@ -135,5 +142,33 @@ ul {
 #logo {
     max-width: 100px;
     max-height: 50%;
+}
+
+#Contact {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: baseline;
+    background-color: #f1f1f1;
+    margin: 1%;
+    padding: 1%;
+    gap: 1%;
+}
+
+#Bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1%;
+    background-color: #918f8f;
+}
+
+.Bottom {
+    color: #f1f1f1;
+    background-color: #797777;
+    text-align: center;
+    text-decoration: none;
+
 }
 
