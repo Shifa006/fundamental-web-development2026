@@ -12,6 +12,16 @@ body {
     color: #111111;
     background-color: #ffffff;
 }
+#goToTop {
+    float: right;
+    margin-left: 15px;
+    width: 200px;
+    height: 200px;
+    position: fixed; 
+    bottom: 20px;     
+    right: 20px;      
+    z-index: 99;      
+}
 
 h1, h2, h3 {
     font-family: 'Fraunces', 'Georgia', serif;

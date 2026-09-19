@@ -40,7 +40,7 @@
         }
     </style>
 </head>
-<body class="bg-brand-light text-brand-dark font-sans antialiased selection:bg-brand-accent selection:text-white">
+<body id="top" class="bg-brand-light text-brand-dark font-sans antialiased selection:bg-brand-accent selection:text-white">
 
     <!-- Navigation -->
     <nav class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-center gap-4 text-sm font-medium tracking-widest uppercase">
@@ -220,7 +220,7 @@
                 <li class="flex justify-between items-center py-4">
                     <span class="text-xs tracking-[0.2em] uppercase text-brand-dark/50">Facebook</span>
                     <a href="https://www.facebook.com/shifa.mama.7/about/" target="_blank" rel="noopener noreferrer"
-                       class="underline underline-offset-2 hover:text-brand-accent transition-colors">Shifa Muhammad</a>
+                        class="underline underline-offset-2 hover:text-brand-accent transition-colors">Shifa Muhammad</a>
                 </li>
             </ul>
         </div>
@@ -232,19 +232,19 @@
             <form class="max-w-md" action="#" method="post">
                 <div class="mb-6">
                     <label for="visitorName" class="block text-xs tracking-[0.2em] uppercase text-brand-dark/50 mb-2">Your Name</label>
-                    <input type="text" id="visitorName" name="visitorName" placeholder="e.g. Anas Tawalbeh" required
-                           class="w-full bg-transparent border-b border-brand-dark/30 py-2 font-light focus:outline-none focus:border-brand-accent transition-colors">
+                    <input type="text" id="visitorName" name="visitorName" placeholder="e.g. Shifa Mama" required
+                        class="w-full bg-transparent border-b border-brand-dark/30 py-2 font-light focus:outline-none focus:border-brand-accent transition-colors">
                 </div>
                 <div class="mb-6">
                     <label for="visitorEmail" class="block text-xs tracking-[0.2em] uppercase text-brand-dark/50 mb-2">Your Email</label>
                     <input type="email" id="visitorEmail" name="visitorEmail" placeholder="you@example.com" required
-                           class="w-full bg-transparent border-b border-brand-dark/30 py-2 font-light focus:outline-none focus:border-brand-accent transition-colors">
+                        class="w-full bg-transparent border-b border-brand-dark/30 py-2 font-light focus:outline-none focus:border-brand-accent transition-colors">
                 </div>
                 <div class="mb-8">
                     <label for="visitorMessage" class="block text-xs tracking-[0.2em] uppercase text-brand-dark/50 mb-2">Message</label>
                     <textarea id="visitorMessage" name="visitorMessage" rows="4" required
-                              placeholder="Tell me a bit about yourself, or why you're reaching out..."
-                              class="w-full bg-transparent border-b border-brand-dark/30 py-2 font-light focus:outline-none focus:border-brand-accent transition-colors resize-y"></textarea>
+                            placeholder="Tell me a bit about yourself, or why you're reaching out..."
+                            class="w-full bg-transparent border-b border-brand-dark/30 py-2 font-light focus:outline-none focus:border-brand-accent transition-colors resize-y"></textarea>
                 </div>
                 <button type="submit"
                         class="px-8 py-3 bg-brand-dark text-brand-light text-sm tracking-widest uppercase hover:bg-brand-accent transition-colors">
@@ -256,15 +256,20 @@
 
     <!-- Closing CTA -->
     <section class="bg-brand-accent text-brand-light py-32 text-center">
-        <h2 class="font-serif text-4xl md:text-5xl mb-8">Ready to create magic?</h2>
+        <h2 class="font-serif text-4xl md:text-5xl mb-8">Thank you</h2>
         <a href="mailto:ug672437001@ftu.ac.th" class="inline-block border-b-2 border-brand-light text-xl md:text-2xl pb-2 hover:text-brand-dark hover:border-brand-dark transition-colors duration-300">
             ug672437001@ftu.ac.th
-        </a>
+        </a><br><br><br><br>
+    <button type="submit"
+            class="px-8 py-3 bg-brand-dark text-brand-light text-sm tracking-widest uppercase hover:bg-brand-accent transition-colors">
+        <a href="#top">Go to top</a>
+    </button>
     </section>
 
-    <footer class="bg-brand-dark text-brand-light/40 py-8 text-center text-sm">
+    <footer id="bottom" class="bg-brand-dark text-brand-light/40 py-8 text-center text-sm">
         <p>&copy; 2026 Shifa Mama. Built with Tailwind CSS.</p>
-    </footer>
 
+    </footer>
+    
 </body>
 </html>

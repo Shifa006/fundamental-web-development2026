@@ -44,12 +44,12 @@ html, body {
 }
 
 body {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 h2, p {
-  margin: 10px;
+    margin: 10px;
 }
 
 #logo {
@@ -70,7 +70,7 @@ nav a {
 }
 
 nav a:hover {
-  background-color: #111111;
+    background-color: #111111;
 }
 
 /* title */
