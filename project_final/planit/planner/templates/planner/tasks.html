@@ -6,54 +6,302 @@ Tasks | Planit
 {% endblock %}
 
 
-{% block topbar_label %}
-Task Archive
-{% endblock %}
-
-
 {% block content %}
 
-<header class="page-heading">
+<section class="page-intro reveal">
 
-    <p class="eyebrow">
-        Everything in one place
-    </p>
+    <div>
 
-    <h1>
-        Tasks
-    </h1>
+        <p class="eyebrow">
+            Task archive
+        </p>
 
-    <p class="page-description">
-        Search, filter and organise what needs your attention.
-    </p>
+        <h1>
+            Tasks
+        </h1>
 
-</header>
+        <p class="intro-copy">
+            Keep everything visible without making everything feel urgent.
+        </p>
 
-
-<div class="view-tabs">
-
-    <button
-        class="view-tab is-active"
-        type="button"
-    >
-        All Tasks
-    </button>
-
-    <button
-        class="view-tab"
-        type="button"
-    >
-        This Week
-    </button>
-
-</div>
+    </div>
 
 
-<section class="paper-panel">
+    <div class="decorative-label pastel-sage">
 
-    <p class="placeholder-copy">
-        Task data will appear here after the API is connected.
-    </p>
+        <span>
+            07
+        </span>
+
+        <small>
+            ACTIVE
+        </small>
+
+    </div>
+
+</section>
+
+
+<section class="filter-panel reveal">
+
+    <label class="search-box">
+
+        <span class="tiny-label">
+            SEARCH
+        </span>
+
+        <input
+            id="taskSearch"
+            type="search"
+            placeholder="Search your tasks"
+        >
+
+    </label>
+
+
+    <div class="filter-group">
+
+        <button
+            class="filter-button is-active"
+            data-filter="all"
+            type="button"
+        >
+            All
+        </button>
+
+        <button
+            class="filter-button"
+            data-filter="academic"
+            type="button"
+        >
+            Academic
+        </button>
+
+        <button
+            class="filter-button"
+            data-filter="personal"
+            type="button"
+        >
+            Personal
+        </button>
+
+    </div>
+
+
+    <div class="view-tabs">
+
+        <button
+            class="view-tab is-active"
+            data-view="all"
+            type="button"
+        >
+            All Tasks
+        </button>
+
+        <button
+            class="view-tab"
+            data-view="week"
+            type="button"
+        >
+            This Week
+        </button>
+
+    </div>
+
+</section>
+
+
+<section
+    id="allTasksView"
+    class="task-view is-visible reveal"
+>
+
+    <div class="archive-heading">
+
+        <span>
+            OCTOBER 06
+        </span>
+
+        <span>
+            TUESDAY
+        </span>
+
+    </div>
+
+
+    <div class="archive-list">
+
+        <article
+            class="archive-task"
+            data-area="academic"
+            data-title="math homework"
+        >
+
+            <button class="check-box" type="button"></button>
+
+            <div>
+
+                <strong>
+                    Math homework
+                </strong>
+
+                <span>
+                    Calculus
+                </span>
+
+            </div>
+
+            <span class="task-status pastel-peach">
+                Urgent
+            </span>
+
+        </article>
+
+
+        <article
+            class="archive-task"
+            data-area="academic"
+            data-title="group meeting"
+        >
+
+            <button class="check-box" type="button"></button>
+
+            <div>
+
+                <strong>
+                    Group meeting
+                </strong>
+
+                <span>
+                    Planit Final Project
+                </span>
+
+            </div>
+
+            <span class="task-status pastel-lavender">
+                Normal
+            </span>
+
+        </article>
+
+
+        <article
+            class="archive-task"
+            data-area="personal"
+            data-title="buy groceries"
+        >
+
+            <button class="check-box" type="button"></button>
+
+            <div>
+
+                <strong>
+                    Buy groceries
+                </strong>
+
+                <span>
+                    Personal
+                </span>
+
+            </div>
+
+            <span class="task-status pastel-sage">
+                Later
+            </span>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<section
+    id="weekTasksView"
+    class="task-view reveal"
+>
+
+    <div class="week-grid">
+
+        <article class="week-column">
+
+            <header>
+                <span>MON</span>
+                <strong>05</strong>
+            </header>
+
+            <div class="week-task pastel-blue">
+                <strong>Read chapter 5</strong>
+                <span>Physics</span>
+            </div>
+
+        </article>
+
+
+        <article class="week-column is-today">
+
+            <header>
+                <span>TUE</span>
+                <strong>06</strong>
+            </header>
+
+            <div class="week-task pastel-peach">
+                <strong>Math homework</strong>
+                <span>Calculus</span>
+            </div>
+
+            <div class="week-task pastel-lavender">
+                <strong>Group meeting</strong>
+                <span>Project</span>
+            </div>
+
+        </article>
+
+
+        <article class="week-column">
+
+            <header>
+                <span>WED</span>
+                <strong>07</strong>
+            </header>
+
+            <p class="empty-day">
+                No tasks
+            </p>
+
+        </article>
+
+
+        <article class="week-column">
+
+            <header>
+                <span>THU</span>
+                <strong>08</strong>
+            </header>
+
+            <div class="week-task pastel-sage">
+                <strong>Review notes</strong>
+                <span>Web Development</span>
+            </div>
+
+        </article>
+
+
+        <article class="week-column">
+
+            <header>
+                <span>FRI</span>
+                <strong>09</strong>
+            </header>
+
+            <div class="week-task pastel-butter">
+                <strong>Calculus exam</strong>
+                <span>Exam</span>
+            </div>
+
+        </article>
+
+    </div>
 
 </section>
 

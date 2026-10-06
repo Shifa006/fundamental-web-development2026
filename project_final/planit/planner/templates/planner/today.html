@@ -6,182 +6,431 @@ Today | Planit
 {% endblock %}
 
 
-{% block topbar_label %}
-October 06 / 2026
-{% endblock %}
-
-
 {% block content %}
 
-<header class="page-heading">
+<section class="page-intro reveal">
 
-    <p class="eyebrow">
-        Daily Journal
-    </p>
+    <div>
 
-    <h1>
-        Today
-    </h1>
-
-    <p class="editorial-date">
-        Tuesday, October 6
-    </p>
-
-</header>
-
-
-<section class="summary-grid">
-
-    <article class="paper-panel progress-note">
-
-        <span class="section-label">
-            TODAY'S PROGRESS
-        </span>
-
-        <strong class="large-number">
-            02 / 03
-        </strong>
-
-        <p class="muted">
-            tasks completed
+        <p class="eyebrow">
+            Tuesday · October 6
         </p>
 
-    </article>
+        <h1>
+            Good morning.
+        </h1>
 
-
-    <article class="paper-panel exam-note">
-
-        <span class="section-label">
-            NEXT EXAM
-        </span>
-
-        <strong class="summary-title">
-            Calculus
-        </strong>
-
-        <p class="muted">
-            in 3 days
+        <p class="intro-copy">
+            Here is what deserves your attention today.
         </p>
-
-    </article>
-
-</section>
-
-
-<section class="journal-section">
-
-    <header class="section-heading">
-
-        <h2>
-            Overdue
-        </h2>
-
-        <span>
-            02
-        </span>
-
-    </header>
-
-
-    <div class="task-preview">
-
-        <div>
-
-            <strong>
-                Lab report
-            </strong>
-
-            <small>
-                Computer Science
-            </small>
-
-        </div>
-
-        <span class="status-text is-overdue">
-            2 days late
-        </span>
 
     </div>
 
 
-    <div class="task-preview">
+    <div class="date-sticker">
 
-        <div>
-
-            <strong>
-                Read chapter 5
-            </strong>
-
-            <small>
-                Physics
-            </small>
-
-        </div>
-
-        <span class="status-text is-overdue">
-            1 day late
+        <span>
+            OCT
         </span>
+
+        <strong>
+            06
+        </strong>
+
+        <small>
+            TUE
+        </small>
 
     </div>
 
 </section>
 
 
-<section class="journal-section">
+<section class="today-grid">
 
-    <header class="section-heading">
+    <div class="today-main">
 
-        <h2>
-            Today
-        </h2>
+        <article class="progress-panel pastel-peach reveal">
 
-        <span>
-            03
-        </span>
+            <div class="panel-top">
 
-    </header>
+                <span class="tiny-label">
+                    TODAY'S PROGRESS
+                </span>
+
+                <span class="panel-number">
+                    01
+                </span>
+
+            </div>
 
 
-    <div class="task-preview">
+            <div class="progress-content">
 
-        <div>
+                <div>
 
-            <strong>
-                Math homework
-            </strong>
+                    <strong class="big-progress">
+                        02
+                    </strong>
 
-            <small>
+                    <span class="progress-divider">
+                        /
+                    </span>
+
+                    <strong class="big-progress muted-number">
+                        03
+                    </strong>
+
+                </div>
+
+                <p>
+                    tasks completed
+                </p>
+
+            </div>
+
+
+            <div class="progress-track">
+
+                <span style="width: 67%"></span>
+
+            </div>
+
+
+            <div
+                class="doodle-loop"
+                aria-hidden="true"
+            ></div>
+
+        </article>
+
+
+        <section class="content-section reveal">
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="tiny-label">
+                        TODAY
+                    </span>
+
+                    <h2>
+                        Your task list
+                    </h2>
+
+                </div>
+
+                <span class="count-pill">
+                    03
+                </span>
+
+            </div>
+
+
+            <div class="task-list">
+
+                <article class="task-row">
+
+                    <button
+                        class="check-box"
+                        type="button"
+                        aria-label="Complete Math homework"
+                    ></button>
+
+                    <div class="task-copy">
+
+                        <strong>
+                            Math homework
+                        </strong>
+
+                        <span>
+                            Calculus
+                        </span>
+
+                    </div>
+
+                    <span class="category-pill pastel-butter">
+                        Assignment
+                    </span>
+
+                    <span class="priority-text urgent">
+                        Urgent
+                    </span>
+
+                </article>
+
+
+                <article class="task-row">
+
+                    <button
+                        class="check-box"
+                        type="button"
+                        aria-label="Complete Group meeting"
+                    ></button>
+
+                    <div class="task-copy">
+
+                        <strong>
+                            Group meeting
+                        </strong>
+
+                        <span>
+                            Planit Final Project
+                        </span>
+
+                    </div>
+
+                    <span class="category-pill pastel-lavender">
+                        Project
+                    </span>
+
+                    <span class="priority-text">
+                        Normal
+                    </span>
+
+                </article>
+
+
+                <article class="task-row is-complete">
+
+                    <button
+                        class="check-box is-checked"
+                        type="button"
+                        aria-label="Uncomplete Review lecture notes"
+                    ></button>
+
+                    <div class="task-copy">
+
+                        <strong>
+                            Review lecture notes
+                        </strong>
+
+                        <span>
+                            Web Development
+                        </span>
+
+                    </div>
+
+                    <span class="category-pill pastel-sage">
+                        Study
+                    </span>
+
+                    <span class="priority-text">
+                        Done
+                    </span>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <section class="content-section overdue-section reveal">
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="tiny-label danger-label">
+                        NEEDS ATTENTION
+                    </span>
+
+                    <h2>
+                        Overdue
+                    </h2>
+
+                </div>
+
+                <span class="count-pill danger-pill">
+                    02
+                </span>
+
+            </div>
+
+
+            <div class="task-list">
+
+                <article class="task-row">
+
+                    <button
+                        class="check-box"
+                        type="button"
+                    ></button>
+
+                    <div class="task-copy">
+
+                        <strong>
+                            Lab report
+                        </strong>
+
+                        <span>
+                            Computer Science
+                        </span>
+
+                    </div>
+
+                    <span class="category-pill pastel-blue">
+                        Assignment
+                    </span>
+
+                    <span class="priority-text urgent">
+                        2 days late
+                    </span>
+
+                </article>
+
+
+                <article class="task-row">
+
+                    <button
+                        class="check-box"
+                        type="button"
+                    ></button>
+
+                    <div class="task-copy">
+
+                        <strong>
+                            Read chapter 5
+                        </strong>
+
+                        <span>
+                            Physics
+                        </span>
+
+                    </div>
+
+                    <span class="category-pill pastel-sage">
+                        Study
+                    </span>
+
+                    <span class="priority-text urgent">
+                        1 day late
+                    </span>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <aside class="today-side">
+
+        <article class="exam-panel pastel-lavender reveal">
+
+            <span class="tiny-label">
+                NEXT EXAM
+            </span>
+
+            <h2>
                 Calculus
-            </small>
+            </h2>
 
-        </div>
-
-        <span class="status-text">
-            Urgent
-        </span>
-
-    </div>
+            <p>
+                Friday, October 9
+            </p>
 
 
-    <div class="task-preview">
+            <div class="exam-countdown">
 
-        <div>
+                <strong>
+                    3
+                </strong>
 
-            <strong>
-                Group meeting
-            </strong>
+                <span>
+                    days
+                </span>
 
-            <small>
-                Software Project
-            </small>
+            </div>
 
-        </div>
 
-        <span class="status-text">
-            Normal
-        </span>
+            <div class="doodle-star"></div>
 
-    </div>
+        </article>
+
+
+        <article class="mini-calendar-card reveal">
+
+            <div class="calendar-heading">
+
+                <div>
+
+                    <span class="tiny-label">
+                        CALENDAR
+                    </span>
+
+                    <h3>
+                        October
+                    </h3>
+
+                </div>
+
+                <span class="calendar-year">
+                    2026
+                </span>
+
+            </div>
+
+
+            <div class="mini-calendar">
+
+                <span class="day-name">M</span>
+                <span class="day-name">T</span>
+                <span class="day-name">W</span>
+                <span class="day-name">T</span>
+                <span class="day-name">F</span>
+                <span class="day-name">S</span>
+                <span class="day-name">S</span>
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+
+                <span>5</span>
+                <span class="current-day">6</span>
+                <span>7</span>
+                <span>8</span>
+                <span>9</span>
+                <span>10</span>
+                <span>11</span>
+
+                <span>12</span>
+                <span>13</span>
+                <span>14</span>
+                <span>15</span>
+                <span>16</span>
+                <span>17</span>
+                <span>18</span>
+
+            </div>
+
+        </article>
+
+
+        <article class="quote-note pastel-butter reveal">
+
+            <span class="tiny-label">
+                TODAY'S NOTE
+            </span>
+
+            <p>
+                Progress does not need to be loud.
+            </p>
+
+            <div class="paper-tape"></div>
+
+        </article>
+
+    </aside>
 
 </section>
 

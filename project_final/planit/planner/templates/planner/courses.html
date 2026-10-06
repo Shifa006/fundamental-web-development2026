@@ -6,64 +6,329 @@ Courses | Planit
 {% endblock %}
 
 
-{% block topbar_label %}
-Academic Overview
-{% endblock %}
-
-
 {% block content %}
 
-<header class="page-heading">
+<section class="page-intro reveal">
 
-    <p class="eyebrow">
-        Course folders
-    </p>
+    <div>
 
-    <h1>
-        Courses
-    </h1>
+        <p class="eyebrow">
+            Academic files
+        </p>
 
-    <p class="page-description">
-        Track coursework, assessments and target grades.
-    </p>
+        <h1>
+            Courses
+        </h1>
 
-</header>
+        <p class="intro-copy">
+            A folder for every subject and everything inside it.
+        </p>
+
+    </div>
+
+
+    <div class="decorative-label pastel-butter">
+
+        <span>
+            04
+        </span>
+
+        <small>
+            COURSES
+        </small>
+
+    </div>
+
+</section>
 
 
 <section class="course-grid">
 
-    <article class="course-folder is-butter">
+    <article class="course-folder butter-folder reveal">
 
-        <span class="folder-code">
+        <div class="folder-tab">
             MATH101
-        </span>
+        </div>
 
-        <h2>
-            Calculus
-        </h2>
+        <div class="folder-paper">
 
-        <p>
-            75% task completion
-        </p>
+            <div class="course-index">
+                01
+            </div>
+
+            <h2>
+                Calculus
+            </h2>
+
+            <p>
+                Mathematics · Semester 1
+            </p>
+
+
+            <div class="course-progress">
+
+                <div>
+
+                    <span>
+                        Task completion
+                    </span>
+
+                    <strong>
+                        75%
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-track">
+
+                    <span style="width: 75%"></span>
+
+                </div>
+
+            </div>
+
+
+            <footer>
+
+                <span>
+                    2 pending
+                </span>
+
+                <span>
+                    1 exam
+                </span>
+
+            </footer>
+
+        </div>
 
     </article>
 
 
-    <article class="course-folder is-lavender">
+    <article class="course-folder lavender-folder reveal">
 
-        <span class="folder-code">
+        <div class="folder-tab">
             CS101
+        </div>
+
+        <div class="folder-paper">
+
+            <div class="course-index">
+                02
+            </div>
+
+            <h2>
+                Computer Science
+            </h2>
+
+            <p>
+                Computing · Semester 1
+            </p>
+
+
+            <div class="course-progress">
+
+                <div>
+
+                    <span>
+                        Task completion
+                    </span>
+
+                    <strong>
+                        48%
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-track">
+
+                    <span style="width: 48%"></span>
+
+                </div>
+
+            </div>
+
+
+            <footer>
+
+                <span>
+                    4 pending
+                </span>
+
+                <span>
+                    1 overdue
+                </span>
+
+            </footer>
+
+        </div>
+
+    </article>
+
+
+    <article class="course-folder sage-folder reveal">
+
+        <div class="folder-tab">
+            WEB101
+        </div>
+
+        <div class="folder-paper">
+
+            <div class="course-index">
+                03
+            </div>
+
+            <h2>
+                Web Development
+            </h2>
+
+            <p>
+                Computing · Semester 1
+            </p>
+
+
+            <div class="course-progress">
+
+                <div>
+
+                    <span>
+                        Task completion
+                    </span>
+
+                    <strong>
+                        67%
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-track">
+
+                    <span style="width: 67%"></span>
+
+                </div>
+
+            </div>
+
+
+            <footer>
+
+                <span>
+                    3 pending
+                </span>
+
+                <span>
+                    1 project
+                </span>
+
+            </footer>
+
+        </div>
+
+    </article>
+
+
+    <article class="course-folder clay-folder reveal">
+
+        <div class="folder-tab">
+            PY101
+        </div>
+
+        <div class="folder-paper">
+
+            <div class="course-index">
+                04
+            </div>
+
+            <h2>
+                Python Programming
+            </h2>
+
+            <p>
+                Computing · Semester 1
+            </p>
+
+
+            <div class="course-progress">
+
+                <div>
+
+                    <span>
+                        Task completion
+                    </span>
+
+                    <strong>
+                        82%
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-track">
+
+                    <span style="width: 82%"></span>
+
+                </div>
+
+            </div>
+
+
+            <footer>
+
+                <span>
+                    1 pending
+                </span>
+
+                <span>
+                    0 overdue
+                </span>
+
+            </footer>
+
+        </div>
+
+    </article>
+
+</section>
+
+
+<section class="grade-preview reveal">
+
+    <div class="grade-note">
+
+        <span class="tiny-label">
+            GRADE PLANNER
         </span>
 
         <h2>
-            Computer Science
+            What do you need next?
         </h2>
 
         <p>
-            48% task completion
+            Select a course to calculate the score required to reach your target grade.
         </p>
 
-    </article>
+    </div>
+
+
+    <div class="grade-example pastel-lavender">
+
+        <span class="tiny-label">
+            EXAMPLE TARGET
+        </span>
+
+        <strong>
+            80%
+        </strong>
+
+        <p>
+            Required on remaining work:
+            <b>76%</b>
+        </p>
+
+    </div>
 
 </section>
 
