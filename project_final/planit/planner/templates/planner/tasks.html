@@ -1,179 +1,83 @@
 {% extends "planner/base.html" %}
 {% load static %}
 
-
-{% block title %}
-Tasks | Planit
-{% endblock %}
-
+{% block title %}Tasks | Planit{% endblock %}
 
 {% block content %}
-
 <section class="page-intro reveal">
-
     <div>
-
-        <p class="eyebrow">
-            Task archive
-        </p>
-
-        <h1>
-            Tasks
-        </h1>
-
-        <p class="intro-copy">
-            Keep everything visible without making everything feel urgent.
-        </p>
-
+        <p class="eyebrow">Task archive</p>
+        <h1>Tasks</h1>
+        <p class="intro-copy">Everything you need to keep moving, without making everything feel urgent.</p>
     </div>
-
 
     <div class="decorative-label pastel-sage">
-
-        <span id="activeTaskCount">
-            --
-        </span>
-
-        <small>
-            ACTIVE
-        </small>
-
+        <span id="activeTaskCount">--</span>
+        <small>ACTIVE</small>
     </div>
-
 </section>
-
 
 <section class="filter-panel reveal">
-
     <label class="search-box">
-
-        <span class="tiny-label">
-            SEARCH
-        </span>
-
-        <input
-            id="taskSearch"
-            type="search"
-            placeholder="Search your tasks"
-        >
-
+        <span class="tiny-label">SEARCH</span>
+        <input id="taskSearch" type="search" placeholder="Search your tasks">
     </label>
 
+    <div class="filter-row">
+        <div class="filter-group" aria-label="Area filter">
+            <button class="filter-button is-active" data-area="all" type="button">All</button>
+            <button class="filter-button" data-area="academic" type="button">Academic</button>
+            <button class="filter-button" data-area="personal" type="button">Personal</button>
+        </div>
 
-    <div class="filter-group">
+        <select id="priorityFilter" class="compact-select" aria-label="Priority filter">
+            <option value="all">All priorities</option>
+            <option value="urgent">Urgent</option>
+            <option value="normal">Normal</option>
+            <option value="later">Later</option>
+        </select>
 
-        <button
-            class="filter-button is-active"
-            data-area="all"
-            type="button"
-        >
-            All
-        </button>
+        <select id="statusFilter" class="compact-select" aria-label="Status filter">
+            <option value="all">All statuses</option>
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
+            <option value="overdue">Overdue</option>
+            <option value="past_exam">Past exams</option>
+        </select>
 
-        <button
-            class="filter-button"
-            data-area="academic"
-            type="button"
-        >
-            Academic
-        </button>
+        <select id="subjectFilter" class="compact-select" aria-label="Subject filter">
+            <option value="all">All subjects</option>
+        </select>
 
-        <button
-            class="filter-button"
-            data-area="personal"
-            type="button"
-        >
-            Personal
-        </button>
-
+        <select id="sortFilter" class="compact-select" aria-label="Sort tasks">
+            <option value="attention">Attention</option>
+            <option value="due">Due date</option>
+            <option value="priority">Priority</option>
+        </select>
     </div>
-
 
     <div class="view-tabs">
-
-        <button
-            class="view-tab is-active"
-            data-view="all"
-            type="button"
-        >
-            All Tasks
-        </button>
-
-        <button
-            class="view-tab"
-            data-view="week"
-            type="button"
-        >
-            This Week
-        </button>
-
+        <button class="view-tab is-active" data-view="all" type="button">All Tasks</button>
+        <button class="view-tab" data-view="week" type="button">This Week</button>
     </div>
-
 </section>
 
+<div id="tasksError" class="message-panel error-message" hidden></div>
+<div id="tasksLoading" class="loading-panel">Loading tasks...</div>
 
-<div
-    id="tasksError"
-    class="message-panel error-message"
-    hidden
-></div>
-
-
-<div
-    id="tasksLoading"
-    class="loading-panel"
->
-    Loading tasks...
-</div>
-
-
-<section
-    id="allTasksView"
-    class="task-view"
-    hidden
->
-
+<section id="allTasksView" class="task-view" hidden>
     <div class="archive-heading">
-
-        <span>
-            TASK LIST
-        </span>
-
-        <span id="taskListCount">
-            00 ITEMS
-        </span>
-
+        <span>TASK LIST</span>
+        <span id="taskListCount">00 ITEMS</span>
     </div>
-
-
-    <div
-        id="archiveTaskList"
-        class="archive-list"
-    ></div>
-
+    <div id="archiveTaskList" class="archive-list"></div>
 </section>
 
-
-<section
-    id="weekTasksView"
-    class="task-view"
-    hidden
->
-
-    <div
-        id="weekGrid"
-        class="week-grid"
-    ></div>
-
+<section id="weekTasksView" class="task-view" hidden>
+    <div id="weekGrid" class="week-grid"></div>
 </section>
-
 {% endblock %}
 
-
 {% block page_scripts %}
-
-<script
-    src="{% static 'planner/js/tasks.js' %}">
-</script>
-
+<script src="{% static 'planner/js/tasks.js' %}"></script>
 {% endblock %}

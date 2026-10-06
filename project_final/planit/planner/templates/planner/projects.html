@@ -1,255 +1,68 @@
 {% extends "planner/base.html" %}
+{% load static %}
 
-
-{% block title %}
-Projects | Planit
-{% endblock %}
-
+{% block title %}Projects | Planit{% endblock %}
 
 {% block content %}
-
 <section class="page-intro reveal">
-
     <div>
-
-        <p class="eyebrow">
-            Work in progress
-        </p>
-
-        <h1>
-            Projects
-        </h1>
-
-        <p class="intro-copy">
-            Keep big work visible by breaking it into smaller pieces.
-        </p>
-
+        <p class="eyebrow">Work in progress</p>
+        <h1>Projects</h1>
+        <p class="intro-copy">Big work, broken into smaller pieces and measured automatically.</p>
     </div>
 
+    <button id="addProjectButton" class="decorative-action pastel-lavender" type="button">
+        <span>Add</span>
+        <small>PROJECT</small>
+    </button>
+</section>
 
-    <div class="decorative-label pastel-lavender">
+<div id="projectsError" class="message-panel error-message" hidden></div>
+<div id="projectsLoading" class="loading-panel">Loading projects...</div>
 
-        <span>
-            03
-        </span>
+<section id="projectGrid" class="project-grid" hidden></section>
 
-        <small>
-            ACTIVE
-        </small>
+<section id="projectDetail" class="detail-panel" hidden>
+    <div class="detail-header">
+        <div>
+            <span id="projectDetailSubject" class="tiny-label"></span>
+            <h2 id="projectDetailTitle"></h2>
+            <p id="projectDetailDescription" class="muted-copy"></p>
+        </div>
 
+        <div class="detail-actions">
+            <button id="projectAddTaskButton" class="primary-button" type="button">Add project task</button>
+            <button id="editProjectButton" class="soft-button" type="button">Edit project</button>
+            <button id="deleteProjectButton" class="text-danger-button" type="button">Delete</button>
+        </div>
     </div>
 
+    <div class="project-detail-summary">
+        <article class="stat-card pastel-peach">
+            <span class="tiny-label">PROGRESS</span>
+            <strong id="projectDetailProgress">--</strong>
+            <span id="projectDetailProgressMeta">No project tasks yet</span>
+        </article>
+
+        <article class="stat-card pastel-butter">
+            <span class="tiny-label">DUE DATE</span>
+            <strong id="projectDetailDue">No date</strong>
+            <span>project deadline</span>
+        </article>
+    </div>
+
+    <section class="detail-card">
+        <div class="section-header">
+            <div>
+                <span class="tiny-label">PROJECT TASKS</span>
+                <h3>Task progress</h3>
+            </div>
+        </div>
+        <div id="projectTaskList" class="mini-list"></div>
+    </section>
 </section>
+{% endblock %}
 
-
-<section class="project-grid">
-
-    <article class="project-card project-one reveal">
-
-        <div class="tape"></div>
-
-
-        <header>
-
-            <span class="project-index">
-                01
-            </span>
-
-            <span class="project-date">
-                OCT 30
-            </span>
-
-        </header>
-
-
-        <div class="project-title">
-
-            <span class="tiny-label">
-                WEB DEVELOPMENT
-            </span>
-
-            <h2>
-                Planit Final Project
-            </h2>
-
-        </div>
-
-
-        <div class="project-progress">
-
-            <div class="project-percent">
-
-                <strong>
-                    67%
-                </strong>
-
-                <span>
-                    complete
-                </span>
-
-            </div>
-
-
-            <div class="progress-track">
-
-                <span style="width: 67%"></span>
-
-            </div>
-
-        </div>
-
-
-        <footer>
-
-            <span>
-                4 / 6 tasks
-            </span>
-
-            <span>
-                24 days left
-            </span>
-
-        </footer>
-
-    </article>
-
-
-    <article class="project-card project-two reveal">
-
-        <div class="tape alternate"></div>
-
-
-        <header>
-
-            <span class="project-index">
-                02
-            </span>
-
-            <span class="project-date">
-                NOV 18
-            </span>
-
-        </header>
-
-
-        <div class="project-title">
-
-            <span class="tiny-label">
-                PYTHON PROGRAMMING
-            </span>
-
-            <h2>
-                Functions and OOP
-            </h2>
-
-        </div>
-
-
-        <div class="project-progress">
-
-            <div class="project-percent">
-
-                <strong>
-                    40%
-                </strong>
-
-                <span>
-                    complete
-                </span>
-
-            </div>
-
-
-            <div class="progress-track">
-
-                <span style="width: 40%"></span>
-
-            </div>
-
-        </div>
-
-
-        <footer>
-
-            <span>
-                2 / 5 tasks
-            </span>
-
-            <span>
-                43 days left
-            </span>
-
-        </footer>
-
-    </article>
-
-
-    <article class="project-card project-three reveal">
-
-        <header>
-
-            <span class="project-index">
-                03
-            </span>
-
-            <span class="project-date">
-                DEC 01
-            </span>
-
-        </header>
-
-
-        <div class="project-title">
-
-            <span class="tiny-label">
-                PERSONAL
-            </span>
-
-            <h2>
-                Portfolio Update
-            </h2>
-
-        </div>
-
-
-        <div class="project-progress">
-
-            <div class="project-percent">
-
-                <strong>
-                    25%
-                </strong>
-
-                <span>
-                    complete
-                </span>
-
-            </div>
-
-
-            <div class="progress-track">
-
-                <span style="width: 25%"></span>
-
-            </div>
-
-        </div>
-
-
-        <footer>
-
-            <span>
-                1 / 4 tasks
-            </span>
-
-            <span>
-                56 days left
-            </span>
-
-        </footer>
-
-    </article>
-
-</section>
-
+{% block page_scripts %}
+<script src="{% static 'planner/js/projects.js' %}"></script>
 {% endblock %}

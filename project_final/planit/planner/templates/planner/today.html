@@ -1,345 +1,111 @@
 {% extends "planner/base.html" %}
 {% load static %}
 
-
-{% block title %}
-Today | Planit
-{% endblock %}
-
+{% block title %}Today | Planit{% endblock %}
 
 {% block content %}
-
 <section class="page-intro reveal">
-
     <div>
-
-        <p
-            id="todayDate"
-            class="eyebrow"
-        >
-            Loading date
-        </p>
-
-        <h1>
-            Good morning.
-        </h1>
-
-        <p class="intro-copy">
-            Here is what deserves your attention today.
-        </p>
-
+        <p id="todayDate" class="eyebrow">Loading date</p>
+        <h1>Good morning.</h1>
+        <p class="intro-copy">A softer way to see what deserves your attention now.</p>
     </div>
-
 
     <div class="date-sticker">
-
-        <span id="dateMonth">
-            ---
-        </span>
-
-        <strong id="dateNumber">
-            --
-        </strong>
-
-        <small id="dateWeekday">
-            ---
-        </small>
-
+        <span id="dateMonth">---</span>
+        <strong id="dateNumber">--</strong>
+        <small id="dateWeekday">---</small>
     </div>
-
 </section>
 
-
-<div
-    class="planner-controls reveal"
-    aria-label="Task area"
->
-
-    <button
-        class="area-filter is-active"
-        data-area="all"
-        type="button"
-    >
-        All
-    </button>
-
-    <button
-        class="area-filter"
-        data-area="academic"
-        type="button"
-    >
-        Academic
-    </button>
-
-    <button
-        class="area-filter"
-        data-area="personal"
-        type="button"
-    >
-        Personal
-    </button>
-
+<div class="planner-controls reveal" aria-label="Task area">
+    <button class="area-filter is-active" data-area="all" type="button">All</button>
+    <button class="area-filter" data-area="academic" type="button">Academic</button>
+    <button class="area-filter" data-area="personal" type="button">Personal</button>
 </div>
 
+<div id="todayError" class="message-panel error-message" hidden></div>
+<section id="todayLoading" class="loading-panel">Loading your day...</section>
 
-<div
-    id="todayError"
-    class="message-panel error-message"
-    hidden
-></div>
-
-
-<section
-    id="todayLoading"
-    class="loading-panel"
->
-    Loading your day...
-</section>
-
-
-<section
-    id="todayContent"
-    class="today-grid"
-    hidden
->
-
+<section id="todayContent" class="today-grid" hidden>
     <div class="today-main">
-
         <article class="progress-panel pastel-peach reveal">
-
             <div class="panel-top">
-
-                <span class="tiny-label">
-                    TODAY'S PROGRESS
-                </span>
-
-                <span class="panel-number">
-                    01
-                </span>
-
+                <span class="tiny-label">TODAY'S PROGRESS</span>
+                <span class="panel-number">01</span>
             </div>
-
 
             <div class="progress-content">
-
                 <div>
-
-                    <strong
-                        id="progressCompleted"
-                        class="big-progress"
-                    >
-                        0
-                    </strong>
-
-                    <span class="progress-divider">
-                        /
-                    </span>
-
-                    <strong
-                        id="progressTotal"
-                        class="big-progress muted-number"
-                    >
-                        0
-                    </strong>
-
+                    <strong id="progressCompleted" class="big-progress">00</strong>
+                    <span class="progress-divider">/</span>
+                    <strong id="progressTotal" class="big-progress muted-number">00</strong>
                 </div>
-
-                <p id="progressText">
-                    tasks completed
-                </p>
-
+                <p id="progressText">tasks completed</p>
             </div>
 
-
-            <div class="progress-track">
-
-                <span
-                    id="todayProgressBar"
-                    style="width: 0%"
-                ></span>
-
-            </div>
-
+            <div class="progress-track"><span id="todayProgressBar" style="width: 0%"></span></div>
+            <div class="doodle-loop" aria-hidden="true"></div>
         </article>
-
 
         <section class="content-section reveal">
-
             <div class="section-header">
-
                 <div>
-
-                    <span class="tiny-label">
-                        TODAY
-                    </span>
-
-                    <h2>
-                        Your task list
-                    </h2>
-
+                    <span class="tiny-label">TODAY</span>
+                    <h2>Your task list</h2>
                 </div>
-
-                <span
-                    id="todayCount"
-                    class="count-pill"
-                >
-                    00
-                </span>
-
+                <span id="todayCount" class="count-pill">00</span>
             </div>
-
-
-            <div
-                id="todayTaskList"
-                class="task-list"
-            ></div>
-
+            <div id="todayTaskList" class="task-list"></div>
         </section>
 
-
-        <section class="content-section overdue-section reveal">
-
+        <section class="content-section reveal">
             <div class="section-header">
-
                 <div>
-
-                    <span class="tiny-label danger-label">
-                        NEEDS ATTENTION
-                    </span>
-
-                    <h2>
-                        Overdue
-                    </h2>
-
+                    <span class="tiny-label danger-label">NEEDS ATTENTION</span>
+                    <h2>Overdue</h2>
                 </div>
-
-                <span
-                    id="overdueCount"
-                    class="count-pill danger-pill"
-                >
-                    00
-                </span>
-
+                <span id="overdueCount" class="count-pill danger-pill">00</span>
             </div>
-
-
-            <div
-                id="overdueTaskList"
-                class="task-list"
-            ></div>
-
+            <div id="overdueTaskList" class="task-list"></div>
         </section>
 
-
-        <div
-            id="examHiddenMessage"
-            class="hidden-note"
-            hidden
-        ></div>
-
+        <div id="examHiddenMessage" class="hidden-note" hidden></div>
     </div>
 
-
     <aside class="today-side">
+        <article class="exam-panel pastel-lavender reveal">
+            <span class="tiny-label">NEXT EXAM</span>
+            <h2 id="nextExamTitle">No upcoming exam</h2>
+            <p id="nextExamDate">Your schedule is clear.</p>
 
-        <article
-            id="nextExamCard"
-            class="exam-panel pastel-lavender reveal"
-        >
-
-            <span class="tiny-label">
-                NEXT EXAM
-            </span>
-
-            <h2 id="nextExamTitle">
-                No upcoming exam
-            </h2>
-
-            <p id="nextExamDate">
-                Your schedule is clear.
-            </p>
-
-
-            <div
-                id="examCountdown"
-                class="exam-countdown"
-                hidden
-            >
-
-                <strong id="examDays">
-                    0
-                </strong>
-
-                <span>
-                    days
-                </span>
-
+            <div id="examCountdown" class="exam-countdown" hidden>
+                <strong id="examDays">0</strong>
+                <span id="examDaysLabel">days</span>
             </div>
-
-            <div class="doodle-star"></div>
-
+            <div class="doodle-star" aria-hidden="true"></div>
         </article>
-
 
         <article class="mini-calendar-card reveal">
-
             <div class="calendar-heading">
-
                 <div>
-
-                    <span class="tiny-label">
-                        CALENDAR
-                    </span>
-
-                    <h3 id="calendarMonth">
-                        Month
-                    </h3>
-
+                    <span class="tiny-label">CALENDAR</span>
+                    <h3 id="calendarMonth">Month</h3>
                 </div>
-
-                <span
-                    id="calendarYear"
-                    class="calendar-year"
-                >
-                    ----
-                </span>
-
+                <span id="calendarYear" class="calendar-year">----</span>
             </div>
-
-
-            <div
-                id="miniCalendar"
-                class="mini-calendar"
-            ></div>
-
+            <div id="miniCalendar" class="mini-calendar"></div>
         </article>
-
 
         <article class="quote-note pastel-butter reveal">
-
-            <span class="tiny-label">
-                TODAY'S NOTE
-            </span>
-
-            <p>
-                Progress does not need to be loud.
-            </p>
-
-            <div class="paper-tape"></div>
-
+            <span class="tiny-label">TODAY'S NOTE</span>
+            <p>Progress does not need to be loud.</p>
+            <div class="paper-tape" aria-hidden="true"></div>
         </article>
-
     </aside>
-
 </section>
-
 {% endblock %}
 
-
 {% block page_scripts %}
-
-<script
-    src="{% static 'planner/js/today.js' %}">
-</script>
-
+<script src="{% static 'planner/js/today.js' %}"></script>
 {% endblock %}

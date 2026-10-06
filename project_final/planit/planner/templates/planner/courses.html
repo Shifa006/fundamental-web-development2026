@@ -1,335 +1,99 @@
 {% extends "planner/base.html" %}
+{% load static %}
 
-
-{% block title %}
-Courses | Planit
-{% endblock %}
-
+{% block title %}Courses | Planit{% endblock %}
 
 {% block content %}
-
 <section class="page-intro reveal">
-
     <div>
-
-        <p class="eyebrow">
-            Academic files
-        </p>
-
-        <h1>
-            Courses
-        </h1>
-
-        <p class="intro-copy">
-            A folder for every subject and everything inside it.
-        </p>
-
+        <p class="eyebrow">Academic files</p>
+        <h1>Courses</h1>
+        <p class="intro-copy">A folder for every subject, task, assessment, and grade target.</p>
     </div>
 
-
-    <div class="decorative-label pastel-butter">
-
-        <span>
-            04
-        </span>
-
-        <small>
-            COURSES
-        </small>
-
-    </div>
-
+    <button id="addSubjectButton" class="decorative-action pastel-butter" type="button">
+        <span>Add</span>
+        <small>COURSE</small>
+    </button>
 </section>
 
+<div id="coursesError" class="message-panel error-message" hidden></div>
+<div id="coursesLoading" class="loading-panel">Loading courses...</div>
 
-<section class="course-grid">
+<section id="courseGrid" class="course-grid" hidden></section>
 
-    <article class="course-folder butter-folder reveal">
-
-        <div class="folder-tab">
-            MATH101
+<section id="courseDetail" class="detail-panel" hidden>
+    <div class="detail-header">
+        <div>
+            <span id="courseDetailCode" class="tiny-label"></span>
+            <h2 id="courseDetailName"></h2>
+            <p id="courseDetailSemester" class="muted-copy"></p>
         </div>
 
-        <div class="folder-paper">
-
-            <div class="course-index">
-                01
-            </div>
-
-            <h2>
-                Calculus
-            </h2>
-
-            <p>
-                Mathematics · Semester 1
-            </p>
-
-
-            <div class="course-progress">
-
-                <div>
-
-                    <span>
-                        Task completion
-                    </span>
-
-                    <strong>
-                        75%
-                    </strong>
-
-                </div>
-
-
-                <div class="progress-track">
-
-                    <span style="width: 75%"></span>
-
-                </div>
-
-            </div>
-
-
-            <footer>
-
-                <span>
-                    2 pending
-                </span>
-
-                <span>
-                    1 exam
-                </span>
-
-            </footer>
-
+        <div class="detail-actions">
+            <button id="editSubjectButton" class="soft-button" type="button">Edit course</button>
+            <button id="deleteSubjectButton" class="text-danger-button" type="button">Delete</button>
         </div>
-
-    </article>
-
-
-    <article class="course-folder lavender-folder reveal">
-
-        <div class="folder-tab">
-            CS101
-        </div>
-
-        <div class="folder-paper">
-
-            <div class="course-index">
-                02
-            </div>
-
-            <h2>
-                Computer Science
-            </h2>
-
-            <p>
-                Computing · Semester 1
-            </p>
-
-
-            <div class="course-progress">
-
-                <div>
-
-                    <span>
-                        Task completion
-                    </span>
-
-                    <strong>
-                        48%
-                    </strong>
-
-                </div>
-
-
-                <div class="progress-track">
-
-                    <span style="width: 48%"></span>
-
-                </div>
-
-            </div>
-
-
-            <footer>
-
-                <span>
-                    4 pending
-                </span>
-
-                <span>
-                    1 overdue
-                </span>
-
-            </footer>
-
-        </div>
-
-    </article>
-
-
-    <article class="course-folder sage-folder reveal">
-
-        <div class="folder-tab">
-            WEB101
-        </div>
-
-        <div class="folder-paper">
-
-            <div class="course-index">
-                03
-            </div>
-
-            <h2>
-                Web Development
-            </h2>
-
-            <p>
-                Computing · Semester 1
-            </p>
-
-
-            <div class="course-progress">
-
-                <div>
-
-                    <span>
-                        Task completion
-                    </span>
-
-                    <strong>
-                        67%
-                    </strong>
-
-                </div>
-
-
-                <div class="progress-track">
-
-                    <span style="width: 67%"></span>
-
-                </div>
-
-            </div>
-
-
-            <footer>
-
-                <span>
-                    3 pending
-                </span>
-
-                <span>
-                    1 project
-                </span>
-
-            </footer>
-
-        </div>
-
-    </article>
-
-
-    <article class="course-folder clay-folder reveal">
-
-        <div class="folder-tab">
-            PY101
-        </div>
-
-        <div class="folder-paper">
-
-            <div class="course-index">
-                04
-            </div>
-
-            <h2>
-                Python Programming
-            </h2>
-
-            <p>
-                Computing · Semester 1
-            </p>
-
-
-            <div class="course-progress">
-
-                <div>
-
-                    <span>
-                        Task completion
-                    </span>
-
-                    <strong>
-                        82%
-                    </strong>
-
-                </div>
-
-
-                <div class="progress-track">
-
-                    <span style="width: 82%"></span>
-
-                </div>
-
-            </div>
-
-
-            <footer>
-
-                <span>
-                    1 pending
-                </span>
-
-                <span>
-                    0 overdue
-                </span>
-
-            </footer>
-
-        </div>
-
-    </article>
-
-</section>
-
-
-<section class="grade-preview reveal">
-
-    <div class="grade-note">
-
-        <span class="tiny-label">
-            GRADE PLANNER
-        </span>
-
-        <h2>
-            What do you need next?
-        </h2>
-
-        <p>
-            Select a course to calculate the score required to reach your target grade.
-        </p>
-
     </div>
 
+    <div class="course-stat-grid">
+        <article class="stat-card pastel-sage">
+            <span class="tiny-label">TASK PROGRESS</span>
+            <strong id="courseCompletion">--</strong>
+            <span id="courseCompletionMeta">No tasks yet</span>
+        </article>
 
-    <div class="grade-example pastel-lavender">
+        <article class="stat-card pastel-peach">
+            <span class="tiny-label">PENDING</span>
+            <strong id="coursePending">0</strong>
+            <span>active tasks</span>
+        </article>
 
-        <span class="tiny-label">
-            EXAMPLE TARGET
-        </span>
-
-        <strong>
-            80%
-        </strong>
-
-        <p>
-            Required on remaining work:
-            <b>76%</b>
-        </p>
-
+        <article class="stat-card pastel-lavender">
+            <span class="tiny-label">OVERDUE</span>
+            <strong id="courseOverdue">0</strong>
+            <span>need attention</span>
+        </article>
     </div>
 
-</section>
+    <div class="course-detail-grid">
+        <section class="detail-card">
+            <div class="section-header">
+                <div>
+                    <span class="tiny-label">ACADEMIC TASKS</span>
+                    <h3>Course tasks</h3>
+                </div>
+            </div>
+            <div id="courseTaskList" class="mini-list"></div>
+        </section>
 
+        <section class="detail-card grade-card">
+            <div class="section-header">
+                <div>
+                    <span class="tiny-label">GRADE TRACKING</span>
+                    <h3>Target grade</h3>
+                </div>
+                <button id="addAssessmentButton" class="small-action" type="button">Add assessment</button>
+            </div>
+
+            <div class="grade-target-row">
+                <label>
+                    <span>Target</span>
+                    <input id="gradeTarget" type="number" min="0" max="100" step="0.01" value="80">
+                </label>
+                <button id="calculateGradeButton" class="primary-button" type="button">Calculate</button>
+            </div>
+
+            <div id="gradeResult" class="grade-result">
+                Add assessments, then calculate a target.
+            </div>
+
+            <div id="assessmentList" class="assessment-list"></div>
+        </section>
+    </div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{% static 'planner/js/courses.js' %}"></script>
 {% endblock %}
