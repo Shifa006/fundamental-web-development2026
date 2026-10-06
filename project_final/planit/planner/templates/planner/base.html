@@ -1,0 +1,164 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>{% block title %}Planit{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'planner/css/style.css' %}"
+    >
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <aside class="sidebar">
+
+        <a
+            class="brand"
+            href="{% url 'today' %}"
+        >
+            planit.
+        </a>
+
+        {% with current=request.resolver_match.url_name %}
+
+        <nav
+            class="main-nav"
+            aria-label="Primary navigation"
+        >
+
+            <a
+                class="nav-link{% if current == 'today' %} is-active{% endif %}"
+                href="{% url 'today' %}"
+            >
+                Today
+            </a>
+
+            <a
+                class="nav-link{% if current == 'tasks' %} is-active{% endif %}"
+                href="{% url 'tasks' %}"
+            >
+                Tasks
+            </a>
+
+            <a
+                class="nav-link{% if current == 'courses' %} is-active{% endif %}"
+                href="{% url 'courses' %}"
+            >
+                Courses
+            </a>
+
+            <a
+                class="nav-link{% if current == 'projects' %} is-active{% endif %}"
+                href="{% url 'projects' %}"
+            >
+                Projects
+            </a>
+
+        </nav>
+
+        {% endwith %}
+
+        <p class="sidebar-note">
+            student life, in one place
+        </p>
+
+    </aside>
+
+
+    <div class="page-shell">
+
+        <header class="topbar">
+
+            <span class="topbar-label">
+                {% block topbar_label %}
+                Student Planner
+                {% endblock %}
+            </span>
+
+            <button
+                class="button button-dark"
+                type="button"
+            >
+                Add task
+            </button>
+
+        </header>
+
+
+        <main class="page-content">
+
+            {% block content %}
+            {% endblock %}
+
+        </main>
+
+    </div>
+
+</div>
+
+
+{% with current=request.resolver_match.url_name %}
+
+<nav
+    class="mobile-nav"
+    aria-label="Mobile navigation"
+>
+
+    <a
+        class="{% if current == 'today' %}is-active{% endif %}"
+        href="{% url 'today' %}"
+    >
+        Today
+    </a>
+
+    <a
+        class="{% if current == 'tasks' %}is-active{% endif %}"
+        href="{% url 'tasks' %}"
+    >
+        Tasks
+    </a>
+
+    <a
+        class="{% if current == 'courses' %}is-active{% endif %}"
+        href="{% url 'courses' %}"
+    >
+        Courses
+    </a>
+
+    <a
+        class="{% if current == 'projects' %}is-active{% endif %}"
+        href="{% url 'projects' %}"
+    >
+        Projects
+    </a>
+
+</nav>
+
+{% endwith %}
+
+
+{% block scripts %}
+{% endblock %}
+
+</body>
+</html>

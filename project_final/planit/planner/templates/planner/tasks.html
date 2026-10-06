@@ -1,0 +1,60 @@
+{% extends "planner/base.html" %}
+
+
+{% block title %}
+Tasks | Planit
+{% endblock %}
+
+
+{% block topbar_label %}
+Task Archive
+{% endblock %}
+
+
+{% block content %}
+
+<header class="page-heading">
+
+    <p class="eyebrow">
+        Everything in one place
+    </p>
+
+    <h1>
+        Tasks
+    </h1>
+
+    <p class="page-description">
+        Search, filter and organise what needs your attention.
+    </p>
+
+</header>
+
+
+<div class="view-tabs">
+
+    <button
+        class="view-tab is-active"
+        type="button"
+    >
+        All Tasks
+    </button>
+
+    <button
+        class="view-tab"
+        type="button"
+    >
+        This Week
+    </button>
+
+</div>
+
+
+<section class="paper-panel">
+
+    <p class="placeholder-copy">
+        Task data will appear here after the API is connected.
+    </p>
+
+</section>
+
+{% endblock %}

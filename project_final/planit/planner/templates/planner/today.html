@@ -1,0 +1,188 @@
+{% extends "planner/base.html" %}
+
+
+{% block title %}
+Today | Planit
+{% endblock %}
+
+
+{% block topbar_label %}
+October 06 / 2026
+{% endblock %}
+
+
+{% block content %}
+
+<header class="page-heading">
+
+    <p class="eyebrow">
+        Daily Journal
+    </p>
+
+    <h1>
+        Today
+    </h1>
+
+    <p class="editorial-date">
+        Tuesday, October 6
+    </p>
+
+</header>
+
+
+<section class="summary-grid">
+
+    <article class="paper-panel progress-note">
+
+        <span class="section-label">
+            TODAY'S PROGRESS
+        </span>
+
+        <strong class="large-number">
+            02 / 03
+        </strong>
+
+        <p class="muted">
+            tasks completed
+        </p>
+
+    </article>
+
+
+    <article class="paper-panel exam-note">
+
+        <span class="section-label">
+            NEXT EXAM
+        </span>
+
+        <strong class="summary-title">
+            Calculus
+        </strong>
+
+        <p class="muted">
+            in 3 days
+        </p>
+
+    </article>
+
+</section>
+
+
+<section class="journal-section">
+
+    <header class="section-heading">
+
+        <h2>
+            Overdue
+        </h2>
+
+        <span>
+            02
+        </span>
+
+    </header>
+
+
+    <div class="task-preview">
+
+        <div>
+
+            <strong>
+                Lab report
+            </strong>
+
+            <small>
+                Computer Science
+            </small>
+
+        </div>
+
+        <span class="status-text is-overdue">
+            2 days late
+        </span>
+
+    </div>
+
+
+    <div class="task-preview">
+
+        <div>
+
+            <strong>
+                Read chapter 5
+            </strong>
+
+            <small>
+                Physics
+            </small>
+
+        </div>
+
+        <span class="status-text is-overdue">
+            1 day late
+        </span>
+
+    </div>
+
+</section>
+
+
+<section class="journal-section">
+
+    <header class="section-heading">
+
+        <h2>
+            Today
+        </h2>
+
+        <span>
+            03
+        </span>
+
+    </header>
+
+
+    <div class="task-preview">
+
+        <div>
+
+            <strong>
+                Math homework
+            </strong>
+
+            <small>
+                Calculus
+            </small>
+
+        </div>
+
+        <span class="status-text">
+            Urgent
+        </span>
+
+    </div>
+
+
+    <div class="task-preview">
+
+        <div>
+
+            <strong>
+                Group meeting
+            </strong>
+
+            <small>
+                Software Project
+            </small>
+
+        </div>
+
+        <span class="status-text">
+            Normal
+        </span>
+
+    </div>
+
+</section>
+
+{% endblock %}

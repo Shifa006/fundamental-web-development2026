@@ -1,0 +1,70 @@
+{% extends "planner/base.html" %}
+
+
+{% block title %}
+Courses | Planit
+{% endblock %}
+
+
+{% block topbar_label %}
+Academic Overview
+{% endblock %}
+
+
+{% block content %}
+
+<header class="page-heading">
+
+    <p class="eyebrow">
+        Course folders
+    </p>
+
+    <h1>
+        Courses
+    </h1>
+
+    <p class="page-description">
+        Track coursework, assessments and target grades.
+    </p>
+
+</header>
+
+
+<section class="course-grid">
+
+    <article class="course-folder is-butter">
+
+        <span class="folder-code">
+            MATH101
+        </span>
+
+        <h2>
+            Calculus
+        </h2>
+
+        <p>
+            75% task completion
+        </p>
+
+    </article>
+
+
+    <article class="course-folder is-lavender">
+
+        <span class="folder-code">
+            CS101
+        </span>
+
+        <h2>
+            Computer Science
+        </h2>
+
+        <p>
+            48% task completion
+        </p>
+
+    </article>
+
+</section>
+
+{% endblock %}
