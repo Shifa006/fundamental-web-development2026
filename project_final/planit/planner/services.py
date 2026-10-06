@@ -1,4 +1,5 @@
-from decimal import Decimal
+from datetime import timedelta
+from decimal import Decimal, ROUND_HALF_UP
 
 from .domain import (
     AssignmentItem,
@@ -363,3 +364,96 @@ def build_today_payload(
         "hidden_by_exam_mode":
             hidden_by_exam_mode,
     }
+
+def to_json_number(
+    value,
+    places="0.01",
+):
+    if value is None:
+        return None
+
+    quantized = value.quantize(
+        Decimal(places),
+        rounding=ROUND_HALF_UP,
+    )
+
+    return float(quantized)
+
+
+def serialize_task(
+    task,
+    item,
+    today,
+    attention_rank=None,
+):
+    subject = None
+
+    if task.subject is not None:
+        subject = {
+            "id": task.subject.id,
+            "name": task.subject.name,
+        }
+
+    project = None
+
+    if task.project is not None:
+        project = {
+            "id": task.project.id,
+            "title": task.project.title,
+        }
+
+    return {
+        "id": task.id,
+        "title": task.title,
+        "description": task.description,
+        "area": task.area,
+        "kind": task.kind,
+        "priority": task.priority,
+        "priority_rank":
+            PRIORITY_RANK[task.priority],
+        "due_date": (
+            task.due_date.isoformat()
+            if task.due_date
+            else None
+        ),
+        "completed": task.completed,
+        "status": item.status(today),
+        "days_left":
+            item.days_left(today),
+        "days_overdue":
+            item.days_overdue(today),
+        "attention_score":
+            to_json_number(
+                item.attention_score(today)
+            ),
+        "attention_rank":
+            attention_rank,
+        "exam_mode_visible":
+            item.visible_in_exam_mode(
+                today
+            ),
+        "subject": subject,
+        "project": project,
+    }
+
+
+def group_by_date(
+    items,
+    week_start,
+    week_end,
+):
+    grouped = {}
+
+    current = week_start
+
+    while current <= week_end:
+        grouped[current] = []
+        current += timedelta(days=1)
+
+    for item in items:
+        if item.due_date in grouped:
+            grouped[
+                item.due_date
+            ].append(item)
+
+    return grouped

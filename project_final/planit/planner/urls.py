@@ -4,8 +4,47 @@ from . import views
 
 
 urlpatterns = [
-    path("", views.today_page, name="today"),
-    path("tasks/", views.tasks_page, name="tasks"),
-    path("courses/", views.courses_page, name="courses"),
-    path("projects/", views.projects_page, name="projects"),
+    # Pages
+    path(
+        "",
+        views.today_page,
+        name="today",
+    ),
+
+    path(
+        "tasks/",
+        views.tasks_page,
+        name="tasks",
+    ),
+
+    path(
+        "courses/",
+        views.courses_page,
+        name="courses",
+    ),
+
+    path(
+        "projects/",
+        views.projects_page,
+        name="projects",
+    ),
+
+    # APIs
+    path(
+        "api/tasks/",
+        views.tasks_api,
+        name="api_tasks",
+    ),
+
+    path(
+        "api/today/",
+        views.today_api,
+        name="api_today",
+    ),
+
+    path(
+        "api/week/",
+        views.week_api,
+        name="api_week",
+    ),
 ]
