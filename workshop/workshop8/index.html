@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<!-- ============================================================
+    Shifa Mama - Creative CV / Portfolio
+    Document outline:
+    nav > main (hero, about, toolkit, education, projects,
+    media, contact) > footer > go-to-top button
+    ============================================================ -->
+<html lang="en">
+
+<head>
+    <!-- Character set. Must appear within the first 1024 bytes of <head>. -->
+    <meta charset="UTF-8">
+
+    <!-- Tells the browser to use the real device width. Basis of responsive design. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Information for search engines -->
+    <meta name="description" content="Creative CV and portfolio of Shifa Mama, a Data Science and Analytics student.">
+    <meta name="author" content="Shifa Mama">
+
+    <!-- Open Graph: builds the link preview on Facebook, LINE and similar apps.
+    Replace og:image with the full https URL once the site is published. -->
+    <meta property="og:title" content="Shifa Mama | Creative CV">
+    <meta property="og:description" content="Data Science and Analytics student - portfolio and CV.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="image/shifa.png">
+
+    <!-- Text shown on the browser tab -->
+    <title>Shifa Mama | Creative CV</title>
+
+    <!-- Favicon written as an inline SVG, so no extra file is needed -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><circle cx='24' cy='24' r='14' fill='none' stroke='%23173c35' stroke-width='3'/><circle cx='24' cy='24' r='4' fill='%23173c35'/></svg>">
+
+    <!-- preconnect opens the connection to Google Fonts early and cuts load time -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts: Fraunces (serif, headings) and Manrope (sans, body text) -->
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- External stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- defer: download in parallel with the HTML, run once the DOM is ready -->
+    <script src="script.js" defer></script>
+</head>
+
+<!-- id="top" is the target of the go-to-top button and the Home link -->
+<body id="top">
+
+    <!-- Lets keyboard and screen reader users jump straight to the content -->
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <!-- Dotted paper texture. Decoration only, hidden from screen readers. -->
+    <div class="page-noise" aria-hidden="true"></div>
+
+    <!-- ============================================================
+    NAVIGATION - a bar that collapses and expands, driven by JavaScript
+    ============================================================ -->
+    <nav class="site-nav nav-collapsed" id="siteNav" aria-label="Main navigation">
+
+        <!-- Logo, also acts as a link back to the top of the page -->
+        <a class="logo-slot" href="#top" aria-label="Back to top">
+            <!-- Inline SVG, so it can follow the text colour through currentColor -->
+            <svg class="nav-logo-svg" viewBox="0 0 48 48" role="img" aria-label="Shifa Mama geometric logo">
+                <circle cx="24" cy="24" r="14"></circle>
+                <path d="M24 6V42M6 24H42"></path>
+                <circle cx="24" cy="24" r="3" class="logo-dot"></circle>
+            </svg>
+        </a>
+
+        <!-- Menu links. data-section tells JavaScript which section each link belongs to. -->
+        <div class="nav-links" id="navLinks">
+            <a class="nav-link active" href="#top" data-section="top">Home</a>
+            <a class="nav-link" href="#about" data-section="about">About</a>
+            <a class="nav-link" href="#education" data-section="education">Education</a>
+            <a class="nav-link" href="#projects" data-section="projects">Projects</a>
+            <a class="nav-link" href="#contact" data-section="contact">Contact</a>
+        </div>
+
+        <!-- Burger button. aria-expanded and aria-controls report its state. -->
+        <button class="menu-button" id="menuButton" type="button" aria-label="Expand navigation" aria-expanded="false" aria-controls="navLinks">
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Main content. tabindex="-1" lets the skip link move focus here. -->
+    <main id="main-content" tabindex="-1">
+
+        <!-- ============================================================
+        HERO - opening screen: name, short introduction, portrait
+        ============================================================ -->
+        <header class="hero section-shell">
+
+            <!-- Left column: text -->
+            <div class="hero-copy">
+                <!-- Short badge naming the field of study -->
+                <p class="kicker">Data Science &middot; Creative Technology</p>
+
+                <!-- h1, the single main heading of the page -->
+                <h1 class="hero-title">
+                    <span>Shifa</span>
+                    <span class="hero-title-accent">Mama.</span>
+                </h1>
+
+                <!-- Introduction paragraph -->
+                <p class="hero-intro">
+                    Data Science and Analytics student exploring the space between
+                    structured thinking, visual storytelling and web design.
+                </p>
+
+                <!-- In-page link. JavaScript intercepts it to animate the scroll. -->
+                <a class="text-link" href="#projects">
+                    View selected work
+                </a>
+            </div>
+
+            <!-- Right column: portrait and decorative shapes -->
+            <div class="hero-visual">
+
+                <!-- Photo frame, cut to shape with clip-path in the stylesheet -->
+                <div class="portrait-frame">
+                    <!-- width and height reserve the space and prevent layout shift -->
+                    <img src="img/shifaWhite.png" alt="Portrait of Shifa Mama" width="840" height="1050">
+                </div>
+
+                <!-- Two decorative rings -->
+                <div class="hero-orbit orbit-one" aria-hidden="true"></div>
+                <div class="hero-orbit orbit-two" aria-hidden="true"></div>
+
+                <!-- Round yellow stamp -->
+                <div class="hero-stamp">
+                    <span>Portfolio</span>
+                    <strong>2026</strong>
+                </div>
+
+                <!-- Vertical caption along the left edge -->
+                <p class="vertical-note">Analytical mind &middot; Creative direction</p>
+
+                <!-- Decorative SVG mark in the top corner -->
+                <svg class="hero-vector-mark" viewBox="0 0 120 120" role="img" aria-label="Abstract data and design symbol">
+                    <circle cx="60" cy="60" r="39"></circle>
+                    <path d="M20 60H100M60 20V100"></path>
+                    <rect x="54" y="54" width="12" height="12" rx="2"></rect>
+                </svg>
+            </div>
+
+            <!-- Small facts strip closing the hero -->
+            <div class="hero-meta">
+                <span>Based in Thailand</span>
+                <span>Open to learning</span>
+                <span>Scroll to explore</span>
+            </div>
+        </header>
+
+        <!-- ============================================================
+        STATEMENT BAND - scrolling words, decoration only.
+        A div, not a section, because it holds no real content or heading.
+        ============================================================ -->
+        <div class="statement-band" aria-hidden="true">
+            <div class="statement-track">
+                <span>DATA</span>
+                <span>DESIGN</span>
+                <span>LOGIC</span>
+                <span>STORY</span>
+                <span>DATA</span>
+                <span>DESIGN</span>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        ABOUT - introduction and basic profile facts
+        ============================================================ -->
+        <section class="about section-shell" id="about" aria-labelledby="about-heading">
+
+            <!-- Section number and name -->
+            <div class="section-label">
+                <span>01</span>
+                <p>About</p>
+            </div>
+
+            <div class="about-layout">
+                <!-- Heading of this section -->
+                <h2 class="display-heading" id="about-heading">
+                    Quiet structure,
+                    <em>curious ideas.</em>
+                </h2>
+
+                <!-- Body copy -->
+                <div class="about-copy">
+                    <p class="lead">
+                        I am Shifa, a Data Science and Analytics student at Fatoni University.
+                        I enjoy working with information, solving problems and turning ideas into
+                        clear digital experiences.
+                    </p>
+
+                    <p>
+                        My current interests include Python, databases, data visualization and web
+                        development. I like visual systems that feel clean, intentional and a little unexpected.
+                    </p>
+                </div>
+
+                <!-- Three small profile cards. article, because each card stands on its own. -->
+                <div class="profile-facts">
+                    <article class="fact-block">
+                        <span class="fact-number" aria-hidden="true">A</span>
+                        <h3>Major</h3>
+                        <p>Data Science and Analytics</p>
+                    </article>
+
+                    <article class="fact-block">
+                        <span class="fact-number" aria-hidden="true">B</span>
+                        <h3>Languages</h3>
+                        <p>Thai &middot; Malay</p>
+                    </article>
+
+                    <article class="fact-block">
+                        <span class="fact-number" aria-hidden="true">C</span>
+                        <h3>Focus</h3>
+                        <p>Data &middot; Web &middot; Visual Thinking</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+        TOOLKIT - skills and tools
+        ============================================================ -->
+        <section class="toolkit-section" id="toolkit" aria-labelledby="toolkit-heading">
+
+            <!-- Hidden from sight but read by screen readers, so the
+            heading order never jumps from h1 straight to h3. -->
+            <h2 class="sr-only" id="toolkit-heading">Skills and toolkit</h2>
+
+            <!-- Left: decorative circle plus caption -->
+            <div class="toolkit-visual">
+                <div class="toolkit-circle" aria-hidden="true"></div>
+                <p>Toolkit / Skills / Practice</p>
+            </div>
+
+            <!-- Right: list of skills -->
+            <div class="toolkit-list">
+                <div class="skill-row">
+                    <span>01</span>
+                    <h3>Python</h3>
+                    <p>Pandas &middot; NumPy &middot; Fundamentals</p>
+                </div>
+
+                <div class="skill-row">
+                    <span>02</span>
+                    <h3>Databases</h3>
+                    <p>PostgreSQL &middot; Data Structure</p>
+                </div>
+
+                <div class="skill-row">
+                    <span>03</span>
+                    <h3>Visualization</h3>
+                    <p>Tableau &middot; Dashboard Design</p>
+                </div>
+
+                <div class="skill-row">
+                    <span>04</span>
+                    <h3>Web Development</h3>
+                    <p>HTML &middot; CSS &middot; JavaScript &middot; Django</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+        EDUCATION - academic history and a table of core coursework
+        ============================================================ -->
+        <section class="education section-shell" id="education" aria-labelledby="education-heading">
+
+            <div class="section-label">
+                <span>02</span>
+                <p>Education</p>
+            </div>
+
+            <!-- Heading of this section -->
+            <div class="education-head">
+                <h2 id="education-heading">Learning is <em>part of the work.</em></h2>
+                <p>My academic path and current direction.</p>
+            </div>
+
+            <!-- Institutions -->
+            <div class="education-list">
+                <article class="education-item">
+                    <span class="education-year">2022 &mdash; Present</span>
+                    <div>
+                        <h3>Fatoni University</h3>
+                        <p>B.Sc. in Data Science and Analytics</p>
+                    </div>
+                    <span class="education-mark" aria-hidden="true">01</span>
+                </article>
+
+                <article class="education-item">
+                    <span class="education-year">2019 &mdash; 2022</span>
+                    <div>
+                        <h3>Attarkiah Islamiah Institute</h3>
+                        <p>Arabic Program</p>
+                    </div>
+                    <span class="education-mark" aria-hidden="true">02</span>
+                </article>
+            </div>
+
+            <!-- Coursework table.
+            caption  = the name of the table
+            thead    = header row, tbody = data rows
+            scope    = tells screen readers whether a header
+                    describes its column or its row -->
+            <div class="table-wrap">
+                <table class="course-table">
+                    <caption>Core coursework and current progress</caption>
+
+                    <thead>
+                        <tr>
+                            <th scope="col">Course</th>
+                            <th scope="col">Area</th>
+                            <th scope="col">Main tools</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <th scope="row">Web Development</th>
+                            <td>Front-end</td>
+                            <td>HTML, CSS, JavaScript</td>
+                            <td>In progress</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Data Visualization</th>
+                            <td>Analytics</td>
+                            <td>Tableau</td>
+                            <td>Completed</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Database Systems</th>
+                            <td>Data engineering</td>
+                            <td>PostgreSQL, SQL</td>
+                            <td>Completed</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Programming Fundamentals</th>
+                            <td>Computer science</td>
+                            <td>Python</td>
+                            <td>Completed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ============================================================
+        PROJECTS - carousel moving one slide at a time, run by JavaScript
+        ============================================================ -->
+        <section class="projects" id="projects" aria-labelledby="projects-heading">
+
+            <div class="projects-header section-shell">
+                <div class="section-label">
+                    <span>03</span>
+                    <p>Selected Work</p>
+                </div>
+
+                <h2 class="projects-title" id="projects-heading">Ideas in <em>motion.</em></h2>
+
+                <!-- Carousel buttons and slide counter.
+                    aria-live="polite" makes screen readers announce the new number. -->
+                <div class="carousel-controls">
+                    <button id="prevSlide" type="button" aria-label="Previous project">Prev</button>
+                    <span id="slideCounter" aria-live="polite">01 / 03</span>
+                    <button id="nextSlide" type="button" aria-label="Next project">Next</button>
+                </div>
+            </div>
+
+            <!-- Visible frame (overflow: hidden).
+                tabindex="0" makes it focusable, so the arrow keys actually work. -->
+            <div class="carousel-window" id="carouselWindow" tabindex="0" role="group"
+                aria-roledescription="carousel" aria-label="Selected projects, use left and right arrow keys">
+
+                <!-- The strip that JavaScript moves with transform: translateX() -->
+                <div class="carousel-track" id="carouselTrack">
+
+                    <!-- Slide 1 -->
+                    <article class="project-slide">
+                        <div class="project-number">01</div>
+                        <div class="project-visual project-grid-visual" aria-hidden="true">
+                            <div class="shape shape-a"></div>
+                            <div class="shape shape-b"></div>
+                            <div class="shape shape-c"></div>
+                            <span>SZ</span>
+                        </div>
+                        <div class="project-copy">
+                            <p class="project-type">Web Development</p>
+                            <h3>ShopZone Web Application</h3>
+                            <p>
+                                A web-store project exploring page structure, interface design
+                                and Django-based development.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- Slide 2 -->
+                    <article class="project-slide">
+                        <div class="project-number">02</div>
+                        <div class="project-visual dashboard-visual" aria-hidden="true">
+                            <div class="dashboard-card large"></div>
+                            <div class="dashboard-card small-one"></div>
+                            <div class="dashboard-card small-two"></div>
+                            <div class="dashboard-line"></div>
+                            <span>DS</span>
+                        </div>
+                        <div class="project-copy">
+                            <p class="project-type">Data Visualization</p>
+                            <h3>Dashboard Sales</h3>
+                            <p>
+                                A Tableau dashboard designed to communicate sales metrics,
+                                KPI cards and patterns clearly.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- Slide 3 -->
+                    <article class="project-slide">
+                        <div class="project-number">03</div>
+                        <div class="project-visual camp-visual" aria-hidden="true">
+                            <div class="camp-ring"></div>
+                            <div class="camp-square"></div>
+                            <span>3i</span>
+                        </div>
+                        <div class="project-copy">
+                            <p class="project-type">Activity</p>
+                            <h3>3i Camp 2025</h3>
+                            <p>
+                                A learning experience centered on collaboration,
+                                experimentation and communication.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+        MEDIA - short video and audio introduction
+        ============================================================ -->
+        <section class="media-section section-shell" id="media" aria-labelledby="media-heading">
+
+            <div class="section-label">
+                <span>04</span>
+                <p>Introduction</p>
+            </div>
+
+            <div class="media-grid">
+                <div class="media-heading">
+                    <h2 id="media-heading">See it.<br><em>Hear it.</em></h2>
+                    <p>A short video and audio introduction.</p>
+                </div>
+
+                <!-- Video. controls shows the player UI, poster is the still frame. -->
+                <div class="video-block">
+                    <span class="media-tag">Video</span>
+                    <video controls preload="metadata" poster="img/coverVideo.png">
+                        <source src="video/draf.MP4" type="video/mp4">
+                        <!-- Fallback text for browsers that cannot play it -->
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <!-- Audio introduction -->
+                <div class="audio-block">
+                    <span class="media-tag">Audio</span>
+                    <audio controls preload="metadata">
+                        <source src="audio/Welcome.mp3" type="audio/mpeg">
+                        Your browser does not support the audio tag.
+                    </audio>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+        CONTACT - contact details and a form
+        (checked with the HTML pattern attribute, cleaned with JavaScript)
+        ============================================================ -->
+        <section class="contact" id="contact" aria-labelledby="contact-heading">
+
+            <!-- Visually hidden h2, so the section still has a real heading -->
+            <h2 class="sr-only" id="contact-heading">Contact</h2>
+
+            <!-- Left: oversized decorative word -->
+            <div class="contact-art">
+                <span class="contact-word">Hello</span>
+                <div class="contact-arc" aria-hidden="true"></div>
+                <p>Let a simple message start something interesting.</p>
+            </div>
+
+            <div class="contact-content">
+
+                <!-- Direct contact details -->
+                <div class="contact-info">
+                    <span class="mini-label">Contact Information</span>
+                    <a href="mailto:ug672437001@ftu.ac.th">ug672437001@ftu.ac.th</a>
+                    <a href="tel:+66835091120">083-509-1120</a>
+                    <!-- rel="noopener noreferrer" stops the new tab from reaching window.opener -->
+                    <a href="https://www.facebook.com/shifa.mama.7/about/" target="_blank" rel="noopener noreferrer">Facebook</a>
+                </div>
+
+                <!-- novalidate turns off the browser's own popup, but the pattern
+                attributes are still read through the Constraint Validation
+                API in JavaScript, which draws the error messages instead. -->
+                <form class="contact-form" id="contactForm" novalidate>
+
+                    <!-- Name field. \p{L} matches a letter in any language, \p{M} the
+                    accent marks that go with it, so the field is not English only. -->
+                    <div class="form-field">
+                        <label for="visitorName">Your Name</label>
+                        <input
+                            type="text"
+                            id="visitorName"
+                            name="visitorName"
+                            autocomplete="name"
+                            placeholder="Shifa Mama"
+                            pattern="[\p{L}][\p{L}\p{M} .'\-]{1,49}"
+                            title="Use 2 to 50 letters. Spaces, apostrophes, periods and hyphens are allowed."
+                            aria-describedby="nameError"
+                            required
+                        >
+                        <!-- Linked to the input above through aria-describedby, so a
+                        screen reader reads this text as part of the field -->
+                        <small class="field-error" id="nameError"></small>
+                    </div>
+
+                    <!-- Email field -->
+                    <div class="form-field">
+                        <label for="visitorEmail">Your Email</label>
+                        <input
+                            type="email"
+                            id="visitorEmail"
+                            name="visitorEmail"
+                            autocomplete="email"
+                            placeholder="you@example.com"
+                            pattern="[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}"
+                            title="Enter a valid email address, for example name@example.com"
+                            aria-describedby="emailError"
+                            required
+                        >
+                        <small class="field-error" id="emailError"></small>
+                    </div>
+
+                    <!-- Message field -->
+                    <div class="form-field">
+                        <label for="visitorMessage">Message</label>
+                        <textarea
+                            id="visitorMessage"
+                            name="visitorMessage"
+                            rows="5"
+                            minlength="5"
+                            maxlength="500"
+                            placeholder="Tell me what you would like to talk about."
+                            aria-describedby="messageError messageHint"
+                            required
+                        ></textarea>
+                        <small class="field-error" id="messageError"></small>
+                    </div>
+
+                    <!-- The label names what actually happens: the message is
+                    saved in this browser, it is not emailed anywhere. -->
+                    <button class="submit-button" type="submit">
+                        <span>Save Message</span>
+                    </button>
+
+                    <!-- Explains to the visitor that this form is a client-side demo -->
+                    <p class="form-hint" id="messageHint">
+                        Demo form &mdash; your message is stored in this browser only, not sent to a server.
+                    </p>
+
+                    <!-- Result line. aria-live="polite" gets it read out automatically. -->
+                    <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============================================================
+    FOOTER - name, local visit counter, link back to the top
+    ============================================================ -->
+    <footer class="site-footer">
+        <div>
+            <p>Shifa Mama</p>
+            <span>Creative CV &middot; 2026</span>
+        </div>
+
+        <!-- This number comes from localStorage, so it counts this device only -->
+        <div class="visitor-counter">
+            <span>Local visits</span>
+            <strong id="visitCount">0</strong>
+        </div>
+
+        <a href="#top">Back to beginning</a>
+    </footer>
+
+    <!-- Floating button. JavaScript adds .visible once the page is scrolled far enough. -->
+    <button class="go-top" id="goToTop" type="button" aria-label="Go to top">
+        <span class="top-arrow" aria-hidden="true"></span>
+    </button>
+</body>
+
+</html>
