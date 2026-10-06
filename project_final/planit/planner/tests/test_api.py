@@ -1,7 +1,12 @@
+import json
+
+from django.test import (
+    Client,
+    TestCase,
+)
 from datetime import date, timedelta
 from unittest.mock import patch
 
-from django.test import TestCase
 from django.urls import reverse
 
 from planner.models import (
@@ -349,3 +354,260 @@ class ApiTests(TestCase):
             "csrftoken",
             response.cookies,
         )
+        
+@patch(
+    "planner.views.timezone.localdate",
+    return_value=TODAY,
+)
+def test_create_task(
+    self,
+    mock_localdate,
+):
+    response = self.client.post(
+        reverse("api_tasks"),
+        data=json.dumps(
+            {
+                "title":
+                    "Prepare presentation",
+
+                "area":
+                    "academic",
+
+                "kind":
+                    "study",
+
+                "priority":
+                    "urgent",
+
+                "due_date":
+                    "2026-10-06",
+
+                "subject_id":
+                    self.subject.id,
+            }
+        ),
+        content_type=
+            "application/json",
+    )
+
+    self.assertEqual(
+        response.status_code,
+        201,
+    )
+
+    self.assertTrue(
+        Task.objects.filter(
+            title=
+                "Prepare presentation"
+        ).exists()
+    )
+
+
+def test_invalid_json_returns_400(
+    self,
+):
+    response = self.client.post(
+        reverse("api_tasks"),
+        data="{bad json",
+        content_type=
+            "application/json",
+    )
+
+    self.assertEqual(
+        response.status_code,
+        400,
+    )
+
+    self.assertEqual(
+        response.json()[
+            "error"
+        ]["code"],
+        "invalid_json",
+    )
+
+
+def test_personal_exam_rejected(
+    self,
+):
+    response = self.client.post(
+        reverse("api_tasks"),
+        data=json.dumps(
+            {
+                "title":
+                    "Personal exam",
+
+                "area":
+                    "personal",
+
+                "kind":
+                    "exam",
+
+                "priority":
+                    "urgent",
+
+                "due_date":
+                    "2026-10-10",
+            }
+        ),
+        content_type=
+            "application/json",
+    )
+
+    self.assertEqual(
+        response.status_code,
+        400,
+    )
+
+
+@patch(
+    "planner.views.timezone.localdate",
+    return_value=TODAY,
+)
+def test_project_autofills_subject(
+    self,
+    mock_localdate,
+):
+    response = self.client.post(
+        reverse("api_tasks"),
+        data=json.dumps(
+            {
+                "title":
+                    "Project task",
+
+                "project_id":
+                    self.project.id,
+            }
+        ),
+        content_type=
+            "application/json",
+    )
+
+    self.assertEqual(
+        response.status_code,
+        201,
+    )
+
+    task = (
+        Task.objects.get(
+            title="Project task"
+        )
+    )
+
+    self.assertEqual(
+        task.subject_id,
+        self.subject.id,
+    )
+
+
+@patch(
+    "planner.views.timezone.localdate",
+    return_value=TODAY,
+)
+def test_patch_complete_task(
+    self,
+    mock_localdate,
+):
+    task = self.create_task(
+        "Complete me",
+        completed=False,
+    )
+
+    response = self.client.patch(
+        reverse(
+            "api_task_detail",
+            args=[task.id],
+        ),
+        data=json.dumps(
+            {
+                "completed":
+                    True,
+            }
+        ),
+        content_type=
+            "application/json",
+    )
+
+    self.assertEqual(
+        response.status_code,
+        200,
+    )
+
+    task.refresh_from_db()
+
+    self.assertTrue(
+        task.completed
+    )
+
+
+def test_delete_task(
+    self,
+):
+    task = self.create_task(
+        "Delete me"
+    )
+
+    response = self.client.delete(
+        reverse(
+            "api_task_detail",
+            args=[task.id],
+        )
+    )
+
+    self.assertEqual(
+        response.status_code,
+        204,
+    )
+
+    self.assertFalse(
+        Task.objects.filter(
+            id=task.id
+        ).exists()
+    )
+
+
+def test_missing_task_returns_404(
+    self,
+):
+    response = self.client.patch(
+        reverse(
+            "api_task_detail",
+            args=[999999],
+        ),
+        data=json.dumps(
+            {
+                "completed":
+                    True,
+            }
+        ),
+        content_type=
+            "application/json",
+    )
+
+    self.assertEqual(
+        response.status_code,
+        404,
+    )
+    
+def test_post_requires_csrf(
+    self,
+):
+    client = Client(
+        enforce_csrf_checks=True
+    )
+
+    response = client.post(
+        reverse("api_tasks"),
+        data=json.dumps(
+            {
+                "title":
+                    "Blocked task",
+            }
+        ),
+        content_type=
+            "application/json",
+    )
+
+    self.assertEqual(
+        response.status_code,
+        403,
+    )

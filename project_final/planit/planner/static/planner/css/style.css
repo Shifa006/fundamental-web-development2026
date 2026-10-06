@@ -1687,25 +1687,21 @@ select {
 
 
 .archive-task {
-    min-height:
-        82px;
+    min-height: 82px;
 
-    padding:
-        0 7px;
+    padding: 0 7px;
 
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         24px
         minmax(0, 1fr)
+        auto
         auto;
 
-    align-items:
-        center;
+    align-items: center;
 
-    gap:
-        13px;
+    gap: 13px;
 
     border-bottom:
         1px solid
@@ -2807,9 +2803,34 @@ select {
 
 }
 
+    .archive-task {
+        grid-template-columns:
+            22px
+            minmax(0, 1fr)
+            auto;
+    }
+
+
+    .archive-task .task-status {
+        display:
+            none;
+    }
+
+
+    .task-actions {
+        grid-column:
+            2 / -1;
+
+        justify-content:
+            flex-start;
+
+        padding-bottom:
+            12px;
+    }
+
 
 /* --------------------------------------------------
-   Reduced motion
+    Reduced motion
 -------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -2995,4 +3016,241 @@ select {
 
     filter:
         saturate(0.65);
+}
+
+.planit-modal .modal-content {
+    overflow: hidden;
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius:
+        26px;
+
+    background:
+        var(--paper);
+
+    box-shadow:
+        0 28px 80px
+        rgba(65, 45, 38, 0.18);
+}
+
+
+.planit-modal .modal-header,
+.planit-modal .modal-footer {
+    padding:
+        22px 24px;
+
+    border-color:
+        var(--line);
+}
+
+
+.planit-modal .modal-body {
+    padding:
+        24px;
+}
+
+
+.planit-modal .modal-title {
+    margin: 0;
+
+    font-family:
+        "DM Serif Display",
+        Georgia,
+        serif;
+
+    font-size:
+        1.7rem;
+
+    font-weight:
+        400;
+}
+
+
+.task-field {
+    display:
+        grid;
+
+    gap:
+        7px;
+
+    margin-bottom:
+        17px;
+}
+
+
+.task-field > span {
+    color:
+        var(--muted);
+
+    font-size:
+        0.67rem;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        0.06em;
+}
+
+
+.task-field input,
+.task-field select,
+.task-field textarea {
+    width:
+        100%;
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius:
+        13px;
+
+    padding:
+        10px 12px;
+
+    outline:
+        none;
+
+    background:
+        #fffdfb;
+
+    color:
+        var(--ink);
+}
+
+
+.task-field input:focus,
+.task-field select:focus,
+.task-field textarea:focus {
+    border-color:
+        #c8aeb8;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(246, 203, 215, 0.3);
+}
+
+
+.task-title-field input {
+    min-height:
+        48px;
+
+    font-size:
+        1rem;
+}
+
+
+.task-more {
+    margin-top:
+        13px;
+}
+
+
+.task-more summary {
+    margin-bottom:
+        18px;
+
+    color:
+        var(--muted);
+
+    cursor:
+        pointer;
+
+    font-size:
+        0.72rem;
+}
+
+
+.task-form-grid {
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        0 14px;
+}
+
+
+.form-error {
+    margin-bottom:
+        18px;
+
+    padding:
+        11px 13px;
+
+    border-radius:
+        12px;
+
+    background:
+        #f8dfdc;
+
+    color:
+        var(--danger);
+
+    font-size:
+        0.72rem;
+}
+
+
+.task-actions {
+    display:
+        flex;
+
+    gap:
+        9px;
+
+    justify-content:
+        flex-end;
+}
+
+
+.text-action {
+    border:
+        0;
+
+    padding:
+        4px;
+
+    background:
+        transparent;
+
+    color:
+        var(--muted);
+
+    cursor:
+        pointer;
+
+    font-size:
+        0.65rem;
+}
+
+
+.text-action:hover {
+    color:
+        var(--ink);
+
+    text-decoration:
+        underline;
+}
+
+
+.danger-action:hover {
+    color:
+        var(--danger);
+}
+
+
+@media (max-width: 560px) {
+
+    .task-form-grid {
+        grid-template-columns:
+            1fr;
+    }
+
 }

@@ -30,6 +30,11 @@ async function initTasksPage() {
         }
     );
 
+    document.addEventListener(
+        "planit:tasks-changed",
+        loadTasks
+    );
+
     await loadTasks();
 }
 
@@ -45,9 +50,13 @@ async function loadTasks() {
 
         tasks = data.tasks;
 
-        renderFilteredTasks();
+        if (selectedView === "week") {
+            await loadWeek();
+        } else {
+            renderFilteredTasks();
+            showAllTasks();
+        }
 
-        showAllTasks();
     } catch (error) {
         showTasksError(
             error.message
@@ -331,11 +340,41 @@ function createArchiveTask(task) {
     check.className =
         "check-box";
 
+    check.setAttribute(
+        "aria-label",
+        task.completed
+            ? `Uncomplete ${task.title}`
+            : `Complete ${task.title}`
+    );
+
     if (task.completed) {
         check.classList.add(
             "is-checked"
         );
     }
+
+
+    check.addEventListener(
+        "click",
+        async () => {
+            check.disabled =
+                true;
+
+            try {
+                await window.PlanitTasks
+                    .toggleCompleted(
+                        task
+                    );
+            } catch (error) {
+                check.disabled =
+                    false;
+
+                window.alert(
+                    error.message
+                );
+            }
+        }
+    );
 
 
     const body =
@@ -382,10 +421,82 @@ function createArchiveTask(task) {
         getStatusLabel(task);
 
 
+    const actions =
+        document.createElement(
+            "div"
+        );
+
+    actions.className =
+        "task-actions";
+
+
+    const editButton =
+        document.createElement(
+            "button"
+        );
+
+    editButton.type =
+        "button";
+
+    editButton.className =
+        "text-action";
+
+    editButton.textContent =
+        "Edit";
+
+    editButton.addEventListener(
+        "click",
+        () => {
+            window.PlanitTasks
+                .openEdit(
+                    task
+                );
+        }
+    );
+
+
+    const deleteButton =
+        document.createElement(
+            "button"
+        );
+
+    deleteButton.type =
+        "button";
+
+    deleteButton.className =
+        "text-action danger-action";
+
+    deleteButton.textContent =
+        "Delete";
+
+    deleteButton.addEventListener(
+        "click",
+        async () => {
+            try {
+                await window.PlanitTasks
+                    .delete(
+                        task
+                    );
+            } catch (error) {
+                window.alert(
+                    error.message
+                );
+            }
+        }
+    );
+
+
+    actions.append(
+        editButton,
+        deleteButton
+    );
+
+
     article.append(
         check,
         body,
-        status
+        status,
+        actions
     );
 
     return article;

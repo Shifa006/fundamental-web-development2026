@@ -17,6 +17,11 @@ async function initTodayPage() {
         loadToday
     );
 
+    document.addEventListener(
+        "planit:tasks-changed",
+        loadToday
+    );
+
     await loadToday();
 }
 
@@ -310,6 +315,27 @@ function createTaskRow(task) {
             : `Complete ${task.title}`
     );
 
+    check.addEventListener(
+        "click",
+        async () => {
+            check.disabled =
+                true;
+
+            try {
+                await window.PlanitTasks
+                    .toggleCompleted(
+                        task
+                    );
+            } catch (error) {
+                check.disabled =
+                    false;
+
+                window.alert(
+                    error.message
+                );
+            }
+        }
+    );
 
     const copy =
         document.createElement(

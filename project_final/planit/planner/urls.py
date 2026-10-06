@@ -48,3 +48,15 @@ urlpatterns = [
         name="api_week",
     ),
 ]
+
+path(
+    "api/tasks/<int:task_id>/",
+    views.task_detail_api,
+    name="api_task_detail",
+),
+
+path(
+    "api/task-options/",
+    views.task_options_api,
+    name="api_task_options",
+),

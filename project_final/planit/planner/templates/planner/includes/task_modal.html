@@ -1,0 +1,261 @@
+<div
+    class="modal fade planit-modal"
+    id="taskModal"
+    tabindex="-1"
+    aria-labelledby="taskModalTitle"
+    aria-hidden="true"
+>
+
+    <div
+        class="modal-dialog modal-dialog-centered"
+    >
+
+        <div class="modal-content">
+
+            <form id="taskForm">
+
+                <div class="modal-header">
+
+                    <div>
+
+                        <span class="tiny-label">
+                            QUICK CAPTURE
+                        </span>
+
+                        <h2
+                            id="taskModalTitle"
+                            class="modal-title"
+                        >
+                            Add task
+                        </h2>
+
+                    </div>
+
+                    <button
+                        class="btn-close"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <div
+                        id="taskFormError"
+                        class="form-error"
+                        hidden
+                    ></div>
+
+
+                    <label
+                        class="task-field task-title-field"
+                    >
+
+                        <span>
+                            Task title
+                        </span>
+
+                        <input
+                            id="taskTitle"
+                            name="title"
+                            type="text"
+                            maxlength="200"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </label>
+
+
+                    <details
+                        id="taskMoreOptions"
+                        class="task-more"
+                    >
+
+                        <summary>
+                            More options
+                        </summary>
+
+
+                        <div class="task-form-grid">
+
+                            <label class="task-field">
+
+                                <span>
+                                    Area
+                                </span>
+
+                                <select
+                                    id="taskArea"
+                                    name="area"
+                                >
+                                    <option value="academic">
+                                        Academic
+                                    </option>
+
+                                    <option value="personal">
+                                        Personal
+                                    </option>
+                                </select>
+
+                            </label>
+
+
+                            <label class="task-field">
+
+                                <span>
+                                    Type
+                                </span>
+
+                                <select
+                                    id="taskKind"
+                                    name="kind"
+                                >
+                                    <option value="general">
+                                        General
+                                    </option>
+
+                                    <option value="assignment">
+                                        Assignment
+                                    </option>
+
+                                    <option value="study">
+                                        Study
+                                    </option>
+
+                                    <option value="exam">
+                                        Exam
+                                    </option>
+                                </select>
+
+                            </label>
+
+
+                            <label class="task-field">
+
+                                <span>
+                                    Priority
+                                </span>
+
+                                <select
+                                    id="taskPriority"
+                                    name="priority"
+                                >
+                                    <option value="normal">
+                                        Normal
+                                    </option>
+
+                                    <option value="urgent">
+                                        Urgent
+                                    </option>
+
+                                    <option value="later">
+                                        Later
+                                    </option>
+                                </select>
+
+                            </label>
+
+
+                            <label class="task-field">
+
+                                <span>
+                                    Due date
+                                </span>
+
+                                <input
+                                    id="taskDueDate"
+                                    name="due_date"
+                                    type="date"
+                                >
+
+                            </label>
+
+
+                            <label class="task-field">
+
+                                <span>
+                                    Subject
+                                </span>
+
+                                <select
+                                    id="taskSubject"
+                                    name="subject_id"
+                                >
+                                    <option value="">
+                                        No subject
+                                    </option>
+                                </select>
+
+                            </label>
+
+
+                            <label class="task-field">
+
+                                <span>
+                                    Project
+                                </span>
+
+                                <select
+                                    id="taskProject"
+                                    name="project_id"
+                                >
+                                    <option value="">
+                                        No project
+                                    </option>
+                                </select>
+
+                            </label>
+
+                        </div>
+
+
+                        <label class="task-field">
+
+                            <span>
+                                Description
+                            </span>
+
+                            <textarea
+                                id="taskDescription"
+                                name="description"
+                                rows="3"
+                            ></textarea>
+
+                        </label>
+
+                    </details>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        class="soft-button"
+                        type="button"
+                        data-bs-dismiss="modal"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        id="taskSubmitButton"
+                        class="primary-button"
+                        type="submit"
+                    >
+                        Save task
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
