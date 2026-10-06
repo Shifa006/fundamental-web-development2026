@@ -141,10 +141,12 @@
             <div class="topbar-actions">
 
                 <button
+                    id="examModeButton"
                     class="soft-button"
                     type="button"
+                    aria-pressed="false"
                 >
-                    Focus mode
+                    Exam Mode
                 </button>
 
                 <button
@@ -216,10 +218,14 @@
 </script>
 
 <script
+    src="{% static 'planner/js/api.js' %}">
+</script>
+
+<script
     src="{% static 'planner/js/ui.js' %}">
 </script>
 
-{% block scripts %}
+{% block page_scripts %}
 {% endblock %}
 
 </body>

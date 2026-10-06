@@ -1,4 +1,5 @@
 {% extends "planner/base.html" %}
+{% load static %}
 
 
 {% block title %}
@@ -29,8 +30,8 @@ Tasks | Planit
 
     <div class="decorative-label pastel-sage">
 
-        <span>
-            07
+        <span id="activeTaskCount">
+            --
         </span>
 
         <small>
@@ -63,7 +64,7 @@ Tasks | Planit
 
         <button
             class="filter-button is-active"
-            data-filter="all"
+            data-area="all"
             type="button"
         >
             All
@@ -71,7 +72,7 @@ Tasks | Planit
 
         <button
             class="filter-button"
-            data-filter="academic"
+            data-area="academic"
             type="button"
         >
             Academic
@@ -79,7 +80,7 @@ Tasks | Planit
 
         <button
             class="filter-button"
-            data-filter="personal"
+            data-area="personal"
             type="button"
         >
             Personal
@@ -111,198 +112,68 @@ Tasks | Planit
 </section>
 
 
+<div
+    id="tasksError"
+    class="message-panel error-message"
+    hidden
+></div>
+
+
+<div
+    id="tasksLoading"
+    class="loading-panel"
+>
+    Loading tasks...
+</div>
+
+
 <section
     id="allTasksView"
-    class="task-view is-visible reveal"
+    class="task-view"
+    hidden
 >
 
     <div class="archive-heading">
 
         <span>
-            OCTOBER 06
+            TASK LIST
         </span>
 
-        <span>
-            TUESDAY
+        <span id="taskListCount">
+            00 ITEMS
         </span>
 
     </div>
 
 
-    <div class="archive-list">
-
-        <article
-            class="archive-task"
-            data-area="academic"
-            data-title="math homework"
-        >
-
-            <button class="check-box" type="button"></button>
-
-            <div>
-
-                <strong>
-                    Math homework
-                </strong>
-
-                <span>
-                    Calculus
-                </span>
-
-            </div>
-
-            <span class="task-status pastel-peach">
-                Urgent
-            </span>
-
-        </article>
-
-
-        <article
-            class="archive-task"
-            data-area="academic"
-            data-title="group meeting"
-        >
-
-            <button class="check-box" type="button"></button>
-
-            <div>
-
-                <strong>
-                    Group meeting
-                </strong>
-
-                <span>
-                    Planit Final Project
-                </span>
-
-            </div>
-
-            <span class="task-status pastel-lavender">
-                Normal
-            </span>
-
-        </article>
-
-
-        <article
-            class="archive-task"
-            data-area="personal"
-            data-title="buy groceries"
-        >
-
-            <button class="check-box" type="button"></button>
-
-            <div>
-
-                <strong>
-                    Buy groceries
-                </strong>
-
-                <span>
-                    Personal
-                </span>
-
-            </div>
-
-            <span class="task-status pastel-sage">
-                Later
-            </span>
-
-        </article>
-
-    </div>
+    <div
+        id="archiveTaskList"
+        class="archive-list"
+    ></div>
 
 </section>
 
 
 <section
     id="weekTasksView"
-    class="task-view reveal"
+    class="task-view"
+    hidden
 >
 
-    <div class="week-grid">
-
-        <article class="week-column">
-
-            <header>
-                <span>MON</span>
-                <strong>05</strong>
-            </header>
-
-            <div class="week-task pastel-blue">
-                <strong>Read chapter 5</strong>
-                <span>Physics</span>
-            </div>
-
-        </article>
-
-
-        <article class="week-column is-today">
-
-            <header>
-                <span>TUE</span>
-                <strong>06</strong>
-            </header>
-
-            <div class="week-task pastel-peach">
-                <strong>Math homework</strong>
-                <span>Calculus</span>
-            </div>
-
-            <div class="week-task pastel-lavender">
-                <strong>Group meeting</strong>
-                <span>Project</span>
-            </div>
-
-        </article>
-
-
-        <article class="week-column">
-
-            <header>
-                <span>WED</span>
-                <strong>07</strong>
-            </header>
-
-            <p class="empty-day">
-                No tasks
-            </p>
-
-        </article>
-
-
-        <article class="week-column">
-
-            <header>
-                <span>THU</span>
-                <strong>08</strong>
-            </header>
-
-            <div class="week-task pastel-sage">
-                <strong>Review notes</strong>
-                <span>Web Development</span>
-            </div>
-
-        </article>
-
-
-        <article class="week-column">
-
-            <header>
-                <span>FRI</span>
-                <strong>09</strong>
-            </header>
-
-            <div class="week-task pastel-butter">
-                <strong>Calculus exam</strong>
-                <span>Exam</span>
-            </div>
-
-        </article>
-
-    </div>
+    <div
+        id="weekGrid"
+        class="week-grid"
+    ></div>
 
 </section>
+
+{% endblock %}
+
+
+{% block page_scripts %}
+
+<script
+    src="{% static 'planner/js/tasks.js' %}">
+</script>
 
 {% endblock %}

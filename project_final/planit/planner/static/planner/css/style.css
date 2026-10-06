@@ -1642,17 +1642,12 @@ select {
 -------------------------------------------------- */
 
 .task-view {
-    display:
-        none;
-
-    margin-top:
-        26px;
+    margin-top: 26px;
 }
 
 
-.task-view.is-visible {
-    display:
-        block;
+.task-view[hidden] {
+    display: none !important;
 }
 
 
@@ -2835,4 +2830,169 @@ select {
             0.01ms !important;
     }
 
+}
+
+.soft-button.is-active {
+    border-color: var(--ink);
+    background: var(--lavender);
+    color: var(--ink);
+}
+
+.planner-controls {
+    margin:
+        6px 0 24px;
+
+    display:
+        flex;
+
+    gap:
+        7px;
+}
+
+
+.area-filter {
+    min-height:
+        35px;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(255, 250, 246, 0.72);
+
+    color:
+        var(--muted);
+
+    cursor:
+        pointer;
+
+    font-size:
+        0.7rem;
+
+    transition:
+        transform 170ms ease,
+        background 170ms ease;
+}
+
+
+.area-filter:hover {
+    transform:
+        translateY(-2px);
+}
+
+
+.area-filter.is-active {
+    border-color:
+        transparent;
+
+    background:
+        var(--pink);
+
+    color:
+        var(--ink);
+
+    font-weight:
+        600;
+}
+
+
+.loading-panel,
+.message-panel {
+    margin:
+        20px 0;
+
+    padding:
+        24px;
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius:
+        20px;
+
+    background:
+        rgba(255, 250, 246, 0.78);
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.78rem;
+}
+
+
+.loading-panel {
+    animation:
+        softPulse
+        1.8s ease-in-out
+        infinite;
+}
+
+
+.error-message {
+    background:
+        #f8e2df;
+
+    color:
+        var(--danger);
+}
+
+
+.empty-message {
+    margin:
+        0;
+
+    padding:
+        24px 0 10px;
+
+    color:
+        var(--muted);
+
+    font-family:
+        "DM Serif Display",
+        Georgia,
+        serif;
+
+    font-size:
+        0.95rem;
+
+    font-style:
+        italic;
+}
+
+
+.hidden-note {
+    padding:
+        13px 16px;
+
+    border:
+        1px dashed
+        #c5b8d8;
+
+    border-radius:
+        15px;
+
+    background:
+        rgba(220, 213, 239, 0.44);
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.7rem;
+}
+
+.week-task.is-past {
+    opacity: 0.48;
+
+    filter:
+        saturate(0.65);
 }

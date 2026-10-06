@@ -1,4 +1,5 @@
 {% extends "planner/base.html" %}
+{% load static %}
 
 
 {% block title %}
@@ -12,8 +13,11 @@ Today | Planit
 
     <div>
 
-        <p class="eyebrow">
-            Tuesday · October 6
+        <p
+            id="todayDate"
+            class="eyebrow"
+        >
+            Loading date
         </p>
 
         <h1>
@@ -29,16 +33,16 @@ Today | Planit
 
     <div class="date-sticker">
 
-        <span>
-            OCT
+        <span id="dateMonth">
+            ---
         </span>
 
-        <strong>
-            06
+        <strong id="dateNumber">
+            --
         </strong>
 
-        <small>
-            TUE
+        <small id="dateWeekday">
+            ---
         </small>
 
     </div>
@@ -46,7 +50,58 @@ Today | Planit
 </section>
 
 
-<section class="today-grid">
+<div
+    class="planner-controls reveal"
+    aria-label="Task area"
+>
+
+    <button
+        class="area-filter is-active"
+        data-area="all"
+        type="button"
+    >
+        All
+    </button>
+
+    <button
+        class="area-filter"
+        data-area="academic"
+        type="button"
+    >
+        Academic
+    </button>
+
+    <button
+        class="area-filter"
+        data-area="personal"
+        type="button"
+    >
+        Personal
+    </button>
+
+</div>
+
+
+<div
+    id="todayError"
+    class="message-panel error-message"
+    hidden
+></div>
+
+
+<section
+    id="todayLoading"
+    class="loading-panel"
+>
+    Loading your day...
+</section>
+
+
+<section
+    id="todayContent"
+    class="today-grid"
+    hidden
+>
 
     <div class="today-main">
 
@@ -69,21 +124,27 @@ Today | Planit
 
                 <div>
 
-                    <strong class="big-progress">
-                        02
+                    <strong
+                        id="progressCompleted"
+                        class="big-progress"
+                    >
+                        0
                     </strong>
 
                     <span class="progress-divider">
                         /
                     </span>
 
-                    <strong class="big-progress muted-number">
-                        03
+                    <strong
+                        id="progressTotal"
+                        class="big-progress muted-number"
+                    >
+                        0
                     </strong>
 
                 </div>
 
-                <p>
+                <p id="progressText">
                     tasks completed
                 </p>
 
@@ -92,15 +153,12 @@ Today | Planit
 
             <div class="progress-track">
 
-                <span style="width: 67%"></span>
+                <span
+                    id="todayProgressBar"
+                    style="width: 0%"
+                ></span>
 
             </div>
-
-
-            <div
-                class="doodle-loop"
-                aria-hidden="true"
-            ></div>
 
         </article>
 
@@ -121,108 +179,20 @@ Today | Planit
 
                 </div>
 
-                <span class="count-pill">
-                    03
+                <span
+                    id="todayCount"
+                    class="count-pill"
+                >
+                    00
                 </span>
 
             </div>
 
 
-            <div class="task-list">
-
-                <article class="task-row">
-
-                    <button
-                        class="check-box"
-                        type="button"
-                        aria-label="Complete Math homework"
-                    ></button>
-
-                    <div class="task-copy">
-
-                        <strong>
-                            Math homework
-                        </strong>
-
-                        <span>
-                            Calculus
-                        </span>
-
-                    </div>
-
-                    <span class="category-pill pastel-butter">
-                        Assignment
-                    </span>
-
-                    <span class="priority-text urgent">
-                        Urgent
-                    </span>
-
-                </article>
-
-
-                <article class="task-row">
-
-                    <button
-                        class="check-box"
-                        type="button"
-                        aria-label="Complete Group meeting"
-                    ></button>
-
-                    <div class="task-copy">
-
-                        <strong>
-                            Group meeting
-                        </strong>
-
-                        <span>
-                            Planit Final Project
-                        </span>
-
-                    </div>
-
-                    <span class="category-pill pastel-lavender">
-                        Project
-                    </span>
-
-                    <span class="priority-text">
-                        Normal
-                    </span>
-
-                </article>
-
-
-                <article class="task-row is-complete">
-
-                    <button
-                        class="check-box is-checked"
-                        type="button"
-                        aria-label="Uncomplete Review lecture notes"
-                    ></button>
-
-                    <div class="task-copy">
-
-                        <strong>
-                            Review lecture notes
-                        </strong>
-
-                        <span>
-                            Web Development
-                        </span>
-
-                    </div>
-
-                    <span class="category-pill pastel-sage">
-                        Study
-                    </span>
-
-                    <span class="priority-text">
-                        Done
-                    </span>
-
-                </article>
-
-            </div>
+            <div
+                id="todayTaskList"
+                class="task-list"
+            ></div>
 
         </section>
 
@@ -243,102 +213,61 @@ Today | Planit
 
                 </div>
 
-                <span class="count-pill danger-pill">
-                    02
+                <span
+                    id="overdueCount"
+                    class="count-pill danger-pill"
+                >
+                    00
                 </span>
 
             </div>
 
 
-            <div class="task-list">
-
-                <article class="task-row">
-
-                    <button
-                        class="check-box"
-                        type="button"
-                    ></button>
-
-                    <div class="task-copy">
-
-                        <strong>
-                            Lab report
-                        </strong>
-
-                        <span>
-                            Computer Science
-                        </span>
-
-                    </div>
-
-                    <span class="category-pill pastel-blue">
-                        Assignment
-                    </span>
-
-                    <span class="priority-text urgent">
-                        2 days late
-                    </span>
-
-                </article>
-
-
-                <article class="task-row">
-
-                    <button
-                        class="check-box"
-                        type="button"
-                    ></button>
-
-                    <div class="task-copy">
-
-                        <strong>
-                            Read chapter 5
-                        </strong>
-
-                        <span>
-                            Physics
-                        </span>
-
-                    </div>
-
-                    <span class="category-pill pastel-sage">
-                        Study
-                    </span>
-
-                    <span class="priority-text urgent">
-                        1 day late
-                    </span>
-
-                </article>
-
-            </div>
+            <div
+                id="overdueTaskList"
+                class="task-list"
+            ></div>
 
         </section>
+
+
+        <div
+            id="examHiddenMessage"
+            class="hidden-note"
+            hidden
+        ></div>
 
     </div>
 
 
     <aside class="today-side">
 
-        <article class="exam-panel pastel-lavender reveal">
+        <article
+            id="nextExamCard"
+            class="exam-panel pastel-lavender reveal"
+        >
 
             <span class="tiny-label">
                 NEXT EXAM
             </span>
 
-            <h2>
-                Calculus
+            <h2 id="nextExamTitle">
+                No upcoming exam
             </h2>
 
-            <p>
-                Friday, October 9
+            <p id="nextExamDate">
+                Your schedule is clear.
             </p>
 
 
-            <div class="exam-countdown">
+            <div
+                id="examCountdown"
+                class="exam-countdown"
+                hidden
+            >
 
-                <strong>
-                    3
+                <strong id="examDays">
+                    0
                 </strong>
 
                 <span>
@@ -346,7 +275,6 @@ Today | Planit
                 </span>
 
             </div>
-
 
             <div class="doodle-star"></div>
 
@@ -363,55 +291,26 @@ Today | Planit
                         CALENDAR
                     </span>
 
-                    <h3>
-                        October
+                    <h3 id="calendarMonth">
+                        Month
                     </h3>
 
                 </div>
 
-                <span class="calendar-year">
-                    2026
+                <span
+                    id="calendarYear"
+                    class="calendar-year"
+                >
+                    ----
                 </span>
 
             </div>
 
 
-            <div class="mini-calendar">
-
-                <span class="day-name">M</span>
-                <span class="day-name">T</span>
-                <span class="day-name">W</span>
-                <span class="day-name">T</span>
-                <span class="day-name">F</span>
-                <span class="day-name">S</span>
-                <span class="day-name">S</span>
-
-                <span></span>
-                <span></span>
-                <span></span>
-
-                <span>1</span>
-                <span>2</span>
-                <span>3</span>
-                <span>4</span>
-
-                <span>5</span>
-                <span class="current-day">6</span>
-                <span>7</span>
-                <span>8</span>
-                <span>9</span>
-                <span>10</span>
-                <span>11</span>
-
-                <span>12</span>
-                <span>13</span>
-                <span>14</span>
-                <span>15</span>
-                <span>16</span>
-                <span>17</span>
-                <span>18</span>
-
-            </div>
+            <div
+                id="miniCalendar"
+                class="mini-calendar"
+            ></div>
 
         </article>
 
@@ -433,5 +332,14 @@ Today | Planit
     </aside>
 
 </section>
+
+{% endblock %}
+
+
+{% block page_scripts %}
+
+<script
+    src="{% static 'planner/js/today.js' %}">
+</script>
 
 {% endblock %}
