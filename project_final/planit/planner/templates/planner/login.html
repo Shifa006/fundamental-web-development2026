@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="mint">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#d8eee2">
+    <title>Sign in | Planit</title>
+
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'planner/css/style.css' %}">
+</head>
+<body class="auth-page" data-page="login">
+    <div class="auth-pixels" aria-hidden="true"></div>
+
+    <main class="auth-shell">
+        <section class="auth-showcase" aria-label="Planit introduction">
+            <div class="auth-brand-row">
+                <span class="brand-tile auth-brand-tile" aria-hidden="true"><span>P</span></span>
+                <div>
+                    <span class="quest-kicker">PLANIT / STUDENT PLANNER</span>
+                    <h1>Plan your studies, one small step at a time.</h1>
+                </div>
+            </div>
+
+            <p class="auth-showcase-copy">
+                One dashboard for tasks, courses, projects, exams, and grade goals.
+            </p>
+
+            <div class="auth-preview-grid" aria-hidden="true">
+                <article class="auth-preview-card mint">
+                    <span>01</span>
+                    <strong>Today's tasks</strong>
+                    <small>Focus on what matters now.</small>
+                </article>
+                <article class="auth-preview-card lavender">
+                    <span>02</span>
+                    <strong>Exam Mode</strong>
+                    <small>Quiet the low-priority noise.</small>
+                </article>
+                <article class="auth-preview-card butter">
+                    <span>03</span>
+                    <strong>Grade target</strong>
+                    <small>Know what score you still need.</small>
+                </article>
+            </div>
+        </section>
+
+        <section class="auth-card game-card" aria-labelledby="loginTitle">
+            <div class="auth-card-head">
+                <div>
+                    <span class="quest-kicker">SIGN IN</span>
+                    <h2 id="loginTitle">Welcome back</h2>
+                    <p>Sign in to open your Planit dashboard.</p>
+                </div>
+
+                <button
+                    id="themeModeButton"
+                    class="theme-toggle"
+                    type="button"
+                    data-theme-toggle
+                    aria-label="Switch theme"
+                    aria-pressed="false"
+                >
+                    <span class="theme-toggle-sun" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"></path></svg>
+                    </span>
+                    <span class="theme-toggle-moon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M19 15.5A8 8 0 0 1 8.5 5 8 8 0 1 0 19 15.5Z"></path></svg>
+                    </span>
+                    <span class="theme-toggle-knob" aria-hidden="true"></span>
+                </button>
+            </div>
+
+            {% if error %}
+            <div class="login-error" role="alert">
+                <strong>Login failed</strong>
+                <span>{{ error }}</span>
+            </div>
+            {% endif %}
+
+            <form class="login-form" method="post" action="{% url 'login' %}" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+
+                <label class="login-field">
+                    <span>Username</span>
+                    <input
+                        id="loginUsername"
+                        name="username"
+                        type="text"
+                        value="{{ username }}"
+                        autocomplete="username"
+                        maxlength="150"
+                        required
+                        autofocus
+                    >
+                </label>
+
+                <label class="login-field">
+                    <span>Password</span>
+                    <span class="password-field-wrap">
+                        <input
+                            id="loginPassword"
+                            name="password"
+                            type="password"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <button
+                            id="passwordToggle"
+                            class="password-toggle"
+                            type="button"
+                            aria-controls="loginPassword"
+                            aria-pressed="false"
+                        >
+                            Show
+                        </button>
+                    </span>
+                </label>
+
+                <button class="login-submit" type="submit">
+                    <span>Enter Planit</span>
+                    <svg class="login-submit-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M14 7l5 5-5 5"></path></svg>
+                </button>
+            </form>
+
+            <p class="auth-switch">New to Planit? <a href="{% url 'signup' %}">Create an account</a></p>
+
+            <div class="login-footnote">
+                <span class="status-dot"></span>
+                <span>Django session authentication</span>
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'planner/js/theme.js' %}"></script>
+    <script src="{% static 'planner/js/login.js' %}"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    initExamModeButton();
+    initExamModeControls();
 });
 
 
@@ -13,33 +13,46 @@ function setExamMode(enabled) {
 }
 
 
-function updateExamModeButton(button) {
+function updateExamModeControls() {
     const enabled = getExamMode();
-    button.classList.toggle("is-active", enabled);
-    button.setAttribute("aria-pressed", String(enabled));
-    button.textContent = enabled ? "Exam Mode On" : "Exam Mode";
+
+    document.querySelectorAll("[data-exam-toggle]").forEach((control) => {
+        control.classList.toggle("is-active", enabled);
+        control.setAttribute("aria-pressed", String(enabled));
+
+        const status = control.querySelector(".mode-toggle-status");
+        if (status) {
+            status.textContent = enabled ? "On" : "Off";
+        }
+    });
+
+    document.body.classList.toggle("exam-mode-on", enabled);
 }
 
 
-function initExamModeButton() {
-    const button = document.querySelector("#examModeButton");
+function toggleExamMode() {
+    const enabled = !getExamMode();
+    setExamMode(enabled);
+    updateExamModeControls();
 
-    if (!button) {
+    document.dispatchEvent(
+        new CustomEvent("planit:exam-mode-change", {
+            detail: { enabled },
+        }),
+    );
+}
+
+
+function initExamModeControls() {
+    const controls = document.querySelectorAll("[data-exam-toggle]");
+    if (!controls.length) {
         return;
     }
 
-    updateExamModeButton(button);
+    updateExamModeControls();
 
-    button.addEventListener("click", () => {
-        const enabled = !getExamMode();
-        setExamMode(enabled);
-        updateExamModeButton(button);
-
-        document.dispatchEvent(
-            new CustomEvent("planit:exam-mode-change", {
-                detail: { enabled },
-            })
-        );
+    controls.forEach((control) => {
+        control.addEventListener("click", toggleExamMode);
     });
 }
 
@@ -47,4 +60,5 @@ function initExamModeButton() {
 window.PlanitUI = {
     getExamMode,
     setExamMode,
+    updateExamModeControls,
 };

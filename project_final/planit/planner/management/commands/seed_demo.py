@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
@@ -16,39 +17,60 @@ class Command(BaseCommand):
             action="store_true",
             help="Delete existing Planit data before creating demo data.",
         )
+        parser.add_argument(
+            "--demo-user",
+            action="store_true",
+            help="Create/update the local demo login: student / PlanitDemo123!",
+        )
 
     @transaction.atomic
     def handle(self, *args, **options):
+        User = get_user_model()
+        user, _ = User.objects.get_or_create(username="student")
+        if options["demo_user"]:
+            user.set_password("PlanitDemo123!")
+            user.save(update_fields=["password"])
+            self.stdout.write(
+                self.style.WARNING(
+                    "Demo login ready: student / PlanitDemo123! (local demo only)."
+                )
+            )
+
         if options["reset"]:
-            Assessment.objects.all().delete()
-            Task.objects.all().delete()
-            Project.objects.all().delete()
-            Subject.objects.all().delete()
+            Assessment.objects.filter(subject__owner=user).delete()
+            Task.objects.filter(owner=user).delete()
+            Project.objects.filter(owner=user).delete()
+            Subject.objects.filter(owner=user).delete()
 
         today = timezone.localdate()
 
         web, _ = Subject.objects.update_or_create(
+            owner=user,
             name="Web Development",
             semester="1/2026",
             defaults={"code": "WEB101", "color": "butter"},
         )
         python, _ = Subject.objects.update_or_create(
+            owner=user,
             name="Python Programming",
             semester="1/2026",
             defaults={"code": "PY101", "color": "lavender"},
         )
         calculus, _ = Subject.objects.update_or_create(
+            owner=user,
             name="Calculus",
             semester="1/2026",
             defaults={"code": "MATH101", "color": "sage"},
         )
         physics, _ = Subject.objects.update_or_create(
+            owner=user,
             name="Physics",
             semester="1/2026",
             defaults={"code": "PHY101", "color": "clay"},
         )
 
         planit, _ = Project.objects.update_or_create(
+            owner=user,
             title="Planit Final Project",
             defaults={
                 "description": "Combined final project for Web Development and Python Functions & OOP.",
@@ -174,6 +196,7 @@ class Command(BaseCommand):
         for data in demo_tasks:
             title = data.pop("title")
             Task.objects.update_or_create(
+                owner=user,
                 title=title,
                 defaults=data,
             )

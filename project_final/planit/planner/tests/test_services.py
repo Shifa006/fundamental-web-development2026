@@ -14,6 +14,7 @@ from planner.services import (
     project_progress,
     select,
     sort_by_attention,
+    top_focus_item,
     to_domain_item,
 )
 
@@ -102,6 +103,16 @@ class ServiceTests(SimpleTestCase):
         result = sort_by_attention([later, urgent], TODAY)
         self.assertEqual(result[0].id, 1)
 
+
+    def test_top_focus_returns_highest_ranked_active_item(self):
+        items = [
+            self.make_item(id=1, priority="normal", days=2),
+            self.make_item(id=2, priority="urgent", days=-1),
+            self.make_item(id=3, completed=True, days=0),
+        ]
+
+        self.assertEqual(top_focus_item(items, TODAY).id, 2)
+
     def test_today_payload(self):
         items = [
             self.make_item(id=1, days=0),
@@ -118,3 +129,28 @@ class ServiceTests(SimpleTestCase):
         self.assertEqual(len(result["overdue"]), 1)
         self.assertEqual(len(result["today"]), 2)
         self.assertEqual(result["next_exam"].id, 4)
+
+    def test_exam_mode_hidden_count_includes_future_active_items(self):
+        items = [
+            self.make_item(id=1, priority="normal", days=10),
+            self.make_item(id=2, priority="urgent", days=2),
+            self.make_item(id=3, priority="later", days=0),
+            self.make_item(id=4, completed=True, days=10),
+        ]
+
+        result = build_today_payload(items, TODAY, exam_mode=True)
+
+        # Normal +10 days and Later due today are active but hidden by Exam Mode.
+        # The completed task is not counted.
+        self.assertEqual(result["hidden_by_exam_mode"], 2)
+
+    def test_project_progress_counts_unfinished_past_exam(self):
+        items = [
+            self.make_item(id=1, completed=True),
+            self.make_item(id=2, item_class=ExamItem, kind="exam", days=-2),
+        ]
+
+        self.assertEqual(
+            project_progress(items, TODAY),
+            {"completed": 1, "total": 2, "percent": 50.0},
+        )

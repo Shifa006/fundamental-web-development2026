@@ -1,5 +1,19 @@
-.DS_Store
-db.sqlite3
-.venv/
+# Python / Django
 __pycache__/
-*.pyc
+*.py[cod]
+*.sqlite3
+.venv/
+.env
+
+# Test / coverage output
+.coverage
+htmlcov/
+.pytest_cache/
+
+# macOS / archives
+.DS_Store
+__MACOSX/
+
+# Editor files
+.vscode/
+.idea/

@@ -4,28 +4,31 @@
 {% block title %}Courses | Planit{% endblock %}
 
 {% block content %}
-<section class="page-intro reveal">
+<section class="collection-hero reveal">
     <div>
-        <p class="eyebrow">Academic files</p>
+        <span class="quest-kicker">STUDY DECK</span>
         <h1>Courses</h1>
-        <p class="intro-copy">A folder for every subject, task, assessment, and grade target.</p>
+        <p>Each course is its own little world of tasks, assessments, and progress.</p>
     </div>
 
-    <button id="addSubjectButton" class="decorative-action pastel-butter" type="button">
-        <span>Add</span>
-        <small>COURSE</small>
+    <button id="addSubjectButton" class="collection-add-button" type="button">
+        <span class="collection-add-icon">+</span>
+        <span>
+            <small>NEW</small>
+            <strong>Course</strong>
+        </span>
     </button>
 </section>
 
 <div id="coursesError" class="message-panel error-message" hidden></div>
-<div id="coursesLoading" class="loading-panel">Loading courses...</div>
+<div id="coursesLoading" class="loading-panel">Loading course deck...</div>
 
 <section id="courseGrid" class="course-grid" hidden></section>
 
-<section id="courseDetail" class="detail-panel" hidden>
+<section id="courseDetail" class="detail-panel game-card" hidden>
     <div class="detail-header">
         <div>
-            <span id="courseDetailCode" class="tiny-label"></span>
+            <span id="courseDetailCode" class="quest-kicker"></span>
             <h2 id="courseDetailName"></h2>
             <p id="courseDetailSemester" class="muted-copy"></p>
         </div>
@@ -37,40 +40,40 @@
     </div>
 
     <div class="course-stat-grid">
-        <article class="stat-card pastel-sage">
-            <span class="tiny-label">TASK PROGRESS</span>
+        <article class="stat-card mint-card">
+            <span class="quest-kicker">TASK PROGRESS</span>
             <strong id="courseCompletion">--</strong>
             <span id="courseCompletionMeta">No tasks yet</span>
         </article>
 
-        <article class="stat-card pastel-peach">
-            <span class="tiny-label">PENDING</span>
+        <article class="stat-card peach-card">
+            <span class="quest-kicker">PENDING</span>
             <strong id="coursePending">0</strong>
             <span>active tasks</span>
         </article>
 
-        <article class="stat-card pastel-lavender">
-            <span class="tiny-label">OVERDUE</span>
+        <article class="stat-card lavender-card">
+            <span class="quest-kicker">OVERDUE</span>
             <strong id="courseOverdue">0</strong>
             <span>need attention</span>
         </article>
     </div>
 
     <div class="course-detail-grid">
-        <section class="detail-card">
-            <div class="section-header">
+        <section class="detail-card game-card-inner">
+            <div class="quest-card-header">
                 <div>
-                    <span class="tiny-label">ACADEMIC TASKS</span>
+                    <span class="quest-kicker">COURSE QUESTS</span>
                     <h3>Course tasks</h3>
                 </div>
             </div>
             <div id="courseTaskList" class="mini-list"></div>
         </section>
 
-        <section class="detail-card grade-card">
-            <div class="section-header">
+        <section class="detail-card grade-card game-card-inner">
+            <div class="quest-card-header">
                 <div>
-                    <span class="tiny-label">GRADE TRACKING</span>
+                    <span class="quest-kicker">GRADE TRACKER</span>
                     <h3>Target grade</h3>
                 </div>
                 <button id="addAssessmentButton" class="small-action" type="button">Add assessment</button>

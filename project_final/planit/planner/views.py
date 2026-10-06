@@ -3,18 +3,24 @@ from datetime import timedelta
 from json import JSONDecodeError
 
 from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_POST
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .domain import EXAM_WINDOW_DAYS
+from .modules import build_module_cards
+from .forms import SignUpForm
 from .models import Assessment, Project, Subject, Task
 from .services import (
     build_today_payload,
     by_area,
+    default_assessments,
     grade_overview,
     group_by_date,
     project_progress,
@@ -23,6 +29,7 @@ from .services import (
     serialize_project,
     serialize_subject,
     serialize_task,
+    should_suggest_exam_mode,
     sort_by_attention,
     subject_summary,
     to_domain_item,
@@ -40,6 +47,65 @@ from .validators import (
     normalize_task_data,
     validate_allowed_fields,
 )
+
+
+# -----------------------------------------------------------------------------
+# Authentication
+# -----------------------------------------------------------------------------
+
+@ensure_csrf_cookie
+def login_page(request):
+    if request.user.is_authenticated:
+        return redirect("today")
+
+    next_url = request.POST.get("next") or request.GET.get("next") or ""
+    context = {
+        "error": "",
+        "username": "",
+        "next": next_url,
+    }
+
+    if request.method == "POST":
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
+        context["username"] = username
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+
+            if next_url and url_has_allowed_host_and_scheme(
+                next_url,
+                allowed_hosts={request.get_host()},
+                require_https=request.is_secure(),
+            ):
+                return redirect(next_url)
+
+            return redirect("today")
+
+        context["error"] = "Incorrect username or password."
+
+    return render(request, "planner/login.html", context)
+
+
+@ensure_csrf_cookie
+def signup_page(request):
+    if request.user.is_authenticated:
+        return redirect("today")
+
+    form = SignUpForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        user = form.save()
+        login(request, user)  # auto sign-in after registration
+        return redirect("today")
+
+    return render(request, "planner/signup.html", {"form": form})
+
+
+@require_POST
+def logout_page(request):
+    logout(request)
+    return redirect("login")
 
 
 # -----------------------------------------------------------------------------
@@ -181,8 +247,9 @@ def build_meta(today, week_start=None, week_end=None):
     }
 
 
-def task_queryset():
-    return Task.objects.select_related("subject", "project")
+def task_queryset(user=None):
+    qs = Task.objects.select_related("subject", "project")
+    return qs.filter(owner=user) if user is not None else qs
 
 
 def serialize_items(items, task_lookup, today):
@@ -239,9 +306,9 @@ def assessment_input_data(assessment):
     }
 
 
-def get_subject(subject_id):
+def get_subject(user, subject_id):
     try:
-        return Subject.objects.get(pk=subject_id)
+        return Subject.objects.get(pk=subject_id, owner=user)
     except Subject.DoesNotExist:
         raise PlanitValidationError(
             "Subject was not found.",
@@ -251,9 +318,9 @@ def get_subject(subject_id):
         )
 
 
-def get_project(project_id):
+def get_project(user, project_id):
     try:
-        return Project.objects.select_related("subject").get(pk=project_id)
+        return Project.objects.select_related("subject").get(pk=project_id, owner=user)
     except Project.DoesNotExist:
         raise PlanitValidationError(
             "Project was not found.",
@@ -263,9 +330,9 @@ def get_project(project_id):
         )
 
 
-def get_task(task_id):
+def get_task(user, task_id):
     try:
-        return task_queryset().get(pk=task_id)
+        return task_queryset(user).get(pk=task_id)
     except Task.DoesNotExist:
         raise PlanitValidationError(
             "Task was not found.",
@@ -274,9 +341,9 @@ def get_task(task_id):
         )
 
 
-def get_assessment(assessment_id):
+def get_assessment(user, assessment_id):
     try:
-        return Assessment.objects.select_related("subject").get(pk=assessment_id)
+        return Assessment.objects.select_related("subject").get(pk=assessment_id, subject__owner=user)
     except Assessment.DoesNotExist:
         raise PlanitValidationError(
             "Assessment was not found.",
@@ -285,15 +352,15 @@ def get_assessment(assessment_id):
         )
 
 
-def resolve_task_relations(data):
+def resolve_task_relations(user, data):
     subject = None
     project = None
 
     if data["subject_id"] is not None:
-        subject = get_subject(data["subject_id"])
+        subject = get_subject(user, data["subject_id"])
 
     if data["project_id"] is not None:
-        project = get_project(data["project_id"])
+        project = get_project(user, data["project_id"])
 
     if project is not None and project.subject_id is not None:
         if subject is None:
@@ -401,14 +468,25 @@ def project_progress_for_model(project, today):
 
 
 def subject_payload(subject, today, include_detail=False):
-    tasks = list(task_queryset().filter(subject=subject))
+    prefetch_cache = getattr(subject, "_prefetched_objects_cache", {})
+
+    if "tasks" in prefetch_cache and not include_detail:
+        tasks = list(prefetch_cache["tasks"])
+    else:
+        tasks = list(task_queryset().filter(subject=subject))
+
+    if "assessments" in prefetch_cache:
+        assessments = list(prefetch_cache["assessments"])
+    else:
+        assessments = list(subject.assessments.all())
+
     items = [to_domain_item(task) for task in tasks]
     summary = subject_summary(items, today)
 
     payload = {
         **serialize_subject(subject),
         "summary": summary,
-        "assessment_count": subject.assessments.count(),
+        "assessment_count": len(assessments),
     }
 
     if include_detail:
@@ -417,11 +495,11 @@ def subject_payload(subject, today, include_detail=False):
         payload["tasks"] = serialize_items(ordered, task_lookup, today)
         payload["assessments"] = [
             serialize_assessment(assessment)
-            for assessment in subject.assessments.all()
+            for assessment in assessments
         ]
         payload["delete_impact"] = {
-            "assessments_deleted": subject.assessments.count(),
-            "tasks_detached": subject.tasks.count(),
+            "assessments_deleted": len(assessments),
+            "tasks_detached": len(tasks),
             "projects_detached": subject.projects.count(),
         }
 
@@ -462,7 +540,7 @@ def tasks_api(request):
 
 def get_tasks_api(request):
     today = timezone.localdate()
-    tasks = list(task_queryset())
+    tasks = list(task_queryset(request.user))
     task_lookup = {task.id: task for task in tasks}
     items = [to_domain_item(task) for task in tasks]
     ordered = sort_by_attention(items, today)
@@ -476,8 +554,12 @@ def get_tasks_api(request):
 
 
 def create_task_api(request):
+    review_tasks_created = 0
+
     try:
         payload = read_json_body(request)
+        from .views_extra import parse_review_offsets
+        review_offsets = parse_review_offsets(payload.pop("review_offsets", None))
         validate_allowed_fields(payload, TASK_INPUT_FIELDS)
 
         merged = {
@@ -494,23 +576,31 @@ def create_task_api(request):
         merged.update(payload)
 
         data = normalize_task_data(merged)
-        subject, project = resolve_task_relations(data)
-        task = apply_task_data(Task(), data, subject, project)
+        subject, project = resolve_task_relations(request.user, data)
+        task = apply_task_data(Task(owner=request.user), data, subject, project)
     except PlanitValidationError as error:
         return validation_response(error)
 
     today = timezone.localdate()
     item = to_domain_item(task)
 
+    from .views_extra import create_review_tasks, remember_task_defaults
+    remember_task_defaults(request.user, task)
+    if review_offsets and task.kind == "exam" and task.due_date:
+        review_tasks_created = create_review_tasks(request.user, task, today, review_offsets)
+
     return JsonResponse(
-        {"task": serialize_task(task, item, today)},
+        {
+            "task": serialize_task(task, item, today),
+            "review_tasks_created": review_tasks_created,
+        },
         status=201,
     )
 
 
 def task_detail_api(request, task_id):
     try:
-        task = get_task(task_id)
+        task = get_task(request.user, task_id)
     except PlanitValidationError as error:
         return validation_response(error)
 
@@ -524,6 +614,28 @@ def task_detail_api(request, task_id):
     return method_not_allowed("PATCH", "DELETE")
 
 
+@require_POST
+def task_duplicate_api(request, task_id):
+    try:
+        task = get_task(request.user, task_id)
+    except PlanitValidationError as error:
+        return validation_response(error)
+
+    today = timezone.localdate()
+    data = task_input_data(task)
+    data["completed"] = False
+    if data.get("due_date") is not None:
+        data["due_date"] = today
+    try:
+        data = normalize_task_data(data)
+        subject, project = resolve_task_relations(request.user, data)
+        copy = apply_task_data(Task(owner=request.user), data, subject, project)
+    except PlanitValidationError as error:
+        return validation_response(error)
+
+    return JsonResponse({"task": serialize_task(copy, to_domain_item(copy), today)}, status=201)
+
+
 def update_task_api(request, task):
     try:
         payload = read_json_body(request)
@@ -531,7 +643,7 @@ def update_task_api(request, task):
         merged = task_input_data(task)
         merged.update(payload)
         data = normalize_task_data(merged)
-        subject, project = resolve_task_relations(data)
+        subject, project = resolve_task_relations(request.user, data)
         apply_task_data(task, data, subject, project)
     except PlanitValidationError as error:
         return validation_response(error)
@@ -548,17 +660,20 @@ def task_options_api(request):
 
     subjects = [
         serialize_subject(subject)
-        for subject in Subject.objects.all()
+        for subject in Subject.objects.filter(owner=request.user)
     ]
     projects = [
         serialize_project(project)
-        for project in Project.objects.select_related("subject").all()
+        for project in Project.objects.filter(owner=request.user).select_related("subject")
     ]
+
+    from .views_extra import get_user_settings, task_defaults
 
     return JsonResponse(
         {
             "subjects": subjects,
             "projects": projects,
+            "defaults": task_defaults(get_user_settings(request.user)),
         }
     )
 
@@ -573,7 +688,7 @@ def today_api(request):
         return validation_response(error)
 
     today = timezone.localdate()
-    tasks = list(task_queryset())
+    tasks = list(task_queryset(request.user))
     task_lookup = {task.id: task for task in tasks}
     items = [to_domain_item(task) for task in tasks]
     payload = build_today_payload(
@@ -588,6 +703,11 @@ def today_api(request):
         item = payload["next_exam"]
         next_exam = serialize_task(task_lookup[item.id], item, today)
 
+    top_focus = None
+    if payload["top_focus"] is not None:
+        item = payload["top_focus"]
+        top_focus = serialize_task(task_lookup[item.id], item, today)
+
     return JsonResponse(
         {
             "meta": build_meta(today),
@@ -595,7 +715,15 @@ def today_api(request):
             "overdue": serialize_items(payload["overdue"], task_lookup, today),
             "today": serialize_items(payload["today"], task_lookup, today),
             "next_exam": next_exam,
+            "top_focus": top_focus,
             "hidden_by_exam_mode": payload["hidden_by_exam_mode"],
+            "suggest_exam_mode": should_suggest_exam_mode(items, today) and not exam_mode,
+            "modules": build_module_cards(
+                _user_settings(request.user).enabled_modules,
+                request.user,
+                today,
+                exam_mode=exam_mode,
+            ),
         }
     )
 
@@ -614,7 +742,7 @@ def week_api(request):
     week_end = week_start + timedelta(days=6)
 
     tasks = list(
-        task_queryset().filter(due_date__range=(week_start, week_end))
+        task_queryset(request.user).filter(due_date__range=(week_start, week_end))
     )
     task_lookup = {task.id: task for task in tasks}
     items = [to_domain_item(task) for task in tasks]
@@ -659,13 +787,14 @@ def subjects_api(request):
         today = timezone.localdate()
         subjects = [
             subject_payload(subject, today)
-            for subject in Subject.objects.prefetch_related("tasks", "assessments").all()
+            for subject in Subject.objects.filter(owner=request.user).prefetch_related("tasks", "assessments")
         ]
         return JsonResponse({"subjects": subjects})
 
     if request.method == "POST":
         try:
             payload = read_json_body(request)
+            use_template = payload.pop("with_default_assessments", False) is True
             validate_allowed_fields(payload, SUBJECT_INPUT_FIELDS)
             merged = {
                 "name": "",
@@ -675,7 +804,15 @@ def subjects_api(request):
             }
             merged.update(payload)
             data = normalize_subject_data(merged)
-            subject = apply_subject_data(Subject(), data)
+            with transaction.atomic():
+                subject = apply_subject_data(Subject(owner=request.user), data)
+                if use_template:
+                    for row in default_assessments():
+                        apply_assessment_data(
+                            Assessment(),
+                            normalize_assessment_data({**row, "subject_id": subject.id, "score": None}),
+                            subject,
+                        )
         except PlanitValidationError as error:
             return validation_response(error)
 
@@ -689,7 +826,7 @@ def subjects_api(request):
 
 def subject_detail_api(request, subject_id):
     try:
-        subject = get_subject(subject_id)
+        subject = get_subject(request.user, subject_id)
     except PlanitValidationError as error:
         return validation_response(error)
 
@@ -725,7 +862,7 @@ def subject_grade_api(request, subject_id):
         return method_not_allowed("GET")
 
     try:
-        subject = get_subject(subject_id)
+        subject = get_subject(request.user, subject_id)
         target = normalize_target(request.GET.get("target", "80"))
         overview = grade_overview(list(subject.assessments.all()), target)
     except (PlanitValidationError, ValueError) as error:
@@ -753,7 +890,7 @@ def assessments_api(request):
         payload = read_json_body(request)
         validate_allowed_fields(payload, ASSESSMENT_INPUT_FIELDS)
         data = normalize_assessment_data(payload)
-        subject = get_subject(data["subject_id"])
+        subject = get_subject(request.user, data["subject_id"])
         validate_assessment_total(subject.id, data["weight"])
         assessment = apply_assessment_data(Assessment(), data, subject)
     except PlanitValidationError as error:
@@ -767,7 +904,7 @@ def assessments_api(request):
 
 def assessment_detail_api(request, assessment_id):
     try:
-        assessment = get_assessment(assessment_id)
+        assessment = get_assessment(request.user, assessment_id)
     except PlanitValidationError as error:
         return validation_response(error)
 
@@ -778,7 +915,7 @@ def assessment_detail_api(request, assessment_id):
             merged = assessment_input_data(assessment)
             merged.update(payload)
             data = normalize_assessment_data(merged)
-            subject = get_subject(data["subject_id"])
+            subject = get_subject(request.user, data["subject_id"])
             validate_assessment_total(
                 subject.id,
                 data["weight"],
@@ -808,7 +945,7 @@ def projects_api(request):
         today = timezone.localdate()
         projects = [
             project_payload(project, today)
-            for project in Project.objects.select_related("subject").prefetch_related("tasks").all()
+            for project in Project.objects.filter(owner=request.user).select_related("subject").prefetch_related("tasks")
         ]
         return JsonResponse({"projects": projects})
 
@@ -824,8 +961,8 @@ def projects_api(request):
             }
             merged.update(payload)
             data = normalize_project_data(merged)
-            subject = get_subject(data["subject_id"]) if data["subject_id"] else None
-            project = apply_project_data(Project(), data, subject)
+            subject = get_subject(request.user, data["subject_id"]) if data["subject_id"] else None
+            project = apply_project_data(Project(owner=request.user), data, subject)
         except PlanitValidationError as error:
             return validation_response(error)
 
@@ -839,7 +976,7 @@ def projects_api(request):
 
 def project_detail_api(request, project_id):
     try:
-        project = get_project(project_id)
+        project = get_project(request.user, project_id)
     except PlanitValidationError as error:
         return validation_response(error)
 
@@ -855,7 +992,7 @@ def project_detail_api(request, project_id):
             merged = project_input_data(project)
             merged.update(payload)
             data = normalize_project_data(merged)
-            new_subject = get_subject(data["subject_id"]) if data["subject_id"] else None
+            new_subject = get_subject(request.user, data["subject_id"]) if data["subject_id"] else None
 
             if project.subject_id != data["subject_id"] and new_subject is not None:
                 conflicts = project.tasks.exclude(subject__isnull=True).exclude(subject=new_subject)
@@ -882,3 +1019,8 @@ def project_detail_api(request, project_id):
         return HttpResponse(status=204)
 
     return method_not_allowed("GET", "PATCH", "DELETE")
+
+
+def _user_settings(user):
+    from .views_extra import get_user_settings
+    return get_user_settings(user)

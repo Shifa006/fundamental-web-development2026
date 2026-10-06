@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 let tasks = [];
+let weekDays = [];
+let weekMeta = null;
 let selectedArea = "all";
 let selectedView = "all";
 let searchQuery = "";
@@ -19,7 +21,7 @@ async function initTasksPage() {
     initSelectFilters();
 
     document.addEventListener("planit:exam-mode-change", async () => {
-        if (selectedView === "week") {
+        if (isCalendarView()) {
             await loadWeek();
         } else {
             renderFilteredTasks();
@@ -27,7 +29,11 @@ async function initTasksPage() {
     });
 
     document.addEventListener("planit:tasks-changed", loadTasks);
-    document.addEventListener("planit:options-changed", populateSubjectFilter);
+
+    document.addEventListener("planit:options-changed", async () => {
+        await populateSubjectFilter();
+        refreshCurrentView();
+    });
 
     await loadTasks();
 }
@@ -41,7 +47,7 @@ async function loadTasks() {
         tasks = data.tasks;
         await populateSubjectFilter();
 
-        if (selectedView === "week") {
+        if (isCalendarView()) {
             await loadWeek();
         } else {
             renderFilteredTasks();
@@ -91,7 +97,9 @@ async function populateSubjectFilter() {
         select.append(option);
     });
 
-    const stillExists = Array.from(select.options).some((option) => option.value === previous);
+    const stillExists = Array.from(select.options).some(
+        (option) => option.value === previous,
+    );
     selectedSubject = stillExists ? previous : "all";
     select.value = selectedSubject;
 }
@@ -107,7 +115,7 @@ function initAreaButtons() {
             button.classList.add("is-active");
             selectedArea = button.dataset.area;
 
-            if (selectedView === "week") {
+            if (isCalendarView()) {
                 await loadWeek();
             } else {
                 renderFilteredTasks();
@@ -127,7 +135,7 @@ function initViewButtons() {
             button.classList.add("is-active");
             selectedView = button.dataset.view;
 
-            if (selectedView === "week") {
+            if (isCalendarView()) {
                 await loadWeek();
             } else {
                 renderFilteredTasks();
@@ -169,23 +177,44 @@ function initSelectFilters() {
 }
 
 
-async function refreshCurrentView() {
-    if (selectedView === "week") {
-        await loadWeek();
+function refreshCurrentView() {
+    if (selectedView === "month") {
+        window.PlanitMonth.rerender();
+    } else if (isCalendarView()) {
+        renderWeek(weekDays);
     } else {
         renderFilteredTasks();
     }
 }
 
 
-function matchesClientFilters(task) {
+function matchesClientFilters(task, { preservePastExam = false } = {}) {
     const examMode = window.PlanitUI.getExamMode();
 
     const areaMatches = selectedArea === "all" || task.area === selectedArea;
-    const examModeMatches = !examMode || task.exam_mode_visible;
-    const searchMatches = !searchQuery || task.title.toLowerCase().includes(searchQuery);
+    const examModeMatches = (
+        !examMode
+        || task.exam_mode_visible
+        || (preservePastExam && task.status === "past_exam")
+    );
+
+    const searchableText = [
+        task.title,
+        task.description,
+        task.subject?.name,
+        task.subject?.code,
+        task.project?.title,
+    ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+    const searchMatches = !searchQuery || searchableText.includes(searchQuery);
     const priorityMatches = selectedPriority === "all" || task.priority === selectedPriority;
-    const subjectMatches = selectedSubject === "all" || String(task.subject?.id ?? "") === selectedSubject;
+    const subjectMatches = (
+        selectedSubject === "all"
+        || String(task.subject?.id ?? "") === selectedSubject
+    );
 
     let statusMatches = true;
     if (selectedStatus === "pending") {
@@ -206,18 +235,27 @@ function matchesClientFilters(task) {
 
 
 function getFilteredTasks() {
-    return tasks.filter(matchesClientFilters).sort(taskSortComparator);
+    return tasks
+        .filter((task) => matchesClientFilters(task))
+        .sort(taskSortComparator);
+}
+
+
+function attentionRank(task) {
+    return Number.isFinite(task.attention_rank)
+        ? task.attention_rank
+        : Number.MAX_SAFE_INTEGER;
 }
 
 
 function taskSortComparator(a, b) {
     if (selectedSort === "priority") {
-        return a.priority_rank - b.priority_rank || a.attention_rank - b.attention_rank;
+        return a.priority_rank - b.priority_rank || attentionRank(a) - attentionRank(b);
     }
 
     if (selectedSort === "due") {
         if (!a.due_date && !b.due_date) {
-            return a.attention_rank - b.attention_rank;
+            return attentionRank(a) - attentionRank(b);
         }
         if (!a.due_date) {
             return 1;
@@ -225,10 +263,20 @@ function taskSortComparator(a, b) {
         if (!b.due_date) {
             return -1;
         }
-        return a.due_date.localeCompare(b.due_date) || a.attention_rank - b.attention_rank;
+        return a.due_date.localeCompare(b.due_date) || attentionRank(a) - attentionRank(b);
     }
 
-    return a.attention_rank - b.attention_rank;
+    return attentionRank(a) - attentionRank(b);
+}
+
+
+function addTaskStateClasses(element, task) {
+    element.classList.add(`kind-${task.kind}`, `priority-${task.priority}`, `status-${task.status}`);
+    element.classList.add(task.area === "personal" ? "area-personal" : "area-academic");
+
+    if (task.completed) {
+        element.classList.add("is-complete");
+    }
 }
 
 
@@ -260,17 +308,15 @@ function renderFilteredTasks() {
 
 function createArchiveTask(task) {
     const article = document.createElement("article");
-    article.className = "archive-task";
-    if (task.completed) {
-        article.classList.add("is-complete");
-    }
+    article.className = "archive-task quest-inventory-row";
+    addTaskStateClasses(article, task);
 
     const check = document.createElement("button");
     check.type = "button";
     check.className = "check-box";
     check.setAttribute(
         "aria-label",
-        task.completed ? `Uncomplete ${task.title}` : `Complete ${task.title}`,
+        task.completed ? `Mark ${task.title} as incomplete` : `Complete ${task.title}`,
     );
     if (task.completed) {
         check.classList.add("is-checked");
@@ -287,10 +333,14 @@ function createArchiveTask(task) {
     });
 
     const body = document.createElement("div");
+    body.className = "archive-task-copy";
+
     const title = document.createElement("strong");
     title.textContent = task.title;
+
     const detail = document.createElement("span");
     detail.textContent = window.PlanitUtils.taskContext(task);
+
     body.append(title, detail);
 
     const status = document.createElement("span");
@@ -306,6 +356,19 @@ function createArchiveTask(task) {
     editButton.textContent = "Edit";
     editButton.addEventListener("click", () => window.PlanitTasks.openEdit(task));
 
+    const duplicateButton = document.createElement("button");
+    duplicateButton.type = "button";
+    duplicateButton.className = "text-action";
+    duplicateButton.textContent = "Duplicate";
+    duplicateButton.setAttribute("aria-label", `Duplicate ${task.title} for today`);
+    duplicateButton.addEventListener("click", async () => {
+        try {
+            await window.PlanitTasks.duplicate(task);
+        } catch (error) {
+            window.PlanitUtils.showToast(error.message, "error");
+        }
+    });
+
     const deleteButton = document.createElement("button");
     deleteButton.type = "button";
     deleteButton.className = "text-action danger-action";
@@ -318,13 +381,32 @@ function createArchiveTask(task) {
         }
     });
 
-    actions.append(editButton, deleteButton);
+    actions.append(editButton, duplicateButton, deleteButton);
     article.append(check, body, status, actions);
     return article;
 }
 
 
+function isCalendarView() {
+    return selectedView === "week" || selectedView === "month";
+}
+
+
 async function loadWeek() {
+    if (selectedView === "month") {
+        await window.PlanitMonth.load({
+            area: selectedArea,
+            examMode: window.PlanitUI.getExamMode(),
+            onLoading: showTasksLoading,
+            onReady: hideTasksLoading,
+            onError: showTasksError,
+            matches: (task) => matchesClientFilters(task, { preservePastExam: true }),
+            sorter: taskSortComparator,
+            makeRow: createArchiveTask,
+        });
+        return;
+    }
+
     showTasksLoading();
 
     const params = new URLSearchParams({
@@ -334,8 +416,12 @@ async function loadWeek() {
 
     try {
         const data = await window.PlanitAPI.get(`/api/week/?${params}`);
-        renderWeek(data.days);
+        weekDays = data.days;
+        weekMeta = data.meta;
+        renderWeekRange(weekMeta);
+        renderWeek(weekDays);
         hideTasksLoading();
+        document.querySelector("#tasksError").hidden = true;
         document.querySelector("#allTasksView").hidden = true;
         document.querySelector("#weekTasksView").hidden = false;
     } catch (error) {
@@ -344,9 +430,33 @@ async function loadWeek() {
 }
 
 
+function renderWeekRange(meta) {
+    if (!meta?.week_start || !meta?.week_end) {
+        return;
+    }
+
+    const start = window.PlanitUtils.parseLocalDate(meta.week_start);
+    const end = window.PlanitUtils.parseLocalDate(meta.week_end);
+
+    const startMonth = new Intl.DateTimeFormat("en-US", { month: "short" }).format(start);
+    const endMonth = new Intl.DateTimeFormat("en-US", { month: "short" }).format(end);
+
+    const label = start.getMonth() === end.getMonth()
+        ? `${start.getDate()}–${end.getDate()} ${startMonth}`
+        : `${start.getDate()} ${startMonth} – ${end.getDate()} ${endMonth}`;
+
+    window.PlanitUtils.setText("#weekRange", label);
+}
+
+
 function renderWeek(days) {
     const grid = document.querySelector("#weekGrid");
+    if (!grid) {
+        return;
+    }
+
     grid.replaceChildren();
+    const allVisibleTasks = [];
 
     days.forEach((day) => {
         const column = document.createElement("article");
@@ -360,11 +470,15 @@ function renderWeek(days) {
         const name = document.createElement("span");
         name.textContent = day.weekday.slice(0, 3).toUpperCase();
         const number = document.createElement("strong");
-        number.textContent = day.date.slice(-2);
+        number.textContent = String(Number(day.date.slice(-2)));
         header.append(name, number);
         column.append(header);
 
-        const visibleTasks = day.tasks.filter(matchesClientFilters);
+        const visibleTasks = day.tasks
+            .filter((task) => matchesClientFilters(task, { preservePastExam: true }))
+            .sort(taskSortComparator);
+
+        allVisibleTasks.push(...visibleTasks);
 
         if (!visibleTasks.length) {
             const empty = document.createElement("p");
@@ -376,22 +490,39 @@ function renderWeek(days) {
         visibleTasks.forEach((task) => {
             const card = document.createElement("button");
             card.type = "button";
-            card.className = `week-task ${window.PlanitUtils.kindClass(task.kind)}`;
+            card.className = "week-task";
+            addTaskStateClasses(card, task);
+
             if (task.status === "past_exam") {
                 card.classList.add("is-past");
             }
 
+            const meta = document.createElement("span");
+            meta.className = "week-task-meta";
+            meta.textContent = task.kind === "exam"
+                ? "EXAM"
+                : window.PlanitUtils.formatKind(task.kind).toUpperCase();
+
             const title = document.createElement("strong");
             title.textContent = task.title;
+
             const detail = document.createElement("span");
+            detail.className = "week-task-detail";
             detail.textContent = window.PlanitUtils.taskContext(task);
-            card.append(title, detail);
+
+            const status = document.createElement("small");
+            status.className = "week-task-status";
+            status.textContent = window.PlanitUtils.taskStatusLabel(task);
+
+            card.append(meta, title, detail, status);
             card.addEventListener("click", () => window.PlanitTasks.openEdit(task));
             column.append(card);
         });
 
         grid.append(column);
     });
+
+    renderActiveCount(allVisibleTasks);
 }
 
 
@@ -408,6 +539,7 @@ function showTasksLoading() {
     document.querySelector("#tasksError").hidden = true;
     document.querySelector("#allTasksView").hidden = true;
     document.querySelector("#weekTasksView").hidden = true;
+    document.querySelector("#monthTasksView").hidden = true;
 }
 
 
@@ -420,12 +552,16 @@ function showAllTasks() {
     hideTasksLoading();
     document.querySelector("#tasksError").hidden = true;
     document.querySelector("#weekTasksView").hidden = true;
+    document.querySelector("#monthTasksView").hidden = true;
     document.querySelector("#allTasksView").hidden = false;
 }
 
 
 function showTasksError(message) {
     hideTasksLoading();
+    document.querySelector("#allTasksView").hidden = true;
+    document.querySelector("#weekTasksView").hidden = true;
+    document.querySelector("#monthTasksView").hidden = true;
     const error = document.querySelector("#tasksError");
     error.textContent = message;
     error.hidden = false;

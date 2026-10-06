@@ -7,6 +7,7 @@ let selectedArea = "all";
 
 async function initTodayPage() {
     initAreaFilters();
+    renderGreeting();
 
     document.addEventListener("planit:exam-mode-change", loadToday);
     document.addEventListener("planit:tasks-changed", loadToday);
@@ -27,6 +28,23 @@ function initAreaFilters() {
             await loadToday();
         });
     });
+}
+
+
+function renderGreeting() {
+    const greeting = document.querySelector("#todayGreeting");
+    if (!greeting) {
+        return;
+    }
+
+    const hour = new Date().getHours();
+    if (hour < 12) {
+        greeting.textContent = "Good morning";
+    } else if (hour < 18) {
+        greeting.textContent = "Good afternoon";
+    } else {
+        greeting.textContent = "Good evening";
+    }
 }
 
 
@@ -52,14 +70,58 @@ async function loadToday() {
 function renderToday(data) {
     renderDate(data.meta.today);
     renderProgress(data.progress);
-    renderTaskList("#todayTaskList", data.today, "Nothing is due today.");
-    renderTaskList("#overdueTaskList", data.overdue, "Nothing overdue.");
+    renderTaskList("#todayTaskList", data.today, "No tasks due today. Tap + to add one.");
+    renderTaskList("#overdueTaskList", data.overdue, "No overdue tasks. Nice work.");
 
     window.PlanitUtils.setText("#todayCount", window.PlanitUtils.formatCount(data.today.length));
     window.PlanitUtils.setText("#overdueCount", window.PlanitUtils.formatCount(data.overdue.length));
 
+    renderTopFocus(data.top_focus);
     renderNextExam(data.next_exam);
     renderHiddenCount(data.hidden_by_exam_mode);
+    renderExamSuggestion(data);
+}
+
+
+function renderExamSuggestion(data) {
+    const box = document.querySelector("#examSuggestion");
+    if (!box) {
+        return;
+    }
+
+    const key = `planit-exam-suggest-${data.meta.today}`;
+    let dismissed = false;
+    try {
+        dismissed = window.localStorage.getItem(key) === "1";
+    } catch {
+        dismissed = false;
+    }
+
+    const exam = data.next_exam;
+    if (!data.suggest_exam_mode || dismissed || !exam) {
+        box.hidden = true;
+        return;
+    }
+
+    const days = exam.days_left;
+    const when = days === 0 ? "today" : `in ${days} day${days === 1 ? "" : "s"}`;
+    window.PlanitUtils.setText("#examSuggestionText", `${exam.title} is ${when}. Focus on what matters?`);
+    box.hidden = false;
+
+    document.querySelector("#examSuggestionOn").onclick = () => {
+        window.PlanitUI.setExamMode(true);
+        window.PlanitUI.updateExamModeControls();
+        document.dispatchEvent(new CustomEvent("planit:exam-mode-change", { detail: { enabled: true } }));
+        box.hidden = true;
+    };
+    document.querySelector("#examSuggestionDismiss").onclick = () => {
+        try {
+            window.localStorage.setItem(key, "1");
+        } catch {
+            /* storage unavailable: dismiss for this view only */
+        }
+        box.hidden = true;
+    };
 }
 
 
@@ -90,25 +152,38 @@ function renderDate(isoDate) {
 
 
 function renderProgress(progress) {
-    window.PlanitUtils.setText(
-        "#progressCompleted",
-        String(progress.completed).padStart(2, "0"),
-    );
-    window.PlanitUtils.setText(
-        "#progressTotal",
-        String(progress.total).padStart(2, "0"),
-    );
+    window.PlanitUtils.setText("#progressCompleted", String(progress.completed));
+    window.PlanitUtils.setText("#progressTotal", String(progress.total));
 
     const percent = progress.percent ?? 0;
+    const roundedPercent = Math.round(percent);
     const bar = document.querySelector("#todayProgressBar");
+    const ring = document.querySelector("#todayProgressRing");
+
     if (bar) {
         bar.style.width = `${percent}%`;
     }
 
-    window.PlanitUtils.setText(
-        "#progressText",
-        progress.percent === null ? "No tasks due today" : `${percent}% completed`,
-    );
+    if (ring) {
+        ring.style.setProperty("--progress", `${percent * 3.6}deg`);
+    }
+
+    window.PlanitUtils.setText("#progressPercent", `${roundedPercent}%`);
+
+    let message = "No tasks due today";
+    if (progress.percent !== null) {
+        if (percent >= 100) {
+            message = "All of today's tasks are done. Nice work.";
+        } else if (percent >= 60) {
+            message = "Almost there. Keep the streak going.";
+        } else if (progress.completed > 0) {
+            message = "Progress saved. Pick your next task.";
+        } else {
+            message = "Start with one small task.";
+        }
+    }
+
+    window.PlanitUtils.setText("#progressText", message);
 }
 
 
@@ -131,20 +206,32 @@ function renderTaskList(selector, tasks, emptyText) {
 }
 
 
-function createTaskRow(task) {
-    const article = document.createElement("article");
-    article.className = "task-row";
+function addTaskStateClasses(element, task) {
+    element.classList.add(`kind-${task.kind}`, `priority-${task.priority}`, `status-${task.status}`);
+
+    if (task.area === "personal") {
+        element.classList.add("area-personal");
+    } else {
+        element.classList.add("area-academic");
+    }
 
     if (task.completed) {
-        article.classList.add("is-complete");
+        element.classList.add("is-complete");
     }
+}
+
+
+function createTaskRow(task) {
+    const article = document.createElement("article");
+    article.className = "task-row quest-row";
+    addTaskStateClasses(article, task);
 
     const check = document.createElement("button");
     check.type = "button";
     check.className = "check-box";
     check.setAttribute(
         "aria-label",
-        task.completed ? `Uncomplete ${task.title}` : `Complete ${task.title}`,
+        task.completed ? `Mark ${task.title} as incomplete` : `Complete ${task.title}`,
     );
 
     if (task.completed) {
@@ -177,14 +264,55 @@ function createTaskRow(task) {
     kind.textContent = window.PlanitUtils.formatKind(task.kind);
 
     const status = document.createElement("span");
-    status.className = "priority-text";
-    if (task.priority === "urgent" || task.status === "overdue") {
-        status.classList.add("urgent");
-    }
+    status.className = `priority-text ${window.PlanitUtils.statusClass(task)}`;
     status.textContent = window.PlanitUtils.taskStatusLabel(task);
 
     article.append(check, copy, kind, status);
     return article;
+}
+
+
+function renderTopFocus(task) {
+    const content = document.querySelector("#topFocusContent");
+    const empty = document.querySelector("#topFocusEmpty");
+    const card = document.querySelector(".top-focus-card");
+
+    if (!content || !empty || !card) {
+        return;
+    }
+
+    card.classList.remove(
+        "kind-general",
+        "kind-assignment",
+        "kind-study",
+        "kind-exam",
+        "priority-urgent",
+        "priority-normal",
+        "priority-later",
+        "status-overdue",
+        "status-today",
+        "status-upcoming",
+        "status-no_date",
+    );
+
+    if (!task) {
+        content.hidden = true;
+        empty.hidden = false;
+        return;
+    }
+
+    content.hidden = false;
+    empty.hidden = true;
+    addTaskStateClasses(card, task);
+
+    window.PlanitUtils.setText("#topFocusTitle", task.title);
+    window.PlanitUtils.setText(
+        "#topFocusMeta",
+        `${window.PlanitUtils.taskContext(task)} · ${window.PlanitUtils.taskStatusLabel(task)}`,
+    );
+
+    const score = Number(task.attention_score ?? 0);
+    window.PlanitUtils.setText("#topFocusScore", score.toFixed(2));
 }
 
 
@@ -231,7 +359,7 @@ function renderHiddenCount(count) {
         return;
     }
 
-    element.textContent = `${count} active item${count === 1 ? "" : "s"} hidden by Exam Mode.`;
+    element.textContent = `${count} active task${count === 1 ? "" : "s"} hidden by Exam Mode.`;
     element.hidden = false;
 }
 

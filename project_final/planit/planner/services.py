@@ -1,7 +1,8 @@
-from datetime import timedelta
+from datetime import date, timedelta
 from decimal import Decimal, ROUND_HALF_UP
 
 from .domain import (
+    EXAM_WINDOW_DAYS,
     AssignmentItem,
     ExamItem,
     GeneralItem,
@@ -88,7 +89,18 @@ def completion_rate(items, today):
 
 
 def project_progress(items, today):
-    return completion_rate(items, today)
+    # Project progress is derived from completion state of every linked task.
+    # A missed/past exam still represents unfinished project work and must not
+    # make a project look artificially complete.
+    items = list(items)
+    total = len(items)
+    completed = sum(1 for item in items if item.completed)
+
+    return {
+        "completed": completed,
+        "total": total,
+        "percent": None if total == 0 else round(completed / total * 100, 1),
+    }
 
 
 def subject_summary(items, today):
@@ -147,6 +159,20 @@ def sort_by_attention(items, today):
     return sorted(items, key=sort_key)
 
 
+def top_focus_item(items, today, exam_mode=False):
+    active = [
+        item
+        for item in items
+        if item.status(today) not in {"completed", "past_exam"}
+    ]
+
+    if exam_mode:
+        active = exam_mode_view(active, today)
+
+    ordered = sort_by_attention(active, today)
+    return ordered[0] if ordered else None
+
+
 def group_by_date(items, week_start, week_end):
     grouped = {}
     current = week_start
@@ -175,13 +201,16 @@ def build_today_payload(items, today, area="all", exam_mode=False):
 
     progress = completion_rate(due_today, today)
     next_exam = None if area == "personal" else nearest_exam(filtered, today)
+    top_focus = top_focus_item(filtered, today, exam_mode=exam_mode)
     hidden_by_exam_mode = 0
 
     if exam_mode:
-        candidates = overdue + due_today
+        # Count every active item that passed the area filter but is hidden by
+        # Exam Mode. This keeps the number consistent with the UI message
+        # ("active items hidden"), not only the Today/Overdue sections.
         hidden_by_exam_mode = sum(
             1
-            for item in candidates
+            for item in filtered
             if (
                 not item.completed
                 and item.status(today) != "past_exam"
@@ -196,6 +225,7 @@ def build_today_payload(items, today, area="all", exam_mode=False):
         "overdue": sort_by_attention(overdue, today),
         "today": sort_by_attention(due_today, today),
         "next_exam": next_exam,
+        "top_focus": top_focus,
         "hidden_by_exam_mode": hidden_by_exam_mode,
     }
 
@@ -312,3 +342,76 @@ def grade_overview(assessments, target):
         "status": result["status"],
         "required": to_json_number(result["required"]),
     }
+
+
+# -----------------------------------------------------------------------------
+# v1.3 helpers (pure functions)
+# -----------------------------------------------------------------------------
+
+REVIEW_OFFSETS = (7, 3, 1)
+
+DEFAULT_ASSESSMENTS = (
+    ("Quiz", 10),
+    ("Midterm", 30),
+    ("Assignment", 20),
+    ("Final", 40),
+)
+
+
+def default_assessments():
+    """Standard assessment template (weights total 100)."""
+    return [{"name": name, "weight": weight, "max_score": weight} for name, weight in DEFAULT_ASSESSMENTS]
+
+
+def plan_review_tasks(exam_title, exam_date, today, offsets=REVIEW_OFFSETS):
+    """Plan "Review" study tasks before an exam.
+
+    Returns a list of {"title", "due_date"} for each offset whose date is still
+    in the future (strictly after today), earliest first. Dates that are
+    already past, or today, are skipped.
+    """
+    planned = []
+    for offset in sorted(set(offsets), reverse=True):
+        due = exam_date - timedelta(days=offset)
+        if due > today:
+            planned.append({"title": f"Review: {exam_title}", "due_date": due})
+    return planned
+
+
+def should_suggest_exam_mode(items, today, window_days=EXAM_WINDOW_DAYS):
+    """True when an unfinished exam is 0..window_days away."""
+    for item in items:
+        if item.kind != "exam" or item.completed or item.due_date is None:
+            continue
+        if 0 <= (item.due_date - today).days <= window_days:
+            return True
+    return False
+
+
+def month_bounds(year, month):
+    first = date(year, month, 1)
+    if month == 12:
+        following = date(year + 1, 1, 1)
+    else:
+        following = date(year, month + 1, 1)
+    return first, following - timedelta(days=1)
+
+
+DOT_ORDER = ("exam", "overdue", "academic", "personal", "completed")
+
+
+def dot_kind(item, today):
+    status = item.status(today)
+    if status == "completed":
+        return "completed"
+    if item.kind == "exam":
+        return "exam"
+    if status == "overdue":
+        return "overdue"
+    return item.area
+
+
+def day_dots(items, today, limit=3):
+    kinds = {dot_kind(item, today) for item in items}
+    ordered = [kind for kind in DOT_ORDER if kind in kinds]
+    return ordered[:limit]

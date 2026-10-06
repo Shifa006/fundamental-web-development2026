@@ -1,90 +1,145 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="mint">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#d8eee2">
     <title>{% block title %}Planit{% endblock %}</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
-
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'planner/css/style.css' %}">
 </head>
 
-<body data-page="{{ page_name }}" data-today="{{ server_today }}">
+<body
+    class="page-{{ page_name }}"
+    data-page="{{ page_name }}"
+    data-today="{{ server_today }}"
+    data-theme="mint"
+>
 
-<div class="background-shape shape-one" aria-hidden="true"></div>
-<div class="background-shape shape-two" aria-hidden="true"></div>
+<div class="ambient-orb orb-one" aria-hidden="true"></div>
+<div class="ambient-orb orb-two" aria-hidden="true"></div>
+<div class="pixel-dots" aria-hidden="true"></div>
 
-<div class="planit-layout">
-    <aside class="sidebar">
-        <div>
-            <a class="brand" href="{% url 'today' %}">planit.</a>
-            <p class="brand-note">student planner</p>
-        </div>
+<div class="planit-shell">
+    <aside class="sidebar" aria-label="Planit navigation">
+        <a class="brand-tile" href="{% url 'today' %}" aria-label="Planit home">
+            <span>P</span>
+        </a>
 
         {% with current=request.resolver_match.url_name %}
         <nav class="main-nav" aria-label="Primary navigation">
-            <a class="nav-item {% if current == 'today' %}is-active{% endif %}" href="{% url 'today' %}">
-                <span class="nav-index">01</span>
-                <span>Today</span>
-            </a>
-            <a class="nav-item {% if current == 'tasks' %}is-active{% endif %}" href="{% url 'tasks' %}">
-                <span class="nav-index">02</span>
-                <span>Tasks</span>
-            </a>
-            <a class="nav-item {% if current == 'courses' %}is-active{% endif %}" href="{% url 'courses' %}">
-                <span class="nav-index">03</span>
-                <span>Courses</span>
-            </a>
-            <a class="nav-item {% if current == 'projects' %}is-active{% endif %}" href="{% url 'projects' %}">
-                <span class="nav-index">04</span>
-                <span>Projects</span>
-            </a>
+            <ul class="nav-list">
+                <li>
+                    <a class="nav-item {% if current == 'today' %}is-active{% endif %}" href="{% url 'today' %}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3 11.2 12 4l9 7.2"></path>
+                            <path d="M5.5 10.4V20h13v-9.6"></path>
+                        </svg>
+                        <span>Today</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-item {% if current == 'tasks' %}is-active{% endif %}" href="{% url 'tasks' %}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="m5 7 1.5 1.5L9 5.5"></path>
+                            <path d="M11 7h8"></path>
+                            <path d="m5 13 1.5 1.5L9 11.5"></path>
+                            <path d="M11 13h8"></path>
+                            <path d="m5 19 1.5 1.5L9 17.5"></path>
+                            <path d="M11 19h8"></path>
+                        </svg>
+                        <span>Tasks</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-item {% if current == 'courses' %}is-active{% endif %}" href="{% url 'courses' %}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M5 4.5h11.5A2.5 2.5 0 0 1 19 7v12.5H7.5A2.5 2.5 0 0 1 5 17V4.5Z"></path>
+                            <path d="M5 17a2.5 2.5 0 0 1 2.5-2.5H19"></path>
+                        </svg>
+                        <span>Courses</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-item {% if current == 'projects' %}is-active{% endif %}" href="{% url 'projects' %}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3.5 7.5h7l2-2h8v13h-17z"></path>
+                        </svg>
+                        <span>Projects</span>
+                    </a>
+                </li>
+            </ul>
         </nav>
         {% endwith %}
 
-        <div class="sidebar-bottom">
-            <div class="sidebar-note-card">
-                <span class="tiny-label">PLANIT V1</span>
-                <strong>one place</strong>
-                <div class="mini-line"></div>
-                <p>Academic work and personal tasks, without the clutter.</p>
+        <div class="sidebar-foot">
+            <div class="player-orb" title="Signed in as {{ request.user.username }}">
+                {{ request.user.username|first|upper }}
             </div>
         </div>
     </aside>
 
     <main class="main-area">
         <header class="topbar">
-            <span class="topbar-label">PLANIT / STUDENT PLANNER</span>
+            <div class="topbar-copy">
+                <span class="topbar-kicker">PLANIT</span>
+                <span class="topbar-separator">/</span>
+                <span class="topbar-page">{{ page_name|title }}</span>
+            </div>
 
             <div class="topbar-actions">
                 <button
-                    id="examModeButton"
-                    class="soft-button"
+                    id="themeModeButton"
+                    class="theme-toggle"
                     type="button"
+                    data-theme-toggle
+                    aria-label="Switch theme"
                     aria-pressed="false"
                 >
-                    Exam Mode
+                    <span class="theme-toggle-sun" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"></path></svg>
+                    </span>
+                    <span class="theme-toggle-moon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M19 15.5A8 8 0 0 1 8.5 5 8 8 0 1 0 19 15.5Z"></path></svg>
+                    </span>
+                    <span class="theme-toggle-knob" aria-hidden="true"></span>
                 </button>
 
                 <button
-                    id="addTaskButton"
-                    class="primary-button"
+                    id="examModeButton"
+                    class="mode-toggle"
                     type="button"
+                    aria-pressed="false"
+                    data-exam-toggle
                 >
-                    Add task
+                    <span class="mode-toggle-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 3c.5 3-2.5 4.1-2.5 7.1 0 1.7 1.1 2.9 2.5 2.9 1.7 0 3-1.4 3-3.2 0-1.1-.4-2.1-1-3 2.9 1.5 5 4.2 5 7.3A7 7 0 1 1 5 14c0-2.6 1.5-5.1 4-6.8-.5 3.6 1.2 5.8 3 5.8"></path>
+                        </svg>
+                    </span>
+                    <span class="mode-toggle-copy">
+                        <span class="mode-toggle-title">Exam Mode</span>
+                        <span class="mode-toggle-status">Off</span>
+                    </span>
+                    <span class="mode-switch" aria-hidden="true"><span></span></span>
                 </button>
+
+                <div class="account-menu">
+                    <span class="account-name">{{ request.user.username }}</span>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="logout-button" type="submit" title="Log out">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M10 5H5v14h5"></path>
+                                <path d="M14 8l4 4-4 4"></path>
+                                <path d="M18 12H9"></path>
+                            </svg>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </div>
             </div>
         </header>
 
@@ -94,12 +149,46 @@
     </main>
 </div>
 
+<button
+    id="addTaskButton"
+    class="quest-fab"
+    type="button"
+    aria-label="Add task"
+    title="Add task"
+>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 5v14M5 12h14"></path>
+    </svg>
+</button>
+
 {% with current=request.resolver_match.url_name %}
 <nav class="mobile-nav" aria-label="Mobile navigation">
-    <a class="{% if current == 'today' %}is-active{% endif %}" href="{% url 'today' %}">Today</a>
-    <a class="{% if current == 'tasks' %}is-active{% endif %}" href="{% url 'tasks' %}">Tasks</a>
-    <a class="{% if current == 'courses' %}is-active{% endif %}" href="{% url 'courses' %}">Courses</a>
-    <a class="{% if current == 'projects' %}is-active{% endif %}" href="{% url 'projects' %}">Projects</a>
+    <ul class="mobile-nav-list">
+        <li>
+            <a class="{% if current == 'today' %}is-active{% endif %}" href="{% url 'today' %}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.2 12 4l9 7.2"></path><path d="M5.5 10.4V20h13v-9.6"></path></svg>
+                <span>Today</span>
+            </a>
+        </li>
+        <li>
+            <a class="{% if current == 'tasks' %}is-active{% endif %}" href="{% url 'tasks' %}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 7 1.5 1.5L9 5.5"></path><path d="M11 7h8"></path><path d="m5 13 1.5 1.5L9 11.5"></path><path d="M11 13h8"></path><path d="m5 19 1.5 1.5L9 17.5"></path><path d="M11 19h8"></path></svg>
+                <span>Tasks</span>
+            </a>
+        </li>
+        <li>
+            <a class="{% if current == 'courses' %}is-active{% endif %}" href="{% url 'courses' %}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.5A2.5 2.5 0 0 1 19 7v12.5H7.5A2.5 2.5 0 0 1 5 17V4.5Z"></path><path d="M5 17a2.5 2.5 0 0 1 2.5-2.5H19"></path></svg>
+                <span>Courses</span>
+            </a>
+        </li>
+        <li>
+            <a class="{% if current == 'projects' %}is-active{% endif %}" href="{% url 'projects' %}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5h7l2-2h8v13h-17z"></path></svg>
+                <span>Projects</span>
+            </a>
+        </li>
+    </ul>
 </nav>
 {% endwith %}
 
@@ -107,7 +196,8 @@
 
 {% include "planner/includes/modals.html" %}
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'planner/js/theme.js' %}"></script>
 <script src="{% static 'planner/js/api.js' %}"></script>
 <script src="{% static 'planner/js/utils.js' %}"></script>
 <script src="{% static 'planner/js/ui.js' %}"></script>

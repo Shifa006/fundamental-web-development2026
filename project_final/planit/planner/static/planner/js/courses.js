@@ -100,7 +100,7 @@ function renderSubjects() {
         pending.textContent = `${subject.summary.pending} pending`;
         const overdue = document.createElement("span");
         overdue.textContent = `${subject.summary.overdue} overdue`;
-        footer.append(pending, overdue);
+        footer.append(pending, document.createTextNode(" \u00b7 "), overdue);
 
         const open = document.createElement("button");
         open.type = "button";
@@ -233,6 +233,7 @@ function openCreateSubject() {
     editingSubjectId = null;
     document.querySelector("#subjectForm").reset();
     document.querySelector("#subjectFormError").hidden = true;
+    document.querySelector("#subjectTemplateField").hidden = false;
     window.PlanitUtils.setText("#subjectModalTitle", "Add course");
     window.PlanitUtils.setText("#subjectSubmitButton", "Save course");
     bootstrap.Modal.getOrCreateInstance(document.querySelector("#subjectModal")).show();
@@ -242,6 +243,7 @@ function openCreateSubject() {
 function openEditSubject(subject) {
     editingSubjectId = subject.id;
     document.querySelector("#subjectFormError").hidden = true;
+    document.querySelector("#subjectTemplateField").hidden = true;
     document.querySelector("#subjectName").value = subject.name;
     document.querySelector("#subjectCode").value = subject.code || "";
     document.querySelector("#subjectSemester").value = subject.semester || "";
@@ -265,6 +267,10 @@ async function submitSubjectForm(event) {
         semester: document.querySelector("#subjectSemester").value,
         color: document.querySelector("#subjectColor").value,
     };
+
+    if (!editingSubjectId && document.querySelector("#subjectTemplate")?.checked) {
+        payload.with_default_assessments = true;
+    }
 
     try {
         const response = editingSubjectId

@@ -4,80 +4,143 @@
 {% block title %}Tasks | Planit{% endblock %}
 
 {% block content %}
-<section class="page-intro reveal">
+<section class="tasks-hero reveal">
     <div>
-        <p class="eyebrow">Task archive</p>
+        <span class="quest-kicker">TASKS</span>
         <h1>Tasks</h1>
-        <p class="intro-copy">Everything you need to keep moving, without making everything feel urgent.</p>
+        <p>Search, filter, and finish your tasks without losing the big picture.</p>
     </div>
 
-    <div class="decorative-label pastel-sage">
-        <span id="activeTaskCount">--</span>
-        <small>ACTIVE</small>
+    <div class="tasks-hero-tools">
+        <div class="segmented-control view-switch" aria-label="Task view">
+            <button class="view-tab is-active" data-view="all" type="button">All tasks</button>
+            <button class="view-tab" data-view="week" type="button">This week</button>
+            <button class="view-tab" data-view="month" type="button">Month</button>
+        </div>
+
+        <div class="active-counter" aria-label="Active task count">
+            <strong id="activeTaskCount">--</strong>
+            <span>ACTIVE</span>
+        </div>
     </div>
 </section>
 
-<section class="filter-panel reveal">
-    <label class="search-box">
-        <span class="tiny-label">SEARCH</span>
-        <input id="taskSearch" type="search" placeholder="Search your tasks">
+<section class="quest-toolbar game-card reveal">
+    <label class="quest-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5"></circle>
+            <path d="m16 16 4 4"></path>
+        </svg>
+        <input id="taskSearch" type="search" placeholder="Search tasks">
     </label>
 
-    <div class="filter-row">
-        <div class="filter-group" aria-label="Area filter">
+    <div class="filter-stack">
+        <div class="segmented-control filter-group" aria-label="Area filter">
             <button class="filter-button is-active" data-area="all" type="button">All</button>
             <button class="filter-button" data-area="academic" type="button">Academic</button>
             <button class="filter-button" data-area="personal" type="button">Personal</button>
         </div>
 
-        <select id="priorityFilter" class="compact-select" aria-label="Priority filter">
-            <option value="all">All priorities</option>
-            <option value="urgent">Urgent</option>
-            <option value="normal">Normal</option>
-            <option value="later">Later</option>
-        </select>
+        <label class="select-shell">
+            <span>Priority</span>
+            <select id="priorityFilter" class="compact-select" aria-label="Priority filter">
+                <option value="all">Any</option>
+                <option value="urgent">Urgent</option>
+                <option value="normal">Normal</option>
+                <option value="later">Later</option>
+            </select>
+        </label>
 
-        <select id="statusFilter" class="compact-select" aria-label="Status filter">
-            <option value="all">All statuses</option>
-            <option value="pending">Pending</option>
-            <option value="completed">Completed</option>
-            <option value="overdue">Overdue</option>
-            <option value="past_exam">Past exams</option>
-        </select>
+        <label class="select-shell">
+            <span>Status</span>
+            <select id="statusFilter" class="compact-select" aria-label="Status filter">
+                <option value="all">All statuses</option>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="overdue">Overdue</option>
+                <option value="past_exam">Past exams</option>
+            </select>
+        </label>
 
-        <select id="subjectFilter" class="compact-select" aria-label="Subject filter">
-            <option value="all">All subjects</option>
-        </select>
+        <label class="select-shell">
+            <span>Course</span>
+            <select id="subjectFilter" class="compact-select" aria-label="Subject filter">
+                <option value="all">All subjects</option>
+            </select>
+        </label>
 
-        <select id="sortFilter" class="compact-select" aria-label="Sort tasks">
-            <option value="attention">Attention</option>
-            <option value="due">Due date</option>
-            <option value="priority">Priority</option>
-        </select>
-    </div>
-
-    <div class="view-tabs">
-        <button class="view-tab is-active" data-view="all" type="button">All Tasks</button>
-        <button class="view-tab" data-view="week" type="button">This Week</button>
+        <label class="select-shell">
+            <span>Sort</span>
+            <select id="sortFilter" class="compact-select" aria-label="Sort tasks">
+                <option value="attention">Attention</option>
+                <option value="due">Due date</option>
+                <option value="priority">Priority</option>
+            </select>
+        </label>
     </div>
 </section>
 
 <div id="tasksError" class="message-panel error-message" hidden></div>
-<div id="tasksLoading" class="loading-panel">Loading tasks...</div>
+<div id="tasksLoading" class="loading-panel">Loading your tasks...</div>
 
 <section id="allTasksView" class="task-view" hidden>
-    <div class="archive-heading">
-        <span>TASK LIST</span>
-        <span id="taskListCount">00 ITEMS</span>
+    <div class="quest-board-heading">
+        <div>
+            <span class="quest-kicker">ALL TASKS</span>
+            <h2>Your tasks</h2>
+        </div>
+        <span id="taskListCount" class="counter-badge">00 ITEMS</span>
     </div>
-    <div id="archiveTaskList" class="archive-list"></div>
+    <div id="archiveTaskList" class="archive-list game-card"></div>
 </section>
 
 <section id="weekTasksView" class="task-view" hidden>
-    <div id="weekGrid" class="week-grid"></div>
+    <div class="week-board game-card">
+        <div class="week-board-heading">
+            <div>
+                <span class="quest-kicker">WEEK MAP</span>
+                <h2 id="weekRange">This week</h2>
+            </div>
+            <span class="today-chip">Today</span>
+        </div>
+        <div id="weekGrid" class="week-grid"></div>
+    </div>
+</section>
+
+<section id="monthTasksView" class="task-view" hidden>
+    <div class="month-board game-card">
+        <div class="month-heading">
+            <div>
+                <span class="quest-kicker">MONTH</span>
+                <h2 id="monthTitle">Month</h2>
+            </div>
+            <div class="month-nav">
+                <button id="monthPrev" class="soft-button" type="button" aria-label="Previous month">&larr;</button>
+                <button id="monthToday" class="soft-button" type="button">Today</button>
+                <button id="monthNext" class="soft-button" type="button" aria-label="Next month">&rarr;</button>
+            </div>
+        </div>
+        <p id="monthOverdueNote" class="hidden-note" hidden></p>
+        <div class="month-weekdays" aria-hidden="true">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+        <div id="monthGrid" class="month-grid"></div>
+        <div class="month-legend" aria-label="Dot colours">
+            <span><i class="dot dot-exam"></i> Exam</span>
+            <span><i class="dot dot-overdue"></i> Overdue</span>
+            <span><i class="dot dot-academic"></i> Academic</span>
+            <span><i class="dot dot-personal"></i> Personal</span>
+            <span><i class="dot dot-completed"></i> Done</span>
+        </div>
+        <div class="month-day-panel">
+            <h3 id="monthDayTitle">Select a day</h3>
+            <div id="monthDayList" class="archive-list"></div>
+        </div>
+    </div>
 </section>
 {% endblock %}
 
 {% block page_scripts %}
+<script src="{% static 'planner/js/month.js' %}"></script>
 <script src="{% static 'planner/js/tasks.js' %}"></script>
 {% endblock %}

@@ -98,9 +98,20 @@ function resetTaskForm() {
     const form = document.querySelector("#taskForm");
     form.reset();
 
-    document.querySelector("#taskArea").value = getDefaultArea();
-    document.querySelector("#taskKind").value = "general";
-    document.querySelector("#taskPriority").value = "normal";
+    const remembered = taskOptions.defaults || {};
+    const filterArea = getDefaultArea();
+    const area = document.querySelector("[data-area].is-active")?.dataset.area !== "all" && filterArea
+        ? filterArea
+        : (remembered.area || "academic");
+    document.querySelector("#taskArea").value = area;
+    document.querySelector("#taskKind").value = area === "personal" ? "general" : (remembered.kind || "general");
+    document.querySelector("#taskPriority").value = remembered.priority || "normal";
+    if (area !== "personal" && remembered.subject_id) {
+        const subjectSelect = document.querySelector("#taskSubject");
+        if (Array.from(subjectSelect.options).some((o) => o.value === String(remembered.subject_id))) {
+            subjectSelect.value = String(remembered.subject_id);
+        }
+    }
     document.querySelector("#taskDueDate").value = getDefaultDueDate();
     document.querySelector("#taskFormError").hidden = true;
     document.querySelector("#taskMoreOptions").open = false;
@@ -202,6 +213,11 @@ function updateTaskFormRules() {
     subject.disabled = personal;
     project.disabled = personal;
     dueDate.required = kind.value === "exam";
+
+    const reviewField = document.querySelector("#reviewField");
+    if (reviewField) {
+        reviewField.hidden = !(kind.value === "exam" && !editingTaskId);
+    }
 }
 
 
@@ -230,6 +246,11 @@ function buildTaskPayload() {
 }
 
 
+function selectedReviewOffsets() {
+    return Array.from(document.querySelectorAll(".review-offset:checked")).map((box) => Number(box.value));
+}
+
+
 async function submitTaskForm(event) {
     event.preventDefault();
 
@@ -245,8 +266,15 @@ async function submitTaskForm(event) {
             await window.PlanitAPI.patch(`/api/tasks/${editingTaskId}/`, payload);
             window.PlanitUtils.showToast("Task updated.");
         } else {
-            await window.PlanitAPI.post("/api/tasks/", payload);
-            window.PlanitUtils.showToast("Task added.");
+            const offsets = payload.kind === "exam" ? selectedReviewOffsets() : [];
+            if (offsets.length) {
+                payload.review_offsets = offsets;
+            }
+            const created = await window.PlanitAPI.post("/api/tasks/", payload);
+            const extra = created.review_tasks_created || 0;
+            window.PlanitUtils.showToast(
+                extra ? `Task added with ${extra} review task${extra === 1 ? "" : "s"}.` : "Task added.",
+            );
         }
 
         hideTaskModal();
@@ -265,6 +293,13 @@ async function toggleCompleted(task) {
         completed: !task.completed,
     });
     window.PlanitUtils.showToast(task.completed ? "Task reopened." : "Task completed.");
+    notifyTasksChanged();
+}
+
+
+async function duplicateTask(task) {
+    await window.PlanitAPI.post(`/api/tasks/${task.id}/duplicate/`, {});
+    window.PlanitUtils.showToast("Task duplicated for today.");
     notifyTasksChanged();
 }
 
@@ -290,6 +325,7 @@ window.PlanitTasks = {
     openCreate: openCreateTask,
     openEdit: openEditTask,
     toggleCompleted,
+    duplicate: duplicateTask,
     delete: deleteTask,
     reloadOptions: loadTaskOptions,
 };

@@ -4,28 +4,31 @@
 {% block title %}Projects | Planit{% endblock %}
 
 {% block content %}
-<section class="page-intro reveal">
+<section class="collection-hero reveal">
     <div>
-        <p class="eyebrow">Work in progress</p>
+        <span class="quest-kicker">QUEST BOARD</span>
         <h1>Projects</h1>
-        <p class="intro-copy">Big work, broken into smaller pieces and measured automatically.</p>
+        <p>Break big projects into smaller tasks and watch your progress grow.</p>
     </div>
 
-    <button id="addProjectButton" class="decorative-action pastel-lavender" type="button">
-        <span>Add</span>
-        <small>PROJECT</small>
+    <button id="addProjectButton" class="collection-add-button project-add-button" type="button">
+        <span class="collection-add-icon">+</span>
+        <span>
+            <small>NEW</small>
+            <strong>Project</strong>
+        </span>
     </button>
 </section>
 
 <div id="projectsError" class="message-panel error-message" hidden></div>
-<div id="projectsLoading" class="loading-panel">Loading projects...</div>
+<div id="projectsLoading" class="loading-panel">Loading project board...</div>
 
 <section id="projectGrid" class="project-grid" hidden></section>
 
-<section id="projectDetail" class="detail-panel" hidden>
+<section id="projectDetail" class="detail-panel game-card" hidden>
     <div class="detail-header">
         <div>
-            <span id="projectDetailSubject" class="tiny-label"></span>
+            <span id="projectDetailSubject" class="quest-kicker"></span>
             <h2 id="projectDetailTitle"></h2>
             <p id="projectDetailDescription" class="muted-copy"></p>
         </div>
@@ -38,23 +41,23 @@
     </div>
 
     <div class="project-detail-summary">
-        <article class="stat-card pastel-peach">
-            <span class="tiny-label">PROGRESS</span>
+        <article class="stat-card peach-card">
+            <span class="quest-kicker">PROGRESS</span>
             <strong id="projectDetailProgress">--</strong>
             <span id="projectDetailProgressMeta">No project tasks yet</span>
         </article>
 
-        <article class="stat-card pastel-butter">
-            <span class="tiny-label">DUE DATE</span>
+        <article class="stat-card butter-card">
+            <span class="quest-kicker">DUE DATE</span>
             <strong id="projectDetailDue">No date</strong>
             <span>project deadline</span>
         </article>
     </div>
 
-    <section class="detail-card">
-        <div class="section-header">
+    <section class="detail-card game-card-inner">
+        <div class="quest-card-header">
             <div>
-                <span class="tiny-label">PROJECT TASKS</span>
+                <span class="quest-kicker">PROJECT QUESTS</span>
                 <h3>Task progress</h3>
             </div>
         </div>

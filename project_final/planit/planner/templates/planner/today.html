@@ -4,92 +4,157 @@
 {% block title %}Today | Planit{% endblock %}
 
 {% block content %}
-<section class="page-intro reveal">
-    <div>
-        <p id="todayDate" class="eyebrow">Loading date</p>
-        <h1>Good morning.</h1>
-        <p class="intro-copy">A softer way to see what deserves your attention now.</p>
+<section class="daily-hero reveal">
+    <div class="daily-hero-copy">
+        <span class="quest-kicker">TODAY</span>
+        <p id="todayDate" class="hero-date">Loading date</p>
+        <h1 id="todayGreeting">Good morning</h1>
+        <p class="hero-subtitle">Pick one task, make a little progress, and keep your day moving.</p>
     </div>
 
-    <div class="date-sticker">
+    <div class="date-cartridge" aria-label="Today's date">
         <span id="dateMonth">---</span>
         <strong id="dateNumber">--</strong>
         <small id="dateWeekday">---</small>
     </div>
 </section>
 
-<div class="planner-controls reveal" aria-label="Task area">
+<div class="segmented-control area-control reveal" aria-label="Task area">
     <button class="area-filter is-active" data-area="all" type="button">All</button>
     <button class="area-filter" data-area="academic" type="button">Academic</button>
     <button class="area-filter" data-area="personal" type="button">Personal</button>
 </div>
 
+<div id="examSuggestion" class="exam-suggestion" role="status" hidden>
+    <span id="examSuggestionText">An exam is coming up.</span>
+    <button id="examSuggestionOn" class="soft-button" type="button">Turn on Exam Mode</button>
+    <button id="examSuggestionDismiss" class="text-action" type="button" aria-label="Dismiss suggestion">Not now</button>
+</div>
+
 <div id="todayError" class="message-panel error-message" hidden></div>
-<section id="todayLoading" class="loading-panel">Loading your day...</section>
+<section id="todayLoading" class="loading-panel">Loading today's tasks...</section>
 
-<section id="todayContent" class="today-grid" hidden>
-    <div class="today-main">
-        <article class="progress-panel pastel-peach reveal">
-            <div class="panel-top">
-                <span class="tiny-label">TODAY'S PROGRESS</span>
-                <span class="panel-number">01</span>
-            </div>
-
-            <div class="progress-content">
+<section id="todayContent" class="today-dashboard" hidden>
+    <div class="today-main-stack">
+        <section class="overdue-quest game-card reveal">
+            <div class="quest-card-header">
                 <div>
-                    <strong id="progressCompleted" class="big-progress">00</strong>
-                    <span class="progress-divider">/</span>
-                    <strong id="progressTotal" class="big-progress muted-number">00</strong>
+                    <span class="quest-kicker danger-text">PRIORITY QUEST</span>
+                    <h2>Needs attention</h2>
                 </div>
-                <p id="progressText">tasks completed</p>
+                <span id="overdueCount" class="counter-badge danger-badge">00</span>
             </div>
-
-            <div class="progress-track"><span id="todayProgressBar" style="width: 0%"></span></div>
-            <div class="doodle-loop" aria-hidden="true"></div>
-        </article>
-
-        <section class="content-section reveal">
-            <div class="section-header">
-                <div>
-                    <span class="tiny-label">TODAY</span>
-                    <h2>Your task list</h2>
-                </div>
-                <span id="todayCount" class="count-pill">00</span>
-            </div>
-            <div id="todayTaskList" class="task-list"></div>
+            <div id="overdueTaskList" class="task-list overdue-list"></div>
         </section>
 
-        <section class="content-section reveal">
-            <div class="section-header">
-                <div>
-                    <span class="tiny-label danger-label">NEEDS ATTENTION</span>
-                    <h2>Overdue</h2>
+        <article class="progress-card game-card reveal">
+            <div class="progress-ring" id="todayProgressRing" style="--progress: 0deg">
+                <div class="progress-ring-core">
+                    <strong id="progressPercent">0%</strong>
+                    <span>clear</span>
                 </div>
-                <span id="overdueCount" class="count-pill danger-pill">00</span>
             </div>
-            <div id="overdueTaskList" class="task-list"></div>
+
+            <div class="progress-card-copy">
+                <span class="quest-kicker">TODAY'S PROGRESS</span>
+                <h2>
+                    <strong id="progressCompleted">00</strong>
+                    <span>of</span>
+                    <strong id="progressTotal">00</strong>
+                    <span>completed</span>
+                </h2>
+                <p id="progressText">No tasks due today</p>
+
+                <div class="quest-meter" aria-hidden="true">
+                    <span id="todayProgressBar" style="width: 0%"></span>
+                </div>
+            </div>
+        </article>
+
+        <section class="today-quests game-card reveal">
+            <div class="quest-card-header">
+                <div>
+                    <span class="quest-kicker">TASKS</span>
+                    <h2>Today's tasks</h2>
+                </div>
+                <span id="todayCount" class="counter-badge">00</span>
+            </div>
+            <div id="todayTaskList" class="task-list"></div>
         </section>
 
         <div id="examHiddenMessage" class="hidden-note" hidden></div>
     </div>
 
-    <aside class="today-side">
-        <article class="exam-panel pastel-lavender reveal">
-            <span class="tiny-label">NEXT EXAM</span>
+    <aside class="today-side-stack">
+        <article class="top-focus-card game-card reveal">
+            <div class="top-focus-head">
+                <div>
+                    <span class="quest-kicker">TOP FOCUS</span>
+                    <h3>Needs attention first</h3>
+                </div>
+                <span class="focus-rank">#1</span>
+            </div>
+
+            <div id="topFocusContent">
+                <strong id="topFocusTitle">Loading...</strong>
+                <span id="topFocusMeta">Finding your next move.</span>
+                <div class="focus-score-line">
+                    <span>Attention score</span>
+                    <strong id="topFocusScore">--</strong>
+                </div>
+            </div>
+
+            <p id="topFocusEmpty" class="focus-empty" hidden>No active tasks right now.</p>
+        </article>
+
+        <article class="next-exam-card game-card reveal">
+            <div class="exam-card-topline">
+                <span class="quest-kicker">NEXT EXAM</span>
+                <span class="tiny-chip">Academic</span>
+            </div>
+
             <h2 id="nextExamTitle">No upcoming exam</h2>
             <p id="nextExamDate">Your schedule is clear.</p>
 
             <div id="examCountdown" class="exam-countdown" hidden>
                 <strong id="examDays">0</strong>
                 <span id="examDaysLabel">days</span>
+                <small>left</small>
             </div>
-            <div class="doodle-star" aria-hidden="true"></div>
+
+            <div class="exam-pixel-track" aria-hidden="true">
+                <span></span><span></span><span></span><span></span>
+            </div>
         </article>
 
-        <article class="mini-calendar-card reveal">
+        <article class="mode-card game-card reveal">
+            <div class="mode-card-title">
+                <span class="mode-card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 3c.5 3-2.5 4.1-2.5 7.1 0 1.7 1.1 2.9 2.5 2.9 1.7 0 3-1.4 3-3.2 0-1.1-.4-2.1-1-3 2.9 1.5 5 4.2 5 7.3A7 7 0 1 1 5 14c0-2.6 1.5-5.1 4-6.8-.5 3.6 1.2 5.8 3 5.8"></path>
+                    </svg>
+                </span>
+                <div>
+                    <span class="quest-kicker">FOCUS BUFF</span>
+                    <h3>Exam Mode</h3>
+                </div>
+                <button
+                    class="mini-mode-toggle"
+                    type="button"
+                    aria-pressed="false"
+                    data-exam-toggle
+                    aria-label="Toggle Exam Mode"
+                >
+                    <span></span>
+                </button>
+            </div>
+            <p>Surfaces exams, urgent work, and overdue tasks while quieting low-priority noise.</p>
+        </article>
+
+        <article class="calendar-card game-card reveal">
             <div class="calendar-heading">
                 <div>
-                    <span class="tiny-label">CALENDAR</span>
+                    <span class="quest-kicker">MAP</span>
                     <h3 id="calendarMonth">Month</h3>
                 </div>
                 <span id="calendarYear" class="calendar-year">----</span>
@@ -97,10 +162,10 @@
             <div id="miniCalendar" class="mini-calendar"></div>
         </article>
 
-        <article class="quote-note pastel-butter reveal">
-            <span class="tiny-label">TODAY'S NOTE</span>
-            <p>Progress does not need to be loud.</p>
-            <div class="paper-tape" aria-hidden="true"></div>
+        <article class="tip-card game-card reveal">
+            <span class="quest-kicker">QUEST TIP</span>
+            <p>Small wins still count. Clear one thing, then choose the next.</p>
+            <div class="tiny-pixels" aria-hidden="true"><i></i><i></i><i></i></div>
         </article>
     </aside>
 </section>

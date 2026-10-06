@@ -2,6 +2,7 @@ import json
 from datetime import date, timedelta
 from unittest.mock import patch
 
+from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
 
@@ -13,13 +14,21 @@ TODAY = date(2026, 10, 6)
 
 class ApiTests(TestCase):
     def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="api-user",
+            password="TestPass123!",
+        )
+        self.client.force_login(self.user)
+
         self.subject = Subject.objects.create(
+            owner=self.user,
             name="Web Development",
             code="WEB101",
             semester="1/2026",
             color="butter",
         )
         self.project = Project.objects.create(
+            owner=self.user,
             title="Planit Final Project",
             subject=self.subject,
             due_date=TODAY + timedelta(days=24),
@@ -39,6 +48,7 @@ class ApiTests(TestCase):
     ):
         due_date = None if days is None else TODAY + timedelta(days=days)
         return Task.objects.create(
+            owner=self.user,
             title=title,
             area=area,
             kind=kind,
@@ -81,6 +91,7 @@ class ApiTests(TestCase):
             {"completed": 1, "total": 2, "percent": 50.0},
         )
         self.assertEqual(len(data["overdue"]), 1)
+        self.assertEqual(data["top_focus"]["title"], "Late report")
         self.assertEqual(data["next_exam"]["id"], exam.id)
 
     def test_invalid_query_returns_400(self):
@@ -171,6 +182,7 @@ class ApiTests(TestCase):
 
     def test_csrf_is_enforced(self):
         client = Client(enforce_csrf_checks=True)
+        client.force_login(self.user)
         response = client.post(
             reverse("api_tasks"),
             data=json.dumps({"title": "Blocked task"}),

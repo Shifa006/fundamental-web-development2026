@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="mint">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#d8eee2">
+    <title>Create account | Planit</title>
+
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'planner/css/style.css' %}">
+</head>
+<body class="auth-page" data-page="signup">
+    <div class="auth-pixels" aria-hidden="true"></div>
+
+    <main class="auth-shell">
+        <section class="auth-showcase" aria-label="Planit introduction">
+            <div class="auth-brand-row">
+                <span class="brand-tile auth-brand-tile" aria-hidden="true"><span>P</span></span>
+                <div>
+                    <span class="quest-kicker">PLANIT / STUDENT PLANNER</span>
+                    <h1>Plan your studies, one small step at a time.</h1>
+                </div>
+            </div>
+
+            <p class="auth-showcase-copy">
+                One dashboard for tasks, courses, projects, exams, and grade goals.
+            </p>
+
+            <div class="auth-preview-grid" aria-hidden="true">
+                <article class="auth-preview-card mint">
+                    <span>01</span>
+                    <strong>Today's tasks</strong>
+                    <small>Focus on what matters now.</small>
+                </article>
+                <article class="auth-preview-card lavender">
+                    <span>02</span>
+                    <strong>Exam Mode</strong>
+                    <small>Quiet the low-priority noise.</small>
+                </article>
+                <article class="auth-preview-card butter">
+                    <span>03</span>
+                    <strong>Grade target</strong>
+                    <small>Know what score you still need.</small>
+                </article>
+            </div>
+        </section>
+
+        <section class="auth-card game-card" aria-labelledby="signupTitle">
+            <div class="auth-card-head">
+                <div>
+                    <span class="quest-kicker">CREATE ACCOUNT</span>
+                    <h2 id="signupTitle">Start with Planit</h2>
+                    <p>Free. Your tasks stay private to your account.</p>
+                </div>
+            </div>
+
+            {% if form.errors %}
+            <div class="login-error" role="alert">
+                <strong>Please fix the highlighted fields</strong>
+            </div>
+            {% endif %}
+
+            <form class="login-form" method="post" action="{% url 'signup' %}" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                <label class="login-field" for="{{ field.id_for_label }}">
+                    <span>{{ field.label }}</span>
+                    {{ field }}
+                    {% if field.errors %}
+                    <small class="field-error" role="alert">{{ field.errors|join:" " }}</small>
+                    {% elif field.help_text %}
+                    <small class="field-hint">{{ field.help_text|safe }}</small>
+                    {% endif %}
+                </label>
+                {% endfor %}
+                <button class="login-submit" type="submit"><span>Create account</span></button>
+            </form>
+
+            <p class="auth-switch">Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
+        </section>
+    </main>
+
+    <script src="{% static 'planner/js/theme.js' %}"></script>
+    
+</body>
+</html>

@@ -2,3 +2,13 @@
 /node_modules
 package-lock.json
 package.json
+
+# Old Planit versions - keep locally only
+/project_final/planit-v1/
+/project_final/planit-v2/
+/project_final/planit-v3/
+/project_final/planit-v4/
+/project_final/planit-v5/
+
+# macOS
+.DS_Store

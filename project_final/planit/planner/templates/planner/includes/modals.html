@@ -4,7 +4,7 @@
             <form id="taskForm">
                 <div class="modal-header">
                     <div>
-                        <span class="tiny-label">QUICK CAPTURE</span>
+                        <span class="tiny-label">NEW TASK</span>
                         <h2 id="taskModalTitle" class="modal-title">Add task</h2>
                     </div>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -69,6 +69,14 @@
                             </label>
                         </div>
 
+                        <fieldset id="reviewField" class="task-field review-field" hidden>
+                            <legend>Add review tasks before this exam?</legend>
+                            <label><input type="checkbox" class="review-offset" value="7"> 7 days before</label>
+                            <label><input type="checkbox" class="review-offset" value="3"> 3 days before</label>
+                            <label><input type="checkbox" class="review-offset" value="1"> 1 day before</label>
+                            <small>Dates that have already passed are skipped.</small>
+                        </fieldset>
+
                         <label class="task-field">
                             <span>Description</span>
                             <textarea id="taskDescription" name="description" rows="3" maxlength="2000"></textarea>
@@ -91,7 +99,7 @@
             <form id="subjectForm">
                 <div class="modal-header">
                     <div>
-                        <span class="tiny-label">COURSE FILE</span>
+                        <span class="tiny-label">COURSE</span>
                         <h2 id="subjectModalTitle" class="modal-title">Add course</h2>
                     </div>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -116,6 +124,11 @@
                             <input id="subjectSemester" type="text" maxlength="50">
                         </label>
                     </div>
+
+                    <label id="subjectTemplateField" class="task-check">
+                        <input id="subjectTemplate" type="checkbox">
+                        <span>Add standard assessments (Quiz 10, Midterm 30, Assignment 20, Final 40). You can edit them later.</span>
+                    </label>
 
                     <label class="task-field">
                         <span>Folder color</span>
@@ -143,7 +156,7 @@
             <form id="assessmentForm">
                 <div class="modal-header">
                     <div>
-                        <span class="tiny-label">GRADE COMPONENT</span>
+                        <span class="tiny-label">GRADE CHECKPOINT</span>
                         <h2 id="assessmentModalTitle" class="modal-title">Add assessment</h2>
                     </div>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -190,7 +203,7 @@
             <form id="projectForm">
                 <div class="modal-header">
                     <div>
-                        <span class="tiny-label">PROJECT FILE</span>
+                        <span class="tiny-label">PROJECT QUEST</span>
                         <h2 id="projectModalTitle" class="modal-title">Add project</h2>
                     </div>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>

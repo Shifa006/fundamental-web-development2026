@@ -104,20 +104,22 @@ function kindClass(kind) {
 
 
 function statusClass(task) {
+    // The pill text is either a state (late / past exam / completed) or the
+    // priority, so colour follows that same meaning, never the task type.
+    if (task.completed) {
+        return "pastel-blue";
+    }
     if (task.status === "overdue") {
         return "pastel-peach";
     }
-    if (task.status === "past_exam") {
+    if (task.status === "past_exam" || task.status === "no_date") {
         return "pastel-muted";
     }
-    if (task.kind === "exam") {
-        return "pastel-butter";
+    if (task.priority === "urgent") {
+        return "pastel-peach";
     }
-    if (task.kind === "study") {
-        return "pastel-sage";
-    }
-    if (task.area === "personal") {
-        return "pastel-lavender";
+    if (task.priority === "later") {
+        return "pastel-muted";
     }
     return "pastel-blue";
 }
