@@ -15,7 +15,7 @@ class SignUpForm(UserCreationForm):
     # HTML5 hints give immediate browser feedback. The Django validators in
     # settings.AUTH_PASSWORD_VALIDATORS stay the authority on the server because
     # browser checks can be bypassed.
-    PASSWORD_PATTERN = r"(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}"
+    PASSWORD_PATTERN = r"(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).{8,128}"
     PASSWORD_TITLE = (
         "At least 8 characters with an upper-case letter, a lower-case letter, "
         "a number and a special character."

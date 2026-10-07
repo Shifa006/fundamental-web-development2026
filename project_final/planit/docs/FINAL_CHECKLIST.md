@@ -67,4 +67,4 @@
 - [ ] Exam Mode remains separate from visual theme
 - [ ] Top Focus appears from `/api/today/`
 - [ ] semantic navigation uses `nav > ul > li > a`
-- [ ] `python manage.py test planner.tests -v 2` reports 64 passing tests
+- [ ] `python manage.py test planner.tests -v 2` reports 104 passing tests (on your Django version)

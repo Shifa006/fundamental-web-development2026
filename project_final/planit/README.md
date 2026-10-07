@@ -6,7 +6,7 @@ It connects a Django/SQLite backend to a dynamic JavaScript interface using JSON
 
 ## Core features
 
-- Django login/logout with session authentication and wrong-password feedback
+- Sign-up, login/logout with session authentication, per-user data and wrong-password feedback
 - Today dashboard with progress, overdue work, Top Focus, next exam, area filters, and Exam Mode
 - Tasks with CRUD, search, filters, sorting, All Tasks, and This Week
 - Exam Mode persisted with `localStorage`
@@ -123,7 +123,7 @@ python manage.py makemigrations --check --dry-run
 python manage.py test planner.tests -v 2
 ```
 
-See `docs/TEST_REPORT.md` and `docs/UI_REDESIGN_V3.md` for verification and the current visual system.
+See `docs/TEST_REPORT.md` for verification.
 
 ## Project structure
 
@@ -157,7 +157,7 @@ Browser -> Fetch/JSON -> Django API -> validators/services/domain -> ORM -> SQLi
 
 ## Scope
 
-Planit V1 is intentionally an **authenticated local prototype**. It has login/logout and protected APIs, but it does not implement public registration, per-user data ownership, password-reset email, push notifications, PWA/offline data sync, or external calendar integration.
+Planit is a multi-user planner: each account has its own data (every query is filtered by owner; another user's id returns 404) and sign-up is at `/signup/`. It does **not** include password-reset email, change-password/account page, Google sign-in, push notifications, PWA/offline sync, or external calendar integration.
 
 ## Final-project documentation
 
@@ -166,9 +166,7 @@ Start with:
 - `FINAL_SETUP.md`
 - `docs/PHASE_MAP.md`
 - `docs/ARCHITECTURE.md`
-- `docs/ACADEMIC_ARTICLE_DRAFT.md`
-- `docs/PRESENTATION_GUIDE.md`
-- `docs/PRESENTATION_READY_V4.md`
+- `docs/Planit_Guide_TH.md`
 - `docs/TEACHER_QA_CHEATSHEET.md`
 - `docs/CODE_LOCATION_MAP.md`
 - `docs/RUNSERVER_FLOW.md`
@@ -182,6 +180,6 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py seed_demo --demo-user              # login: student / PlanitDemo123!
 python manage.py runserver
-python manage.py test                               # 95 tests
+python manage.py test                               # 104 tests
 ```
 Sign-up is at /signup/. See docs/CHANGELOG_V5.md for what changed.

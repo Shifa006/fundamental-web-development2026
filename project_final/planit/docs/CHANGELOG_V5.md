@@ -31,7 +31,7 @@ Account/Change-password page, undo toast after delete/complete, skeleton loading
 - **Priority pill colours** are now consistent (urgent = coral, normal = blue, later = grey) and always carry text.
 
 ## Verified
-- `python manage.py check`, `makemigrations --check`, and `python manage.py test` (95 tests) all pass.
+- `python manage.py check`, `makemigrations --check`, and `python manage.py test` (95 tests at v1.3; 104 at v1.4) all pass.
 - Checked in Chromium at 1360px and 390px: login, Today banner, Month view, add exam with review tasks, remembered defaults, duplicate, course template, no horizontal scroll.
 
 ## Not included (see spec v1.3 for the plan)
@@ -40,4 +40,7 @@ Habits, Reading, Reflection/Memory, Goals, Faith (prayer times, Hijri, Ramadan),
 ## v1.4 additions
 - Sign-up password field: HTML5 `pattern`, `minlength`, `maxlength`, `title`; `novalidate` removed from the sign-up form. Server validators remain the authority.
 - Tasks page: `countByStatus()` uses `Array.prototype.reduce` to show task counts in the Status filter (e.g. `Overdue (1)`).
-- 5 new tests (`tests/test_v14.py`); suite is now 102 tests.
+- 6 new tests (`tests/test_v14.py`); suite is now 104 tests.
+- Password rule: the special character must not be whitespace (server `ComplexityValidator` and HTML `pattern` agree); new `MaxLengthValidator` (128) on the server.
+- Status counts in the Status filter also refresh on Week/Month views.
+- Grade calculator: when every assessment is graded and the target is missed, the result card shows the final course total and the shortfall instead of "No remaining assessments."

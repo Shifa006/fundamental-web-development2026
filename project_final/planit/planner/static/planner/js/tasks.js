@@ -178,6 +178,7 @@ function initSelectFilters() {
 
 
 function refreshCurrentView() {
+    updateStatusCounts();
     if (selectedView === "month") {
         window.PlanitMonth.rerender();
     } else if (isCalendarView()) {

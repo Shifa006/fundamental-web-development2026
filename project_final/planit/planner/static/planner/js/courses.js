@@ -438,7 +438,7 @@ function renderGradeResult(grade) {
         detail.textContent = `Configured weight: ${grade.configured_weight}% of 100%.`;
     } else if (grade.status === "achieved") {
         headline.textContent = "Target already achieved.";
-        detail.textContent = `Earned course points: ${grade.earned_course_points}%.`;
+        detail.textContent = `Course total so far: ${grade.earned_course_points}% (target ${grade.target}%).`;
     } else if (grade.status === "possible") {
         headline.textContent = `${grade.required}% required on remaining work.`;
         detail.textContent = `Target ${grade.target}% · earned ${grade.earned_course_points}% · graded average ${grade.average_on_graded_work ?? "--"}%.`;
@@ -446,8 +446,9 @@ function renderGradeResult(grade) {
         headline.textContent = `Target requires ${grade.required}% on remaining work.`;
         detail.textContent = "The selected target is not currently reachable without extra credit or a grading change.";
     } else {
-        headline.textContent = "No remaining assessments.";
-        detail.textContent = "The target has not been reached and nothing remains to be graded.";
+        const shortBy = Number(grade.target) - Number(grade.earned_course_points);
+        headline.textContent = `Final result: ${grade.earned_course_points}% (target ${grade.target}%).`;
+        detail.textContent = `Every assessment is graded, so there is nothing left to calculate. The target was missed by ${Math.round(shortBy * 100) / 100} points.`;
     }
 
     result.append(headline, detail);
