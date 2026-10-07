@@ -246,3 +246,34 @@ class V13ApiTests(TestCase):
             on = self.client.get(reverse("api_today"), {"exam_mode": 1}).json()
         self.assertTrue(off["suggest_exam_mode"])
         self.assertFalse(on["suggest_exam_mode"])
+
+
+class FunctionalHelperTests(TestCase):
+    def test_status_counts_uses_reduce_and_handles_empty(self):
+        from planner.services import status_counts, to_domain_items
+        from types import SimpleNamespace
+
+        self.assertEqual(status_counts([], TODAY), {})
+        tasks = [
+            SimpleNamespace(id=1, title="a", area="academic", kind="general", priority="normal",
+                            due_date=TODAY - timedelta(days=1), completed=False),
+            SimpleNamespace(id=2, title="b", area="academic", kind="general", priority="normal",
+                            due_date=TODAY, completed=False),
+            SimpleNamespace(id=3, title="c", area="academic", kind="general", priority="normal",
+                            due_date=TODAY, completed=True),
+            SimpleNamespace(id=4, title="d", area="academic", kind="exam", priority="normal",
+                            due_date=TODAY - timedelta(days=2), completed=False),
+        ]
+        items = to_domain_items(tasks)
+        self.assertEqual(len(items), 4)
+        self.assertEqual(
+            status_counts(items, TODAY),
+            {"overdue": 1, "today": 1, "completed": 1, "past_exam": 1},
+        )
+
+    def test_parse_due_date_else_branch_and_error(self):
+        from planner.validators import PlanitValidationError, parse_due_date
+
+        self.assertEqual(parse_due_date("2026-10-06"), date(2026, 10, 6))
+        with self.assertRaises(PlanitValidationError):
+            parse_due_date("06/10/2026")

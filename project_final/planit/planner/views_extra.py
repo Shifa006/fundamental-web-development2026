@@ -14,6 +14,7 @@ from .services import (
     select,
     sort_by_attention,
     to_domain_item,
+    to_domain_items,
 )
 from .validators import PlanitValidationError, validate_allowed_fields
 from .views import (
@@ -155,7 +156,7 @@ def month_api(request):
 
     tasks = list(task_queryset(request.user).filter(due_date__range=(start, end)))
     task_lookup = {task.id: task for task in tasks}
-    items = select([to_domain_item(task) for task in tasks], by_area(area))
+    items = select(to_domain_items(tasks), by_area(area))
     if exam_mode:
         items = [
             item for item in items

@@ -188,7 +188,7 @@ function refreshCurrentView() {
 }
 
 
-function matchesClientFilters(task, { preservePastExam = false } = {}) {
+function matchesClientFilters(task, { preservePastExam = false, ignoreStatus = false } = {}) {
     const examMode = window.PlanitUI.getExamMode();
 
     const areaMatches = selectedArea === "all" || task.area === selectedArea;
@@ -217,7 +217,9 @@ function matchesClientFilters(task, { preservePastExam = false } = {}) {
     );
 
     let statusMatches = true;
-    if (selectedStatus === "pending") {
+    if (ignoreStatus) {
+        statusMatches = true;
+    } else if (selectedStatus === "pending") {
         statusMatches = ["overdue", "today", "upcoming", "no_date"].includes(task.status);
     } else if (selectedStatus !== "all") {
         statusMatches = task.status === selectedStatus;
@@ -231,6 +233,43 @@ function matchesClientFilters(task, { preservePastExam = false } = {}) {
         && subjectMatches
         && statusMatches
     );
+}
+
+
+const PENDING_STATUSES = ["overdue", "today", "upcoming", "no_date"];
+
+
+// reduce folds a list into one value: here, a dictionary of counts per status.
+function countByStatus(list) {
+    return list.reduce(
+        (counts, task) => {
+            counts[task.status] = (counts[task.status] || 0) + 1;
+            if (PENDING_STATUSES.includes(task.status)) {
+                counts.pending += 1;
+            }
+            counts.all += 1;
+            return counts;
+        },
+        { all: 0, pending: 0 },
+    );
+}
+
+
+// Show how many tasks each Status option would give with the other filters kept.
+function updateStatusCounts() {
+    const select = document.querySelector("#statusFilter");
+    if (!select) {
+        return;
+    }
+
+    const counts = countByStatus(
+        tasks.filter((task) => matchesClientFilters(task, { ignoreStatus: true })),
+    );
+
+    Array.from(select.options).forEach((option) => {
+        option.dataset.label ??= option.textContent;
+        option.textContent = `${option.dataset.label} (${counts[option.value] ?? 0})`;
+    });
 }
 
 
@@ -281,6 +320,7 @@ function addTaskStateClasses(element, task) {
 
 
 function renderFilteredTasks() {
+    updateStatusCounts();
     const list = document.querySelector("#archiveTaskList");
     if (!list) {
         return;

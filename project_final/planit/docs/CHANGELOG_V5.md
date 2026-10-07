@@ -36,3 +36,8 @@ Account/Change-password page, undo toast after delete/complete, skeleton loading
 
 ## Not included (see spec v1.3 for the plan)
 Habits, Reading, Reflection/Memory, Goals, Faith (prayer times, Hijri, Ramadan), recurring tasks, Account/Change-password page, Google sign-in, undo toast.
+
+## v1.4 additions
+- Sign-up password field: HTML5 `pattern`, `minlength`, `maxlength`, `title`; `novalidate` removed from the sign-up form. Server validators remain the authority.
+- Tasks page: `countByStatus()` uses `Array.prototype.reduce` to show task counts in the Status filter (e.g. `Overdue (1)`).
+- 5 new tests (`tests/test_v14.py`); suite is now 102 tests.

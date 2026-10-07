@@ -61,7 +61,7 @@
             </div>
             {% endif %}
 
-            <form class="login-form" method="post" action="{% url 'signup' %}" novalidate>
+            <form class="login-form" method="post" action="{% url 'signup' %}">
                 {% csrf_token %}
                 {% for field in form %}
                 <label class="login-field" for="{{ field.id_for_label }}">

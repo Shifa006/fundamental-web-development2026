@@ -2484,6 +2484,7 @@ button.mini-list-row {
 }
 
 .top-focus-card::after {
+    display: none; /* v1.3: removed stray decorative circle */
     content: "";
     width: 76px;
     height: 76px;

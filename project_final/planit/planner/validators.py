@@ -104,13 +104,16 @@ def parse_due_date(value, field_name="due_date"):
         return value
 
     try:
-        return date.fromisoformat(str(value))
+        parsed = date.fromisoformat(str(value))
     except ValueError:
         raise PlanitValidationError(
             "Due date must use YYYY-MM-DD format.",
             code="invalid_date",
             field=field_name,
         )
+    else:
+        # try/except/else: this branch runs only when parsing succeeded.
+        return parsed
 
 
 def parse_decimal(value, field_name, *, optional=False):

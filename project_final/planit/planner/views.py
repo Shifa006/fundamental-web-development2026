@@ -33,6 +33,7 @@ from .services import (
     sort_by_attention,
     subject_summary,
     to_domain_item,
+    to_domain_items,
 )
 from .validators import (
     ASSESSMENT_INPUT_FIELDS,
@@ -463,7 +464,7 @@ def apply_assessment_data(assessment, data, subject):
 
 
 def project_progress_for_model(project, today):
-    items = [to_domain_item(task) for task in project.tasks.all()]
+    items = to_domain_items(project.tasks.all())
     return project_progress(items, today)
 
 
@@ -480,7 +481,7 @@ def subject_payload(subject, today, include_detail=False):
     else:
         assessments = list(subject.assessments.all())
 
-    items = [to_domain_item(task) for task in tasks]
+    items = to_domain_items(tasks)
     summary = subject_summary(items, today)
 
     payload = {
@@ -512,7 +513,7 @@ def project_payload(project, today, include_detail=False):
 
     if include_detail:
         tasks = list(task_queryset().filter(project=project))
-        items = [to_domain_item(task) for task in tasks]
+        items = to_domain_items(tasks)
         task_lookup = {task.id: task for task in tasks}
         payload["tasks"] = serialize_items(
             sort_by_attention(items, today),
@@ -542,7 +543,7 @@ def get_tasks_api(request):
     today = timezone.localdate()
     tasks = list(task_queryset(request.user))
     task_lookup = {task.id: task for task in tasks}
-    items = [to_domain_item(task) for task in tasks]
+    items = to_domain_items(tasks)
     ordered = sort_by_attention(items, today)
 
     return JsonResponse(
@@ -690,7 +691,7 @@ def today_api(request):
     today = timezone.localdate()
     tasks = list(task_queryset(request.user))
     task_lookup = {task.id: task for task in tasks}
-    items = [to_domain_item(task) for task in tasks]
+    items = to_domain_items(tasks)
     payload = build_today_payload(
         items,
         today,
@@ -745,7 +746,7 @@ def week_api(request):
         task_queryset(request.user).filter(due_date__range=(week_start, week_end))
     )
     task_lookup = {task.id: task for task in tasks}
-    items = [to_domain_item(task) for task in tasks]
+    items = to_domain_items(tasks)
     items = select(items, by_area(area))
 
     if exam_mode:

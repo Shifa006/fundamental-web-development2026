@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from functools import reduce
 from decimal import Decimal, ROUND_HALF_UP
 
 from .domain import (
@@ -47,6 +48,21 @@ def to_domain_item(task):
         due_date=task.due_date,
         completed=task.completed,
     )
+
+
+def to_domain_items(tasks):
+    """Convert many model rows at once (higher-order: map applies a function)."""
+    return list(map(to_domain_item, tasks))
+
+
+def status_counts(items, today):
+    """Count items per status with reduce (fold a list into one dict)."""
+
+    def add(counts, item):
+        status = item.status(today)
+        return {**counts, status: counts.get(status, 0) + 1}
+
+    return reduce(add, items, {})
 
 
 def select(items, predicate):
@@ -104,18 +120,18 @@ def project_progress(items, today):
 
 
 def subject_summary(items, today):
-    statuses = [item.status(today) for item in items]
+    items = list(items)
+    counts = status_counts(items, today)
 
     return {
         "completion": completion_rate(items, today),
         "pending": sum(
-            1
-            for status in statuses
-            if status in {"overdue", "today", "upcoming", "no_date"}
+            counts.get(status, 0)
+            for status in ("overdue", "today", "upcoming", "no_date")
         ),
-        "completed": statuses.count("completed"),
-        "overdue": statuses.count("overdue"),
-        "past_exams": statuses.count("past_exam"),
+        "completed": counts.get("completed", 0),
+        "overdue": counts.get("overdue", 0),
+        "past_exams": counts.get("past_exam", 0),
         "task_count": len(items),
     }
 
